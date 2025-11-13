@@ -1,10 +1,10 @@
 'use client'
 
-import { PortableText } from '@portabletext/react'
+import { PortableText, PortableTextBlock } from '@portabletext/react'
 
 interface HeroSectionProps {
   title: string
-  subtitle?: any // comes from Sanity blockContent (array of blocks)
+  subtitle?: PortableTextBlock[] // comes from Sanity blockContent (array of blocks)
   ctaText?: string
   ctaLink?: string
 }

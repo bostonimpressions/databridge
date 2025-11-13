@@ -1,5 +1,8 @@
 import { defineType } from "sanity"
 
+// Import the component you will create to render the highlight in the Studio
+import HighlightDecorator from '../components/HighlightDecorator' 
+
 export default defineType({
   name: 'blockContentMinimal',
   title: 'Simple Text',
@@ -8,11 +11,17 @@ export default defineType({
     {
       type: 'block',
       styles: [{ title: 'Normal', value: 'normal' }],
-      lists: [], // no lists
+      lists: [], 
       marks: {
         decorators: [
           { title: 'Strong', value: 'strong' },
-          { title: 'Highlight', value: 'highlight' },
+          { title: 'Strong', value: 'strong' },
+          { 
+            title: 'Highlight', 
+            value: 'highlight', 
+            // Add the component here for visual preview in the editor
+            component: HighlightDecorator, 
+          },
         ],
         annotations: [],
       },
