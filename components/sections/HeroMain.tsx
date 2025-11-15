@@ -5,7 +5,7 @@ import { PortableText, PortableTextBlock } from '@portabletext/react'
 interface HeroSectionProps {
   title: string
   subtitle?: PortableTextBlock[] // comes from Sanity blockContent (array of blocks)
-  ctaText?: string
+  ctaText?: number
   ctaLink?: string
 }
 

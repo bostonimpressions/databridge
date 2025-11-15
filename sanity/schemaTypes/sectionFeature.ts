@@ -10,4 +10,15 @@ export default defineType({
     defineField({ name: 'title', title: 'Title', type: 'blockContentMinimal' }),
     defineField({ name: 'description', title: 'Description', type: 'blockContent' }),
   ],
+  preview: {
+    select: {
+      subtitle: 'title',
+    },
+    prepare({ subtitle }) {
+      return {
+        title: 'Hero Main',
+        subtitle: subtitle || '(no subtitle)',
+      }
+    },
+  },
 })
