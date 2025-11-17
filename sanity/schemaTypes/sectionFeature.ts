@@ -1,6 +1,7 @@
 import { defineType, defineField } from 'sanity'
 import blockContent from './blockContent'
 import blockContentMinimal from './blockContentMinimal'
+import { toPlainText } from '../../utils/toPlainText'
 
 export default defineType({
   name: 'sectionFeature',
@@ -12,12 +13,14 @@ export default defineType({
   ],
   preview: {
     select: {
-      subtitle: 'title',
+      titleValue: 'title',
     },
-    prepare({ subtitle }) {
+    prepare({ titleValue }) {
+      const plainTextTitle = toPlainText(titleValue)
+
       return {
-        title: 'Hero Main',
-        subtitle: subtitle || '(no subtitle)',
+        title: 'Feature Section',
+        subtitle: plainTextTitle,
       }
     },
   },
