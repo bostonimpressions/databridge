@@ -13,6 +13,7 @@ export default defineType({
       type: 'array',
       of: [
         { type: 'sectionHeroMain' },
+        { type: 'sectionHeroSubpage' },
         { type: 'sectionFeature' },
         // add more section types as needed
       ],

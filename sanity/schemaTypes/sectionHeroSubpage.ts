@@ -2,12 +2,13 @@ import { defineType, defineField } from 'sanity'
 import { toPlainText } from '../../utils/toPlainText'
 
 export default defineType({
-  name: 'sectionFeature',
-  title: 'Feature Section',
+  name: 'sectionHeroSubpage',
+  title: 'Hero (subpage)',
   type: 'object',
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'blockContentMinimal' }),
-    defineField({ name: 'description', title: 'Description', type: 'blockContent' }),
+    defineField({ name: 'subtitle', title: 'Subtitle', type: 'blockContentMinimal' }),
+    defineField({ name: 'body', title: 'Body', type: 'blockContent' }),
   ],
   preview: {
     select: {
@@ -17,9 +18,10 @@ export default defineType({
       const plainTextTitle = toPlainText(titleValue)
 
       return {
-        title: 'Feature Section',
+        title: 'Hero (subpage)',
         subtitle: plainTextTitle,
       }
     },
   },
+
 })

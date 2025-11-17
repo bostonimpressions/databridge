@@ -1,16 +1,13 @@
 import { defineType, defineField } from 'sanity'
-import blockContentMinimal from './blockContentMinimal'
 import { toPlainText } from '../../utils/toPlainText'
 
 export default defineType({
   name: 'sectionHeroMain',
-  title: 'Hero Main',
+  title: 'Hero (main)',
   type: 'object',
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'blockContentMinimal' }),
     defineField({ name: 'subtitle', title: 'Subtitle', type: 'blockContentMinimal' }),
-    defineField({ name: 'ctaText', title: 'CTA Text', type: 'number' }),
-    defineField({ name: 'ctaLink', title: 'CTA Link', type: 'string' }),
   ],
   preview: {
     select: {
@@ -20,7 +17,7 @@ export default defineType({
       const plainTextTitle = toPlainText(titleValue)
 
       return {
-        title: 'Hero Main',
+        title: 'Hero (main)',
         subtitle: plainTextTitle,
       }
     },
