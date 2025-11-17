@@ -12,12 +12,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);
@@ -27,4 +27,23 @@ body {
 
 @utility btn-primary {
   @apply rounded-lg bg-blue-600 px-4 py-2 text-sm text-white shadow-md transition duration-150 hover:bg-blue-700;
+}
+
+h1 {
+  color: #000;
+  font-family: 'Open Sans';
+  font-size: 70px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  letter-spacing: -2.8px;
+}
+
+.hero-main {
+  background: linear-gradient(
+    346deg,
+    rgba(69, 218, 255, 0.32) 4.34%,
+    rgba(111, 231, 181, 0.32) 28.41%,
+    rgba(187, 255, 48, 0.24) 60.32%
+  );
 }
