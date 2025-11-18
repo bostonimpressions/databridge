@@ -1,5 +1,5 @@
-import HeroMain from '@/components/sections/HeroMain';
-import Feature from '@/components/sections/Feature';
+import SectionHeroMain from '@/components/sections/SectionHeroMain';
+import SectionFeature from '@/components/sections/SectionFeature';
 import { getPageData } from '@/lib/getPageData';
 
 export default async function Home() {
@@ -15,9 +15,9 @@ export default async function Home() {
 
         switch (_type) {
           case 'sectionHeroMain': // <-- matches your Sanity schema
-            return <HeroMain key={i} {...props} />; // <-- matches your React component
+            return <SectionHeroMain key={i} {...props} />; // <-- matches your React component
           case 'sectionFeature':
-            return <Feature key={i} {...props} />;
+            return <SectionFeature key={i} {...props} />;
           default:
             return null;
         }

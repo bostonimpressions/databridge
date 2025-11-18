@@ -7,12 +7,12 @@ export default defineType({
   type: 'object',
   fields: [
     defineField({ name: 'label', title: 'Label', type: 'string' }),
-    defineField({ name: 'title', title: 'Title', type: 'blockContentMinimal' }),
+    defineField({ name: 'heading', title: 'Heading', type: 'blockContentMinimal' }),
     defineField({ name: 'body', title: 'Body', type: 'blockContentMinimal' }),
   ],
   preview: {
     select: {
-      titleValue: 'title',
+      titleValue: 'heading',
     },
     prepare({ titleValue }) {
       const plainTextTitle = toPlainText(titleValue);

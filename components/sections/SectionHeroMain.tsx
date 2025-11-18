@@ -5,11 +5,11 @@ import Image from 'next/image';
 
 interface Props {
   label?: string;
-  title: PortableTextBlock[];
+  heading: PortableTextBlock[];
   body?: PortableTextBlock[];
 }
 
-export default function HeroSection({ label, title, body }: Props) {
+export default function HeroSection({ label, heading, body }: Props) {
   return (
     <section className="relative overflow-hidden py-[20] pb-[40] md:py-[60]">
       <video
@@ -32,7 +32,7 @@ export default function HeroSection({ label, title, body }: Props) {
           <div className="md:col-span-2">
             <h1>
               <PortableText
-                value={title}
+                value={heading}
                 components={{
                   marks: {
                     highlight: ({ children }) => <span className="text-highlight">{children}</span>,
