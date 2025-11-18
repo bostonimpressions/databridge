@@ -70,7 +70,6 @@ const navigationItems: NavListItem[] = [
   { name: 'About', href: '/about' },
   { name: 'Services', href: '/services' },
   { name: 'Resources', href: '/resources/blog' },
-  { name: 'Contact', href: '/contact' },
 ];
 
 const useScrollEffect = (threshold: number = 400): boolean => {

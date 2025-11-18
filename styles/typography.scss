@@ -1,0 +1,26 @@
+@utility heading-style {
+  font-family: 'Open Sans';
+  @apply mb-5 font-semibold leading-none text-black md:mb-7;
+  @apply tracking-tight md:tracking-tighter;
+  p {
+    font-size: 1em;
+    margin: 0;
+  }
+}
+h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  @apply heading-style;
+}
+h2 {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  @apply heading-style;
+}
+
+p {
+  margin-bottom: 1em;
+  font-size: clamp(0.875rem, 4vw, 1rem);
+  @apply text-black;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -17,7 +17,7 @@ export default async function Home() {
           case 'sectionHeroMain': // <-- matches your Sanity schema
             return <HeroMain key={i} {...props} />; // <-- matches your React component
           case 'sectionFeature':
-            return <Feature key={i} features={[props]} />;
+            return <Feature key={i} {...props} />;
           default:
             return null;
         }

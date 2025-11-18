@@ -1,28 +1,34 @@
-import { PortableText } from '@portabletext/react'
-import type { PortableTextBlock } from '@portabletext/types'
+import { PortableText } from '@portabletext/react';
+import type { PortableTextBlock } from '@portabletext/types';
 
-interface Feature {
-  title: PortableTextBlock[]
-  description: PortableTextBlock[]
+interface Props {
+  title: PortableTextBlock[];
+  body: PortableTextBlock[];
 }
 
-interface FeatureSectionProps {
-  features: Feature[];
-}
-
-export default function FeatureSection({ features }: FeatureSectionProps) {
+export default function FeatureSection({ title, body }: Props) {
   return (
-    <section className="py-20 max-w-5xl mx-auto grid md:grid-cols-3 gap-8">
-      {features.map((f: Feature, i: number) => (
-        <div key={i} className="p-4 border rounded shadow-sm">
-          <h3 className="font-semibold text-xl mb-2">
-            <PortableText value={f.title} />
-          </h3>
-          <div>
-            <PortableText value={f.description} />
-          </div>
-        </div>
-      ))}
+    <section className="relative overflow-hidden py-[20] pb-[40] md:py-[60]">
+      <div className="container">
+        <h2>
+          <PortableText
+            value={title}
+            components={{
+              marks: {
+                highlight: ({ children }) => <span className="text-highlight">{children}</span>,
+              },
+            }}
+          />
+        </h2>
+        <PortableText
+          value={body}
+          components={{
+            marks: {
+              highlight: ({ children }) => <span className="text-highlight">{children}</span>,
+            },
+          }}
+        />
+      </div>
     </section>
-  )
+  );
 }

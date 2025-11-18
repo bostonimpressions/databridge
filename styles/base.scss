@@ -1,0 +1,24 @@
+@utility btn-primary {
+  @apply rounded-4xl cursor-pointer border-2 border-transparent bg-blue-600 px-4 py-1 text-sm text-white shadow-md transition duration-150 hover:bg-blue-700;
+}
+
+@utility btn-secondary {
+  @apply rounded-4xl cursor-pointer border-2 border-blue-600 bg-transparent px-4 py-1 text-sm text-blue-600 shadow-md transition duration-150 hover:border-blue-700;
+}
+
+.container {
+  @apply mx-auto px-6 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8;
+}
+
+.text-highlight {
+  @apply text-blue-600;
+}
+
+.hero-gradient {
+  background: linear-gradient(
+    346deg,
+    rgba(69, 218, 255, 0.32) 4.34%,
+    rgba(111, 231, 181, 0.32) 28.41%,
+    rgba(187, 255, 48, 0.24) 60.32%
+  );
+}

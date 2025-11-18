@@ -1,5 +1,5 @@
-import { defineType, defineField } from 'sanity'
-import { toPlainText } from '../../utils/toPlainText'
+import { defineType, defineField } from 'sanity';
+import { toPlainText } from '../../utils/toPlainText';
 
 export default defineType({
   name: 'sectionFeature',
@@ -7,19 +7,19 @@ export default defineType({
   type: 'object',
   fields: [
     defineField({ name: 'title', title: 'Title', type: 'blockContentMinimal' }),
-    defineField({ name: 'description', title: 'Description', type: 'blockContent' }),
+    defineField({ name: 'body', title: 'Body', type: 'blockContent' }),
   ],
   preview: {
     select: {
       titleValue: 'title',
     },
     prepare({ titleValue }) {
-      const plainTextTitle = toPlainText(titleValue)
+      const plainTextTitle = toPlainText(titleValue);
 
       return {
         title: 'Feature Section',
         subtitle: plainTextTitle,
-      }
+      };
     },
   },
-})
+});

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist_Mono, Open_Sans } from 'next/font/google';
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import LayoutWrapper from '@/components/LayoutWrapper';
 
 const geistMono = Geist_Mono({
