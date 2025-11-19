@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+/* dont use '//single-line comments in these scss files or nextjs breaks, use option+cmd+/' */
 @import './typography.scss';
 @import './base.scss';
 
