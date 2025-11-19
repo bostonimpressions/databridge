@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Open_Sans, Share_Tech } from 'next/font/google';
 import '@/styles/globals.css';
-import '@/styles/main.scss';
+// import '@/styles/main.scss';
 import LayoutWrapper from '@/components/LayoutWrapper';
 
 const openSans = Open_Sans({

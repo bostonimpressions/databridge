@@ -27,7 +27,6 @@ h2 {
 p {
   margin-bottom: 1em;
   font-size: clamp(0.875rem, 4vw, 1rem);
-  //@apply text-black;
   &:last-child {
     margin-bottom: 0;
   }

@@ -32,7 +32,7 @@ export default function FeatureSection({ heading, body, cards = [], table }: Pro
               {cards.map((card, i) => (
                 <div key={i} className="rounded-xl bg-blue-600 p-4 text-white">
                   <h3 className="font-share-tech font-semibold">{card.heading}</h3>
-                  <p className="text-white!">{card.body}</p>
+                  <p>{card.body}</p>
                 </div>
               ))}
             </div>

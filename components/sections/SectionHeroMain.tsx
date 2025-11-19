@@ -42,7 +42,7 @@ export default function HeroSection({ label, heading, body }: Props) {
             </h1>
 
             {body && (
-              <div className="mb-6 text-lg text-gray-700 dark:text-gray-300">
+              <div className="mb-6">
                 <PortableText
                   value={body}
                   components={{
