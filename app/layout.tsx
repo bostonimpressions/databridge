@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
-import { Geist_Mono, Open_Sans } from 'next/font/google';
-import '@/styles/globals.scss';
+import { Open_Sans, Share_Tech } from 'next/font/google';
+import '@/styles/globals.css';
+import '@/styles/main.scss';
 import LayoutWrapper from '@/components/LayoutWrapper';
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 const openSans = Open_Sans({
   variable: '--font-open-sans',
+  subsets: ['latin'],
+});
+
+const shareTech = Share_Tech({
+  weight: '400',
+  variable: '--font-share-tech',
   subsets: ['latin'],
 });
 
@@ -26,7 +28,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${openSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${openSans.variable} ${shareTech.variable} antialiased`}>
         <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>

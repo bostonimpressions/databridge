@@ -14,10 +14,11 @@ export default async function Home() {
         const { _type, _key, ...props } = section;
 
         switch (_type) {
-          case 'sectionHeroMain': // <-- matches your Sanity schema
-            return <SectionHeroMain key={i} {...props} />; // <-- matches your React component
+          case 'sectionHeroMain': // Sanity schema -- sanity/schemaTypes/
+            return <SectionHeroMain key={i} {...props} />; // React component -- components/sections
           case 'sectionFeature':
             return <SectionFeature key={i} {...props} />;
+
           default:
             return null;
         }

@@ -1,5 +1,13 @@
+.font-open-sans {
+  font-family: var(--font-open-sans);
+}
+.font-share-tech {
+  font-family: var(--font-share-tech);
+  @apply tracking-normal;
+}
+
 @utility heading-style {
-  font-family: 'Open Sans';
+  font-family: var(--font-open-sans);
   @apply mb-5 font-semibold leading-none text-black md:mb-7;
   @apply tracking-tight md:tracking-tighter;
   p {
@@ -19,7 +27,7 @@ h2 {
 p {
   margin-bottom: 1em;
   font-size: clamp(0.875rem, 4vw, 1rem);
-  @apply text-black;
+  //@apply text-black;
   &:last-child {
     margin-bottom: 0;
   }
