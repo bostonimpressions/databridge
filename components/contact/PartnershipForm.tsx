@@ -133,7 +133,7 @@ export default function PartnershipForm() {
   };
 
   const inputClass =
-    'border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nugreen-500';
+    'border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-apple-500';
 
   return (
     <div className="shadow-xs max-w-2xl rounded-2xl border border-gray-100 bg-white p-8">
@@ -261,14 +261,14 @@ export default function PartnershipForm() {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="bg-nugreen-500 hover:bg-nugreen-600 flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white transition"
+          className="bg-apple-500 hover:bg-apple-600 flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white transition"
         >
           {status === 'sending' ? 'Sending...' : 'Submit Partnership Request'}
           {status === 'sending' && <FiSend className="animate-spin" />}
         </button>
 
         {status === 'success' && (
-          <p className="text-nugreen-500 mt-2 flex items-center gap-2">
+          <p className="text-apple-500 mt-2 flex items-center gap-2">
             <FiCheckCircle /> Request sent successfully!
           </p>
         )}

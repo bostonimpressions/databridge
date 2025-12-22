@@ -1,33 +1,33 @@
 @utility btn-primary {
-  @apply rounded-4xl bg-sapphire-500 hover:bg-sapphire-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl bg-blue-ribbon-500 hover:bg-blue-ribbon-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-secondary {
-  @apply rounded-4xl border-sapphire-500 text-sapphire-500 hover:border-sapphire-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl border-blue-ribbon-500 text-blue-ribbon-500 hover:border-blue-ribbon-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-primary-light {
-  @apply rounded-4xl bg-perano-500 hover:bg-perano-600 text-biscay-500 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl hover:bg-perano-600 text-biscay-500 cursor-pointer border-2 border-transparent bg-perano-500 px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-secondary-light {
-  @apply rounded-4xl border-perano-500 text-perano-500 hover:border-perano-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl hover:border-perano-600 cursor-pointer border-2 border-perano-500 bg-transparent px-4 py-1 text-center text-xs font-semibold text-perano-500 shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-primary-green {
-  @apply rounded-4xl bg-nugreen-500 hover:bg-nugreen-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl bg-apple-500 hover:bg-apple-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-secondary-green {
-  @apply rounded-4xl border-nugreen-500 text-nugreen-500 hover:border-nugreen-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl border-apple-500 text-apple-500 hover:border-apple-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-primary-white {
-  @apply rounded-4xl bg-white hover:bg-gray-100 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-black shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl cursor-pointer border-2 border-transparent bg-white px-4 py-1 text-center text-xs font-semibold text-black shadow-md transition duration-150 hover:bg-gray-100 md:text-sm;
 }
 
 @utility btn-secondary-white {
-  @apply rounded-4xl border-white text-white hover:border-gray-100 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl cursor-pointer border-2 border-white bg-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 hover:border-gray-100 md:text-sm;
 }
 
 .container {
@@ -35,7 +35,7 @@
 }
 
 .text-highlight {
-  @apply text-sapphire-600;
+  @apply text-blue-ribbon-500;
 }
 
 .icon-wrapper {

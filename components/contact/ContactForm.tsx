@@ -41,9 +41,9 @@ export default function ContactForm() {
   };
 
   return (
-    <div className="max-w-2xl bg-white p-8 rounded-2xl shadow-xs border-1 border-gray-100">
+    <div className="shadow-xs border-1 max-w-2xl rounded-2xl border-gray-100 bg-white p-8">
       <TextHeading level="h2">Send us a message</TextHeading>
-      <p className="text-gray-600 mb-6">
+      <p className="mb-6 text-gray-600">
         For any questions or inquiries, fill out the form below and we’ll get back to you promptly.
       </p>
 
@@ -55,7 +55,7 @@ export default function ContactForm() {
           value={form.name}
           onChange={handleChange}
           required
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nugreen-500"
+          className="focus:ring-apple-500 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
         />
         <input
           type="email"
@@ -64,7 +64,7 @@ export default function ContactForm() {
           value={form.email}
           onChange={handleChange}
           required
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nugreen-500"
+          className="focus:ring-apple-500 rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
         />
         <textarea
           name="message"
@@ -73,26 +73,26 @@ export default function ContactForm() {
           onChange={handleChange}
           required
           rows={5}
-          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-nugreen-500 resize-none"
+          className="focus:ring-apple-500 resize-none rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
         />
 
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="bg-nugreen-500 hover:bg-nugreen-600 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 transition"
+          className="bg-apple-500 hover:bg-apple-600 flex items-center justify-center gap-2 rounded-lg py-3 font-semibold text-white transition"
         >
           {status === 'sending' ? 'Sending...' : 'Send Message'}
           {status === 'sending' && <FiSend className="animate-spin" />}
         </button>
 
         {status === 'success' && (
-          <p className="flex items-center text-nugreen-500 gap-2 mt-2">
+          <p className="text-apple-500 mt-2 flex items-center gap-2">
             <FiCheckCircle /> Message sent successfully!
           </p>
         )}
 
         {status === 'error' && (
-          <p className="flex items-center text-magenta-500 gap-2 mt-2">
+          <p className="mt-2 flex items-center gap-2 text-magenta-500">
             <FiAlertCircle /> {errorMsg}
           </p>
         )}

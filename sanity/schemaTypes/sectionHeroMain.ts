@@ -16,7 +16,11 @@ export default defineType({
           title: 'Hero Slide',
           type: 'object',
           fields: [
-            // HEADING
+            defineField({
+              name: 'label',
+              title: 'Label',
+              type: 'blockContentMinimal',
+            }),
             defineField({
               name: 'heading',
               title: 'Heading',
@@ -126,8 +130,7 @@ export default defineType({
               title: 'Auto Height',
               type: 'boolean',
               description: 'If true, the Hero section will use height:auto instead of min-height.',
-            })
-
+            }),
           ],
 
           // ✅ EDITOR PREVIEW FIX (No more "Untitled Slide")

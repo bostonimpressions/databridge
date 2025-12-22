@@ -14,7 +14,7 @@ export default function ContactTabs() {
           onClick={() => setActive('general')}
           className={`px-6 py-3 font-semibold transition ${
             active === 'general'
-              ? 'border-nugreen-500 text-nugreen-600 border-b-2'
+              ? 'border-apple-500 text-apple-600 border-b-2'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -24,7 +24,7 @@ export default function ContactTabs() {
           onClick={() => setActive('partnership')}
           className={`px-6 py-3 font-semibold transition ${
             active === 'partnership'
-              ? 'border-nugreen-500 text-nugreen-600 border-b-2'
+              ? 'border-apple-500 text-apple-600 border-b-2'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >

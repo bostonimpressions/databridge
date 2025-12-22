@@ -375,7 +375,7 @@ const LayoutWrapper = ({ children, servicePages = [], industryPages = [] }: Layo
                   href="https://www.linkedin.com/company/nuview-it/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-nugreen-500 hover:text-nugreen-600 transition"
+                  className="text-apple-500 hover:text-apple-600 transition"
                   aria-label="LinkedIn"
                 >
                   <FaLinkedin size={30} />

@@ -1,17 +1,28 @@
 /* Define all colors in :root for guaranteed availability */
 :root {
-  /* Nugreen */
-  --color-nugreen-50: #f9fcf6;
-  --color-nugreen-100: #ebf7e2;
-  --color-nugreen-200: #d0ebbb;
-  --color-nugreen-300: #b5df94;
-  --color-nugreen-400: #99d46c;
-  --color-nugreen-500: #7ec845;
-  --color-nugreen-600: #65a832;
-  --color-nugreen-700: #4e8126;
-  --color-nugreen-800: #365a1a;
-  --color-nugreen-900: #1e320f;
-  --color-nugreen-950: #121e09;
+  --color-blue-ribbon-50: #f5fbff;
+  --color-blue-ribbon-100: #ebf7ff;
+  --color-blue-ribbon-200: #c9e8ff;
+  --color-blue-ribbon-300: #a7d3fc;
+  --color-blue-ribbon-400: #68a6fc;
+  --color-blue-ribbon-500: #286afa;
+  --color-blue-ribbon-600: #1f59e0;
+  --color-blue-ribbon-700: #1645ba;
+  --color-blue-ribbon-800: #0f3196;
+  --color-blue-ribbon-900: #082070;
+  --color-blue-ribbon-950: #041147;
+
+  --color-apple-50: #f9fcf5;
+  --color-apple-100: #f0f7e9;
+  --color-apple-200: #daedca;
+  --color-apple-300: #bfe0a8;
+  --color-apple-400: #8bc973;
+  --color-apple-500: #54b244;
+  --color-apple-600: #47a137;
+  --color-apple-700: #328525;
+  --color-apple-800: #226b19;
+  --color-apple-900: #154f0d;
+  --color-apple-950: #0a3306;
 
   /* Perano */
   --color-perano-50: #fcfeff;
@@ -64,26 +75,13 @@
   --color-solitude-900: #2e4b73;
   --color-solitude-950: #13284a;
 
-  --color-magenta-100: #F6C3D0;
-  --color-magenta-300: #D05E66;
-  --color-magenta-500: #A4103B;
-
+  --color-magenta-100: #f6c3d0;
+  --color-magenta-300: #d05e66;
+  --color-magenta-500: #a4103b;
 }
 
 /* Tailwind theme for utility class generation */
 @theme {
-  --color-nugreen-50: #f9fcf6;
-  --color-nugreen-100: #ebf7e2;
-  --color-nugreen-200: #d0ebbb;
-  --color-nugreen-300: #b5df94;
-  --color-nugreen-400: #99d46c;
-  --color-nugreen-500: #7ec845;
-  --color-nugreen-600: #65a832;
-  --color-nugreen-700: #4e8126;
-  --color-nugreen-800: #365a1a;
-  --color-nugreen-900: #1e320f;
-  --color-nugreen-950: #121e09;
-
   --color-perano-50: #fcfeff;
   --color-perano-100: #f5f9fc;
   --color-perano-200: #ecf0ff;
@@ -132,7 +130,31 @@
   --color-solitude-900: #2e4b73;
   --color-solitude-950: #13284a;
 
-  --color-magenta-100: #F6C3D0;
-  --color-magenta-300: #D05E66;
-  --color-magenta-500: #A4103B;
+  --color-magenta-100: #f6c3d0;
+  --color-magenta-300: #d05e66;
+  --color-magenta-500: #a4103b;
+
+  --color-blue-ribbon-50: #f5fbff;
+  --color-blue-ribbon-100: #ebf7ff;
+  --color-blue-ribbon-200: #c9e8ff;
+  --color-blue-ribbon-300: #a7d3fc;
+  --color-blue-ribbon-400: #68a6fc;
+  --color-blue-ribbon-500: #286afa;
+  --color-blue-ribbon-600: #1f59e0;
+  --color-blue-ribbon-700: #1645ba;
+  --color-blue-ribbon-800: #0f3196;
+  --color-blue-ribbon-900: #082070;
+  --color-blue-ribbon-950: #041147;
+
+  --color-apple-50: #f9fcf5;
+  --color-apple-100: #f0f7e9;
+  --color-apple-200: #daedca;
+  --color-apple-300: #bfe0a8;
+  --color-apple-400: #8bc973;
+  --color-apple-500: #54b244;
+  --color-apple-600: #47a137;
+  --color-apple-700: #328525;
+  --color-apple-800: #226b19;
+  --color-apple-900: #154f0d;
+  --color-apple-950: #0a3306;
 }

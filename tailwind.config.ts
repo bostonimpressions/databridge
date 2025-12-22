@@ -9,6 +9,15 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        'blue-ribbon': {
+          500: '#286afa',
+          700: '#1645ba',
+        },
+        apple: {
+          500: '#54b244',
+          600: '#47a137',
+          700: '#328525',
+        },
         sapphire: {
           500: '#3f51b5',
           700: '#2c387e',

@@ -22,17 +22,16 @@ function SectionCallToAction({ heading, subheading, body, link }: Props) {
   return (
     <AnimatedSection animation="scale" className="bg-white py-12">
       <div className="container mx-auto">
-        <div className="relative rounded-xl overflow-hidden p-10 md:p-20">
-
+        <div className="relative overflow-hidden rounded-xl p-10 md:p-20">
           {/* Green background */}
-          <div className="bg-nugreen-500 w-full h-full absolute inset-0"></div>
+          <div className="bg-apple-500 absolute inset-0 h-full w-full"></div>
 
           {/* Black → transparent gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent mix-blend-color-burn"></div>
 
           {/* Content */}
-          <div className="flex flex-col relative max-w-[540px] m-auto text-center gap-10">
-            <h2 className="text-white mb-0">
+          <div className="relative m-auto flex max-w-[540px] flex-col gap-10 text-center">
+            <h2 className="mb-0 text-white">
               <PortableText value={heading} />
             </h2>
 
@@ -43,23 +42,23 @@ function SectionCallToAction({ heading, subheading, body, link }: Props) {
             )}
 
             {link && (
-              <Link href={link.url} className="btn-primary-white w-fit mx-auto p-3 px-10 md:text-lg">{link.text}</Link>
-
+              <Link
+                href={link.url}
+                className="btn-primary-white mx-auto w-fit p-3 px-10 md:text-lg"
+              >
+                {link.text}
+              </Link>
             )}
-
 
             {body && (
               <div className="text-sm text-white">
                 <PortableText value={body} />
               </div>
             )}
-
           </div>
-
         </div>
       </div>
     </AnimatedSection>
-
   );
 }
 

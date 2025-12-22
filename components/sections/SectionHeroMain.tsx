@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { SanityImageSource } from '@sanity/image-url';
 import { urlFor } from '@/sanity/lib/image';
 import TextHeading from '@/components/ui/TextHeading';
-import { usePathname } from 'next/navigation';
 
 interface Button {
   title: string;
@@ -16,6 +15,7 @@ interface Button {
 
 interface Slide {
   heading: PortableTextBlock[];
+  label?: PortableTextBlock[];
   subheading?: PortableTextBlock[];
   lead?: PortableTextBlock[];
   body?: PortableTextBlock[];
@@ -53,9 +53,6 @@ export default function SectionHeroMain({ slides }: Props) {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  const pathname = usePathname();
-  const isHome = pathname === '/';
-
   const slide = slides[current];
 
   // Get the properly formatted image URL
@@ -67,7 +64,7 @@ export default function SectionHeroMain({ slides }: Props) {
   const backgroundStyle =
     slide.theme === 'default'
       ? {
-          background: 'radial-gradient(118.67% 95.24% at 91.36% 7.49%, #202C59 0%, #2A2A2A 100%)',
+          background: 'white',
         }
       : slide.theme === 'service'
         ? {
@@ -78,6 +75,9 @@ export default function SectionHeroMain({ slides }: Props) {
   // Determine blend mode for the background image
   const blendMode =
     slide.theme === 'default' ? 'multiply' : slide.theme === 'service' ? 'color-dodge' : 'normal';
+
+  const textColor =
+    slide.theme === 'default' || slide.theme === 'service' ? 'text-gray-900' : 'text-white';
 
   return (
     <section
@@ -91,12 +91,12 @@ export default function SectionHeroMain({ slides }: Props) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 1.2, ease: 'easeInOut' }}
-          className="absolute inset-0"
+          className="absolute inset-0 bg-white"
           style={{
             background:
               slide.theme === 'default'
-                ? 'radial-gradient(118.67% 95.24% at 91.36% 7.49%, #202C59 0%, #2A2A2A 100%)'
-                : '#394FA2',
+                ? 'linear-gradient(346deg, rgba(69, 218, 255, 0.32) 4.34%, rgba(111, 231, 181, 0.32) 28.41%, rgba(187, 255, 48, 0.24) 60.32%)'
+                : '#286AFA',
           }}
         />
       </AnimatePresence>
@@ -154,7 +154,25 @@ export default function SectionHeroMain({ slides }: Props) {
                 <div className="mb-4 text-sm font-semibold text-white">Services</div>
               )}
 
-              <TextHeading color={'text-white'} border={current != 0}>
+              {slide.label && (
+                <PortableText
+                  value={slide.label}
+                  components={{
+                    block: {
+                      normal: ({ children }) => (
+                        <p className={`text-sm font-semibold ${textColor}`}>{children}</p>
+                      ),
+                    },
+                    marks: {
+                      highlight: ({ children }) => (
+                        <span className="text-highlight">{children}</span>
+                      ),
+                    },
+                  }}
+                />
+              )}
+
+              <TextHeading color={textColor} border={current != 0}>
                 <PortableText
                   value={slide.heading}
                   components={{
@@ -172,7 +190,7 @@ export default function SectionHeroMain({ slides }: Props) {
                   value={slide.subheading}
                   components={{
                     block: {
-                      normal: ({ children }) => <h4 className="text-white">{children}</h4>,
+                      normal: ({ children }) => <h4 className={textColor}>{children}</h4>,
                     },
                     marks: {
                       highlight: ({ children }) => (
@@ -189,7 +207,7 @@ export default function SectionHeroMain({ slides }: Props) {
                   components={{
                     block: {
                       normal: ({ children }) => (
-                        <p className="text-lg font-semibold text-white">{children}</p>
+                        <p className={`text-lg font-semibold ${textColor}`}>{children}</p>
                       ),
                     },
                     marks: {
@@ -207,7 +225,7 @@ export default function SectionHeroMain({ slides }: Props) {
                     value={slide.body}
                     components={{
                       block: {
-                        normal: ({ children }) => <p className="text-white">{children}</p>,
+                        normal: ({ children }) => <p className={textColor}>{children}</p>,
                       },
                       marks: {
                         highlight: ({ children }) => (
@@ -235,19 +253,11 @@ export default function SectionHeroMain({ slides }: Props) {
                     <a
                       key={btn.title}
                       href={btn.url}
-                      className={i === 0 ? 'btn-primary-green' : 'btn-secondary-green'}
+                      className={i === 0 ? 'btn-primary' : 'btn-secondary'}
                     >
                       {btn.title}
                     </a>
                   ))}
-                </div>
-              )}
-
-              {isHome && (
-                <div className="mt-20 flex gap-3 text-lg font-semibold text-perano-500 md:text-3xl">
-                  <span>Secure.</span>
-                  <span>Support.</span>
-                  <span>Empower.</span>
                 </div>
               )}
             </div>

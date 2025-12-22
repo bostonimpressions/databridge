@@ -23,7 +23,24 @@ export async function getPageData(slug: string): Promise<PageData | null> {
     orderRank,
     sections[]{
       ...,
-      _type
+      _type,
+      _type == "sectionHeroMain" => {
+        slides[]{
+          ...,
+          backgroundVideo{
+            asset->{
+              url
+            }
+          }
+        }
+      },
+      _type == "sectionHeroSubpage" => {
+        backgroundVideo{
+          asset->{
+            url
+          }
+        }
+      }
     }
   }`;
 
