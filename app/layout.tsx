@@ -2,13 +2,13 @@ import BotIdProvider from '@/components/BotIdProvider';
 import type { Metadata } from 'next';
 import { defaultMetadata } from '@/lib/seo';
 
-import { Inter, Share_Tech } from 'next/font/google';
+import { Open_Sans, Share_Tech } from 'next/font/google';
 import '@/styles/globals.css';
 import LayoutWrapper from '@/components/LayoutWrapper';
 import { getServicePages } from '@/lib/getServicePages';
 import { getIndustryPages } from '@/lib/getIndustryPages';
 
-const inter = Inter({
+const inter = Open_Sans({
   variable: '--font-open-sans',
   subsets: ['latin'],
 });
@@ -32,12 +32,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${shareTech.variable} antialiased`}>
-      <BotIdProvider>
-        <LayoutWrapper servicePages={servicePages} industryPages={industryPages}>
-          {children}
-        </LayoutWrapper>
-      </BotIdProvider>
-
+        <BotIdProvider>
+          <LayoutWrapper servicePages={servicePages} industryPages={industryPages}>
+            {children}
+          </LayoutWrapper>
+        </BotIdProvider>
       </body>
     </html>
   );

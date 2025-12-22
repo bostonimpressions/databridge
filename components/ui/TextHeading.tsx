@@ -11,7 +11,7 @@ interface TextHeadingProps {
 export default function TextHeading({
   level = 'h1',
   children,
-  border = true,
+  border = false,
   color = 'text-biscay-600',
   barColor = 'bg-apple-500',
 }: TextHeadingProps) {
