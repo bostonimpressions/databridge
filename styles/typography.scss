@@ -1,0 +1,61 @@
+.font-open-sans {
+  font-family: var(--font-open-sans);
+}
+.font-share-tech {
+  font-family: var(--font-share-tech);
+  @apply tracking-normal;
+}
+
+/* Define the utility outside of @layer */
+@utility heading-style {
+  font-family: var(--font-open-sans);
+  @apply mb-4 font-semibold leading-none;
+  @apply tracking-tight md:tracking-tighter;
+}
+
+/* Then use @layer base for element styles */
+@layer base {
+  h1 {
+    font-size: clamp(2.25rem, 5vw, 3rem);
+    @apply heading-style;
+    p {
+      font-size: 1em;
+      margin: 0;
+    }
+  }
+
+  h2 {
+    font-size: clamp(1.5rem, 5vw, 2.25rem);
+    @apply heading-style;
+    p {
+      font-size: 1em;
+      margin: 0;
+    }
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+    @apply heading-style;
+    p {
+      font-size: 1em;
+      margin: 0;
+    }
+  }
+
+  h4 {
+    @apply heading-style text-base md:text-lg lg:text-xl;
+    p {
+      font-size: 1em;
+      margin: 0;
+    }
+  }
+
+  p {
+    margin-bottom: 1em;
+    @apply text-sm md:text-base lg:text-lg;
+    line-height: 1.375em;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

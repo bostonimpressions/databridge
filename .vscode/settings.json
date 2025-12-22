@@ -1,0 +1,6 @@
+{
+  "css.customData": ["./node_modules/tailwindcss/custom-data.json"],
+  "css.lint.unknownAtRules": "ignore",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
+}

@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+/* dont use '//single-line comments in these scss files or nextjs breaks, use option+cmd+/' */
+@import './colors.scss';
+@import './typography.scss';
+@import './base.scss';
+@import './components/list.scss';
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-open-sans);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+}

@@ -1,0 +1,138 @@
+/* Define all colors in :root for guaranteed availability */
+:root {
+  /* Nugreen */
+  --color-nugreen-50: #f9fcf6;
+  --color-nugreen-100: #ebf7e2;
+  --color-nugreen-200: #d0ebbb;
+  --color-nugreen-300: #b5df94;
+  --color-nugreen-400: #99d46c;
+  --color-nugreen-500: #7ec845;
+  --color-nugreen-600: #65a832;
+  --color-nugreen-700: #4e8126;
+  --color-nugreen-800: #365a1a;
+  --color-nugreen-900: #1e320f;
+  --color-nugreen-950: #121e09;
+
+  /* Perano */
+  --color-perano-50: #fcfeff;
+  --color-perano-100: #f5f9fc;
+  --color-perano-200: #ecf0ff;
+  --color-perano-300: #e5eaff;
+  --color-perano-400: #bbcbed;
+  --color-perano-500: #a1afe5;
+  --color-perano-600: #8290cf;
+  --color-perano-700: #5967ab;
+  --color-perano-800: #3a478a;
+  --color-perano-900: #202a66;
+  --color-perano-950: #0d1442;
+
+  /* Sapphire */
+  --color-sapphire-50: #f2f7fa;
+  --color-sapphire-100: #e6eef5;
+  --color-sapphire-200: #c3d6e8;
+  --color-sapphire-300: #a2bcdb;
+  --color-sapphire-400: #6986bf;
+  --color-sapphire-500: #394fa2;
+  --color-sapphire-600: #2f4394;
+  --color-sapphire-700: #20307a;
+  --color-sapphire-800: #142161;
+  --color-sapphire-900: #0c154a;
+  --color-sapphire-950: #050b30;
+
+  /* Biscay */
+  --color-biscay-50: #f0f4f7;
+  --color-biscay-100: #e1e9f0;
+  --color-biscay-200: #b4c6d6;
+  --color-biscay-300: #8ca2bd;
+  --color-biscay-400: #4d628c;
+  --color-biscay-500: #202c59;
+  --color-biscay-600: #1a2552;
+  --color-biscay-700: #121b42;
+  --color-biscay-800: #0c1336;
+  --color-biscay-900: #070c29;
+  --color-biscay-950: #03061a;
+
+  --color-solitude-50: #ffffff;
+  --color-solitude-100: #fcfeff;
+  --color-solitude-200: #fafeff;
+  --color-solitude-300: #f5fcff;
+  --color-solitude-400: #edf9ff;
+  --color-solitude-500: #e5f4ff;
+  --color-solitude-600: #bad2e6;
+  --color-solitude-700: #80a1bf;
+  --color-solitude-800: #537399;
+  --color-solitude-900: #2e4b73;
+  --color-solitude-950: #13284a;
+
+  --color-magenta-100: #F6C3D0;
+  --color-magenta-300: #D05E66;
+  --color-magenta-500: #A4103B;
+
+}
+
+/* Tailwind theme for utility class generation */
+@theme {
+  --color-nugreen-50: #f9fcf6;
+  --color-nugreen-100: #ebf7e2;
+  --color-nugreen-200: #d0ebbb;
+  --color-nugreen-300: #b5df94;
+  --color-nugreen-400: #99d46c;
+  --color-nugreen-500: #7ec845;
+  --color-nugreen-600: #65a832;
+  --color-nugreen-700: #4e8126;
+  --color-nugreen-800: #365a1a;
+  --color-nugreen-900: #1e320f;
+  --color-nugreen-950: #121e09;
+
+  --color-perano-50: #fcfeff;
+  --color-perano-100: #f5f9fc;
+  --color-perano-200: #ecf0ff;
+  --color-perano-300: #e5eaff;
+  --color-perano-400: #bbcbed;
+  --color-perano-500: #a1afe5;
+  --color-perano-600: #8290cf;
+  --color-perano-700: #5967ab;
+  --color-perano-800: #3a478a;
+  --color-perano-900: #202a66;
+  --color-perano-950: #0d1442;
+
+  --color-sapphire-50: #f2f7fa;
+  --color-sapphire-100: #e6eef5;
+  --color-sapphire-200: #c3d6e8;
+  --color-sapphire-300: #a2bcdb;
+  --color-sapphire-400: #6986bf;
+  --color-sapphire-500: #394fa2;
+  --color-sapphire-600: #2f4394;
+  --color-sapphire-700: #20307a;
+  --color-sapphire-800: #142161;
+  --color-sapphire-900: #0c154a;
+  --color-sapphire-950: #050b30;
+
+  --color-biscay-50: #f0f4f7;
+  --color-biscay-100: #e1e9f0;
+  --color-biscay-200: #b4c6d6;
+  --color-biscay-300: #8ca2bd;
+  --color-biscay-400: #4d628c;
+  --color-biscay-500: #202c59;
+  --color-biscay-600: #1a2552;
+  --color-biscay-700: #121b42;
+  --color-biscay-800: #0c1336;
+  --color-biscay-900: #070c29;
+  --color-biscay-950: #03061a;
+
+  --color-solitude-50: #ffffff;
+  --color-solitude-100: #fcfeff;
+  --color-solitude-200: #fafeff;
+  --color-solitude-300: #f5fcff;
+  --color-solitude-400: #edf9ff;
+  --color-solitude-500: #e5f4ff;
+  --color-solitude-600: #bad2e6;
+  --color-solitude-700: #80a1bf;
+  --color-solitude-800: #537399;
+  --color-solitude-900: #2e4b73;
+  --color-solitude-950: #13284a;
+
+  --color-magenta-100: #F6C3D0;
+  --color-magenta-300: #D05E66;
+  --color-magenta-500: #A4103B;
+}

@@ -1,0 +1,47 @@
+@utility btn-primary {
+  @apply rounded-4xl bg-sapphire-500 hover:bg-sapphire-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-secondary {
+  @apply rounded-4xl border-sapphire-500 text-sapphire-500 hover:border-sapphire-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-primary-light {
+  @apply rounded-4xl bg-perano-500 hover:bg-perano-600 text-biscay-500 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-secondary-light {
+  @apply rounded-4xl border-perano-500 text-perano-500 hover:border-perano-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-primary-green {
+  @apply rounded-4xl bg-nugreen-500 hover:bg-nugreen-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-secondary-green {
+  @apply rounded-4xl border-nugreen-500 text-nugreen-500 hover:border-nugreen-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-primary-white {
+  @apply rounded-4xl bg-white hover:bg-gray-100 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-black shadow-md transition duration-150 md:text-sm;
+}
+
+@utility btn-secondary-white {
+  @apply rounded-4xl border-white text-white hover:border-gray-100 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+}
+
+.container {
+  @apply mx-auto px-6 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8;
+}
+
+.text-highlight {
+  @apply text-sapphire-600;
+}
+
+.icon-wrapper {
+  @apply w-100 relative aspect-square h-auto min-w-[40px] max-w-[50px] md:max-w-[64px];
+
+  img {
+    @apply object-contain;
+  }
+}
