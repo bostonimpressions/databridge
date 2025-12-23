@@ -3,8 +3,12 @@ import { page } from './page';
 import { blogPage } from './blogPage';
 import { servicePage } from './servicePage';
 import { industryPage } from './industryPage';
-import blockContent from './blockContent';
-import blockContentMinimal from './blockContentMinimal';
+import blockContent from './blocks/blockContent';
+import blockContentMinimal from './blocks/blockContentMinimal';
+import listBlock from './blocks/listBlock';
+import listItem from './blocks/listItem';
+import tableBlock from './blocks/tableBlock';
+import sectionMain from './sectionMain';
 import sectionHeroMain from './sectionHeroMain';
 import sectionHeroSubpage from './sectionHeroSubpage';
 import sectionOverview from './sectionOverview';
@@ -25,6 +29,10 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     industryPage,
     blockContent,
     blockContentMinimal,
+    listBlock,
+    listItem,
+    tableBlock,
+    sectionMain,
     sectionHeroMain,
     sectionHeroSubpage,
     sectionOverview,

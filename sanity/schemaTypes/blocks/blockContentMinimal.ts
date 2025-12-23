@@ -1,6 +1,6 @@
-import { defineType } from "sanity"
-import HighlightDecorator from '../components/HighlightDecorator'
-import { HighlightIcon } from '@sanity/icons'
+import { defineType } from 'sanity';
+import HighlightDecorator from '../../components/HighlightDecorator';
+import { HighlightIcon } from '@sanity/icons';
 
 export default defineType({
   name: 'blockContentMinimal',
@@ -10,20 +10,20 @@ export default defineType({
     {
       type: 'block',
       styles: [{ title: 'Normal', value: 'normal' }],
-      lists: [], 
+      lists: [],
       marks: {
         decorators: [
           { title: 'Strong', value: 'strong' },
           { title: 'Emphasis', value: 'em' },
-          { 
-            title: 'Highlight', 
-            value: 'highlight', 
+          {
+            title: 'Highlight',
+            value: 'highlight',
             component: HighlightDecorator,
-            icon: HighlightIcon, 
+            icon: HighlightIcon,
           },
         ],
         annotations: [],
       },
     },
   ],
-})
+});

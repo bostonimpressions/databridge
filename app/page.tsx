@@ -4,30 +4,12 @@ import { defaultMetadata } from '@/lib/seo';
 import { getPageData, PageData } from '@/lib/getPageData';
 import { toPlainText } from '@portabletext/react';
 
-import SectionBanner from '@/components/sections/SectionBanner';
+import SectionMain from '@/components/sections/SectionMain';
 import SectionHeroMain from '@/components/sections/SectionHeroMain';
-import SectionHeroSubpage from '@/components/sections/SectionHeroSubpage';
-import SectionOverview from '@/components/sections/SectionOverview';
-import SectionFeatureList from '@/components/sections/SectionFeatureList';
-import SectionFeature from '@/components/sections/SectionFeature';
-import SectionSnapshots from '@/components/sections/SectionSnapshots';
-import SectionComparison from '@/components/sections/SectionComparison';
-import SectionCallToAction from '@/components/sections/SectionCallToAction';
-import SectionDetails from '@/components/sections/SectionDetails';
-import SectionBody from '@/components/sections/SectionBody';
 
 const sectionComponents: Record<string, React.ComponentType<any>> = {
-  sectionBanner: SectionBanner,
+  sectionMain: SectionMain,
   sectionHeroMain: SectionHeroMain,
-  sectionHeroSubpage: SectionHeroSubpage,
-  sectionOverview: SectionOverview,
-  sectionFeatureList: SectionFeatureList,
-  sectionFeature: SectionFeature,
-  sectionSnapshots: SectionSnapshots,
-  sectionComparison: SectionComparison,
-  sectionCallToAction: SectionCallToAction,
-  sectionDetails: SectionDetails,
-  sectionBody: SectionBody,
 };
 
 function generateAnchorId(section: any, index: number) {
@@ -63,11 +45,7 @@ export default async function Page() {
         const anchorId = generateAnchorId(section, i);
 
         return (
-          <div
-            id={anchorId}
-            key={`${_type}-${i}`}
-            className="scroll-mt-24"
-          >
+          <div id={anchorId} key={`${_type}-${i}`} className="scroll-mt-24">
             <SectionComponent {...sectionProps} />
           </div>
         );
