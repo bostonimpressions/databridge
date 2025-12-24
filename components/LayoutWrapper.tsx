@@ -387,10 +387,10 @@ const LayoutWrapper = ({ children, servicePages = [], industryPages = [] }: Layo
           <div className="flex flex-col justify-between py-10 md:flex-row">
             <div>
               <div className="pb-5">
-                <Image src="/logo-white.png" alt="NuView" width={140} height={40} />
+                <Image src="/images/logo-horizontal.png" alt="Databridge Sites" width={200} height={40} />
               </div>
               <p className="text-sm opacity-80">
-                &copy; {new Date().getFullYear()} NuView. All rights reserved.
+                &copy; {new Date().getFullYear()} Databridge Sites. All rights reserved.
               </p>
             </div>
             <ul className="mt-auto flex gap-6 md:gap-12">
