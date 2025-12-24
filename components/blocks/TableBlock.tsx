@@ -1,7 +1,21 @@
 // components/blocks/TableBlock.tsx
 import { PortableText } from '@portabletext/react';
+import type { PortableTextBlock } from '@portabletext/types';
 
-export default function TableBlock({ value }) {
+interface TableBlockValue {
+  columnA: string;
+  columnB: string;
+  rows: Array<{
+    a: PortableTextBlock[];
+    b: PortableTextBlock[];
+  }>;
+}
+
+interface TableBlockProps {
+  value: TableBlockValue;
+}
+
+export default function TableBlock({ value }: TableBlockProps) {
   return (
     <div className="overflow-x-auto">
       <table className="table">

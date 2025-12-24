@@ -70,7 +70,7 @@ export default defineType({
               type: 'object',
               fields: [
                 defineField({ name: 'text', title: 'Link Text', type: 'string' }),
-                defineField({ name: 'url', title: 'URL', type: 'url' }),
+                defineField({ name: 'url', title: 'URL', type: 'string' }),
               ],
               description: 'Optional link at the bottom of the text content',
             }),
