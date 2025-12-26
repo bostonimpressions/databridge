@@ -21,9 +21,9 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
   const isDark = theme === 'dark' || theme === 'midnight';
   const borderColor = isDark ? 'border-gray-400' : 'border-gray-300';
   const headerBg = isDark ? 'bg-gray-700' : 'bg-white';
-  const cellBg = isDark ? 'bg-gray-800' : 'bg-white';
   const textColor = isDark ? 'text-white' : 'text-sapphire-500';
   const headerTextColor = isDark ? 'text-white' : 'text-sapphire-500';
+  const headerBorderColor = isDark ? 'border-gray-500' : 'border-blue-ribbon-500';
 
   return (
     <div className="overflow-x-auto my-6">
@@ -39,16 +39,23 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
           </tr>
         </thead>
         <tbody>
-          {value.rows.map((row, i) => (
-            <tr key={i}>
-              <td className={`border ${borderColor} ${cellBg} ${textColor} px-4 py-3`}>
-                <PortableText value={row.a} />
-              </td>
-              <td className={`border ${borderColor} ${cellBg} ${textColor} px-4 py-3`}>
-                <PortableText value={row.b} />
-              </td>
-            </tr>
-          ))}
+          {value.rows.map((row, i) => {
+            // Alternating row backgrounds: white for even, light gray for odd
+            const rowBg = isDark 
+              ? (i % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700')
+              : (i % 2 === 0 ? 'bg-white' : 'bg-gray-50');
+            
+            return (
+              <tr key={i} className={i === 0 ? `border-t-2 ${headerBorderColor}` : ''}>
+                <td className={`border ${borderColor} ${rowBg} ${textColor} px-4 py-3`}>
+                  <PortableText value={row.a} />
+                </td>
+                <td className={`border ${borderColor} ${rowBg} ${textColor} px-4 py-3`}>
+                  <PortableText value={row.b} />
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

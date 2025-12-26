@@ -153,7 +153,7 @@ export default defineType({
                   type: 'object',
                   fields: [
                     defineField({ name: 'title', title: 'Button Text', type: 'string' }),
-                    defineField({ name: 'url', title: 'URL', type: 'url' }),
+                    defineField({ name: 'url', title: 'URL', type: 'string' }),
                     defineField({
                       name: 'style',
                       title: 'Button Style',

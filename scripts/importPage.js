@@ -83,6 +83,54 @@ async function handleImage(imagePath) {
 }
 
 // ------------------------
+// Helper: upload or reference video file
+// ------------------------
+async function handleVideo(videoPath) {
+  if (!videoPath) return null;
+
+  // If it's already a Sanity file reference
+  if (videoPath.startsWith('file-') && videoPath.includes('-')) {
+    return {
+      _type: 'file',
+      asset: {
+        _ref: videoPath,
+        _type: 'reference',
+      },
+    };
+  }
+
+  // Handle paths starting with /videos/ or /
+  let fullPath = videoPath;
+  if (videoPath.startsWith('/videos/') || videoPath.startsWith('/')) {
+    fullPath = path.join(process.cwd(), 'public', videoPath);
+  } else {
+    fullPath = path.join(process.cwd(), videoPath);
+  }
+
+  if (!fs.existsSync(fullPath)) {
+    console.warn(`⚠️  Video not found: ${fullPath}`);
+    return null;
+  }
+
+  try {
+    const videoAsset = await client.assets.upload('file', fs.createReadStream(fullPath), {
+      filename: path.basename(fullPath),
+    });
+    console.log(`✅ Uploaded video: ${path.basename(fullPath)}`);
+    return {
+      _type: 'file',
+      asset: {
+        _ref: videoAsset._id,
+        _type: 'reference',
+      },
+    };
+  } catch (error) {
+    console.error(`❌ Failed to upload video: ${fullPath}`, error.message);
+    return null;
+  }
+}
+
+// ------------------------
 // Convert Markdown string to Sanity Portable Text blocks
 // Supports paragraphs, bold text, and bullet lists
 // ------------------------
@@ -234,6 +282,48 @@ async function importPage(mdFilePath) {
     }
 
     // -------------------------------------------
+    // SECTION: sectionHeroMain
+    // -------------------------------------------
+    if (section._type === 'sectionHeroMain') {
+      // Process slides
+      if (Array.isArray(section.slides)) {
+        section.slides = await Promise.all(
+          section.slides.map(async (slide) => {
+            slide._key = generateKey();
+            slide._type = 'heroSlide';
+
+            // Convert text fields to blocks
+            ['label', 'heading', 'subheading', 'lead', 'body'].forEach((key) => {
+              if (slide[key] && typeof slide[key] === 'string') {
+                slide[key] = convertMarkdownToBlocks(slide[key]);
+              }
+            });
+
+            // Handle background images and videos
+            if (slide.backgroundImage) {
+              slide.backgroundImage = await handleImage(slide.backgroundImage);
+            }
+
+            if (slide.backgroundVideo) {
+              slide.backgroundVideo = await handleVideo(slide.backgroundVideo);
+            }
+
+            // Process buttons
+            if (Array.isArray(slide.buttons)) {
+              slide.buttons = slide.buttons.map((button) => {
+                button._key = generateKey();
+                button._type = 'button';
+                return button;
+              });
+            }
+
+            return slide;
+          })
+        );
+      }
+    }
+
+    // -------------------------------------------
     // SECTION: sectionDetails
     // -------------------------------------------
     if (section._type === 'sectionDetails') {
@@ -373,6 +463,135 @@ async function importPage(mdFilePath) {
             }
           }
         }
+      }
+    }
+
+    // -------------------------------------------
+    // SECTION: sectionMain
+    // -------------------------------------------
+    if (section._type === 'sectionMain') {
+      // Process rows
+      if (Array.isArray(section.rows)) {
+        section.rows = await Promise.all(
+          section.rows.map(async (row) => {
+            row._key = generateKey();
+
+            // Convert text fields to blocks
+            ['heading', 'subheading', 'body'].forEach((key) => {
+              if (row[key] && typeof row[key] === 'string') {
+                row[key] = convertMarkdownToBlocks(row[key]);
+              }
+            });
+
+            // Process contentBlocks
+            if (Array.isArray(row.contentBlocks)) {
+              const processedBlocks = await Promise.all(
+                row.contentBlocks.map(async (block) => {
+                  block._key = generateKey();
+
+                  // Determine block type
+                  if (block.image) {
+                    // Image block
+                    block._type = 'image';
+                    const imagePath = block.image;
+                    const imageData = await handleImage(imagePath);
+                    if (imageData) {
+                      // Merge image asset at top level (not nested)
+                      // imageData has: { _type: 'image', asset: { ... } }
+                      block.asset = imageData.asset;
+                      // Keep alt text - it's already in the block object
+                      // Remove the image path property since we've converted it
+                      delete block.image;
+                    } else {
+                      // If image upload failed, remove the block
+                      return null;
+                    }
+                  } else if (block.listBlock) {
+                    // List block
+                    block._type = 'listBlock';
+                    const listData = block.listBlock;
+                    block.heading = listData.heading
+                      ? typeof listData.heading === 'string'
+                        ? convertMarkdownToBlocks(listData.heading)
+                        : listData.heading
+                      : undefined;
+                    block.body = listData.body
+                      ? typeof listData.body === 'string'
+                        ? convertMarkdownToBlocks(listData.body)
+                        : listData.body
+                      : undefined;
+                    block.variant = listData.variant || 'default';
+                    block.columns = listData.columns || 2;
+                    block.items = [];
+
+                    if (Array.isArray(listData.items)) {
+                      block.items = await Promise.all(
+                        listData.items.map(async (item) => {
+                          item._key = generateKey();
+                          item._type = 'listItem';
+
+                          ['heading', 'body'].forEach((key) => {
+                            if (item[key] && typeof item[key] === 'string') {
+                              item[key] = convertMarkdownToBlocks(item[key]);
+                            }
+                          });
+
+                          if (item.icon) {
+                            item.icon = await handleImage(item.icon);
+                          }
+
+                          return item;
+                        })
+                      );
+                    }
+
+                    delete block.listBlock;
+                  } else if (block.tableBlock) {
+                    // Table block
+                    block._type = 'tableBlock';
+                    const tableData = block.tableBlock;
+                    block.columnA = tableData.columnA || '';
+                    block.columnB = tableData.columnB || '';
+                    block.rows = [];
+
+                    if (Array.isArray(tableData.rows)) {
+                      block.rows = await Promise.all(
+                        tableData.rows.map(async (row) => {
+                          row._key = generateKey();
+                          row.a =
+                            row.a && typeof row.a === 'string'
+                              ? convertMarkdownToBlocks(row.a)
+                              : row.a || [];
+                          row.b =
+                            row.b && typeof row.b === 'string'
+                              ? convertMarkdownToBlocks(row.b)
+                              : row.b || [];
+                          return row;
+                        })
+                      );
+                    }
+
+                    delete block.tableBlock;
+                  } else if (block.ctaBlock) {
+                    // CTA block
+                    block._type = 'ctaBlock';
+                    const ctaData = block.ctaBlock;
+                    block.title = ctaData.title || '';
+                    block.url = ctaData.url || '';
+                    block.style = ctaData.style || 'primary';
+                    delete block.ctaBlock;
+                  }
+
+                  return block;
+                })
+              );
+              // Filter out null blocks (failed image uploads)
+              row.contentBlocks = processedBlocks.filter((block) => block !== null);
+            }
+
+            return row;
+          })
+        );
       }
     }
   }
