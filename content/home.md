@@ -159,6 +159,50 @@ sections:
                 - heading: "IT Consulting"
                   body: "Strategic guidance for your technology decisions"
 
+  # Example Section - Demonstrates divider and full width with 4-col list
+  - type: sectionMain
+    theme: light
+    rows:
+      # Row 1: Left/Right content layout
+      - heading: "Example Section with Multiple Row Types"
+        subheading: "Demonstrating Layout Flexibility"
+        body: |
+          This section showcases different row configurations within a single sectionMain instance.
+          
+          You can combine various layouts to create rich, dynamic content experiences.
+        layout:
+          columns: "1/2-1/2"
+          textColumn: "left"
+        contentBlocks:
+          - image: "/images/it-ecosystem-photo.jpeg"
+            alt: "Example Image"
+      
+      # Row 2: Divider
+      - divider: true
+      
+      # Row 3: Full width with text and 4-column list
+      - heading: "Comprehensive Service Offerings"
+        body: |
+          Our full suite of services covers every aspect of modern IT infrastructure and management.
+          
+          From foundational services to advanced solutions, we provide everything your business needs to thrive in today's digital landscape.
+        layout:
+          columns: "1/1"
+        contentBlocks:
+          - listBlock:
+              heading: "Core Service Categories"
+              variant: "cards"
+              columns: 4
+              items:
+                - heading: "Infrastructure"
+                  body: "Enterprise-grade data center and network infrastructure solutions"
+                - heading: "Security"
+                  body: "Comprehensive cybersecurity and threat protection services"
+                - heading: "Cloud Services"
+                  body: "Scalable cloud computing and managed cloud solutions"
+                - heading: "Support"
+                  body: "24/7 technical support and managed IT services"
+
   - type: sectionCallToAction
     heading: "Ready to Get Started?"
     body: "Contact us today to learn how we can help transform your IT infrastructure."
