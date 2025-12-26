@@ -71,7 +71,11 @@ export const page = defineType({
       name: 'sections',
       title: 'Sections',
       type: 'array',
-      of: [{ type: 'sectionHeroMain' }, { type: 'sectionMain' }],
+      of: [
+        { type: 'sectionHeroMain' },
+        { type: 'sectionMain' },
+        { type: 'sectionBody' },
+      ],
     }),
   ],
 

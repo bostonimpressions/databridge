@@ -36,7 +36,7 @@ interface Row {
 
 interface SectionMainProps {
   rows: Row[];
-  theme?: 'light' | 'dark' | 'midnight';
+  theme?: 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
 }
 
 
@@ -133,7 +133,14 @@ const renderContentBlock = (
 /* ------------------------------ Component ------------------------------ */
 
 export default function SectionMain({ rows, theme = 'light' }: SectionMainProps) {
-  const sectionBg = theme === 'dark' ? 'bg-gray-100' : 'bg-white';
+  // Theme-based background colors
+  const sectionBg = 
+    theme === 'dark' ? 'bg-gray-100' :
+    theme === 'midnight' ? 'bg-gray-900' :
+    theme === 'sky' ? 'bg-blue-50' :
+    theme === 'orange' ? 'bg-orange-50' :
+    'bg-white';
+  
   const proseClass = theme === 'midnight' ? 'prose-invert' : '';
 
   return (

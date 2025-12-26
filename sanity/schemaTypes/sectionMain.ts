@@ -17,6 +17,8 @@ export default defineType({
           { title: 'Light', value: 'light' },
           { title: 'Dark', value: 'dark' },
           { title: 'Midnight', value: 'midnight' },
+          { title: 'Sky', value: 'sky' },
+          { title: 'Orange', value: 'orange' },
         ],
         layout: 'radio',
       },

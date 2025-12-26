@@ -22,11 +22,10 @@ sections:
         backgroundType: "video"
         backgroundVideo: "/videos/hero-video.mp4"
 
-
+  # Who We Are - Full width section
   - type: sectionMain
     theme: light
     rows:
-      # Full width row (1/1)
       - label: "About Us"
         heading: "Who We Are"
         subheading: "Your trusted technology partner"
@@ -39,7 +38,10 @@ sections:
           - Managed IT services
           - Digital transformation
 
-      # Two column layout (1/2-1/2) - Text left, content right
+  # Our Services - Two column layout
+  - type: sectionMain
+    theme: sky
+    rows:
       - heading: "Our Services"
         subheading: "Comprehensive IT Solutions"
         body: |
@@ -53,11 +55,13 @@ sections:
           columns: "1/2-1/2"
           textColumn: "left"
         contentBlocks:
-          # Image block
           - image: "/images/it-ecosystem-photo.jpeg"
             alt: "IT Ecosystem"
 
-      # Two column layout (2/3-1/3) - Text left, content right
+  # Why Choose Us - Two column layout
+  - type: sectionMain
+    theme: light
+    rows:
       - heading: "Why Choose Us"
         body: |
           We provide exceptional service and support to help your business grow.
@@ -67,7 +71,6 @@ sections:
           columns: "2/3-1/3"
           textColumn: "left"
         contentBlocks:
-          # List block
           - listBlock:
               heading: "Key Benefits"
               variant: "checks"
@@ -80,12 +83,10 @@ sections:
                 - heading: "Proven Results"
                   body: "Track record of successful implementations"
 
-      # Example: Stacked content blocks demonstrating contentRow
-      # This shows how to stack multiple content blocks (text + table) in one column
-      # Left column: heading + body (from row fields) + tableBlock (from contentRow) - all stacked
-      # Right column: image
-      # Note: When textColumn is "left", row heading/body go left, contentBlocks go right
-      # To stack content below the text, use contentRow in contentBlocks
+  # 100% Uptime - Stacked content example
+  - type: sectionMain
+    theme: dark
+    rows:
       - heading: "100% Uptime for Three Decades"
         body: |
           DataBridge Sites has maintained 100% uptime for 30 years without experiencing a single electrical outage.
@@ -95,7 +96,6 @@ sections:
           columns: "1/2-1/2"
           textColumn: "left"
         contentBlocks:
-          # Content Row with tableBlock - appears on RIGHT, stacks below if we had more contentRows
           - contentRow:
               heading: "Reliability Factors"
               body: |
@@ -111,43 +111,13 @@ sections:
                         b: "Professional on-site teams monitor all systems around the clock, providing immediate response to any situations and direct access for customer needs."
                       - a: "Tier IV Design"
                         b: "Maryland's only Tier IV-designed commercial facility implements multiple layers of redundancy throughout all infrastructure systems for maximum fault tolerance."
-          # Image also appears on RIGHT (same side as other contentBlocks)
           - image: "/images/it-ecosystem-photo.jpeg"
             alt: "Data Center Infrastructure"
 
-      # Better example: All content stacked in left column using contentRows
-      # Right column stays empty (or you could add text there)
-      - layout:
-          columns: "1/2-1/2"
-          textColumn: "right"
-        contentBlocks:
-          # All contentRows appear on LEFT side (opposite of textColumn)
-          - contentRow:
-              heading: "100% Uptime for Three Decades"
-              body: |
-                DataBridge Sites has maintained 100% uptime for 30 years without experiencing a single electrical outage.
-
-                This perfect reliability record demonstrates actual operational excellence rather than statistical projections.
-
-                Organizations that cannot accept downtime depend on infrastructure designed and operated to eliminate outage risks.
-              blocks:
-                - tableBlock:
-                    columnA: "Reliability Factor"
-                    columnB: "Implementation"
-                    rows:
-                      - a: "Redundant Power"
-                        b: "Six 2.4-megawatt generators with N+1 redundancy ensure continuous operations during extended utility outages and provide capacity for future growth."
-                      - a: "24/7/365 Staffing"
-                        b: "Professional on-site teams monitor all systems around the clock, providing immediate response to any situations and direct access for customer needs."
-                      - a: "Tier IV Design"
-                        b: "Maryland's only Tier IV-designed commercial facility implements multiple layers of redundancy throughout all infrastructure systems for maximum fault tolerance."
-          # Second contentRow stacks below the first one
-          - contentRow:
-              blocks:
-                - image: "/images/it-ecosystem-photo.jpeg"
-                  alt: "Data Center Infrastructure"
-
-      # Two column layout (1/2-1/2) - Text right, content left
+  # Get Started - CTA section
+  - type: sectionMain
+    theme: orange
+    rows:
       - heading: "Get Started Today"
         body: |
           Ready to transform your IT infrastructure?
@@ -157,20 +127,21 @@ sections:
           columns: "1/2-1/2"
           textColumn: "right"
         contentBlocks:
-          # CTA block
           - ctaBlock:
               title: "Schedule a Consultation"
               url: "/contact"
               style: "primary"
 
-      # Full width row with multiple content blocks
+  # Our Solutions - Full width with multiple lists
+  - type: sectionMain
+    theme: midnight
+    rows:
       - heading: "Our Solutions"
         body: |
           We offer comprehensive solutions tailored to your needs.
         layout:
           columns: "1/1"
         contentBlocks:
-          # Multiple list blocks
           - listBlock:
               heading: "Managed IT Services"
               variant: "cards"
@@ -200,4 +171,3 @@ sections:
       url: "/contact"
 
 ---
-
