@@ -36,12 +36,22 @@ export default defineType({
           type: 'object',
           title: 'Row',
           fields: [
+            // DIVIDER
+            defineField({
+              name: 'divider',
+              title: 'Divider Row',
+              type: 'boolean',
+              description: 'If enabled, this row will render as a simple horizontal divider line',
+              initialValue: false,
+            }),
+
             // LABEL
             defineField({
               name: 'label',
               title: 'Label',
               type: 'string',
               description: 'Optional eyebrow label (appears above the grid)',
+              hidden: ({ parent }) => parent?.divider === true,
             }),
 
             // HEADING
@@ -49,6 +59,7 @@ export default defineType({
               name: 'heading',
               title: 'Heading',
               type: 'blockContentMinimal',
+              hidden: ({ parent }) => parent?.divider === true,
             }),
 
             // SUBHEADING
@@ -56,6 +67,7 @@ export default defineType({
               name: 'subheading',
               title: 'Subheading',
               type: 'blockContentMinimal',
+              hidden: ({ parent }) => parent?.divider === true,
             }),
 
             // BODY
@@ -63,6 +75,7 @@ export default defineType({
               name: 'body',
               title: 'Body',
               type: 'blockContent',
+              hidden: ({ parent }) => parent?.divider === true,
             }),
 
             // LINK
@@ -75,6 +88,7 @@ export default defineType({
                 defineField({ name: 'url', title: 'URL', type: 'string' }),
               ],
               description: 'Optional link at the bottom of the text content',
+              hidden: ({ parent }) => parent?.divider === true,
             }),
 
             // LAYOUT
@@ -117,6 +131,7 @@ export default defineType({
                   hidden: ({ parent }) => parent?.columns === '1/1',
                 }),
               ],
+              hidden: ({ parent }) => parent?.divider === true,
             }),
 
             // CONTENT BLOCKS
@@ -285,12 +300,19 @@ export default defineType({
           // ROW PREVIEW
           preview: {
             select: {
+              divider: 'divider',
               label: 'label',
               heading: 'heading',
               columns: 'layout.columns',
               textColumn: 'layout.textColumn',
             },
-            prepare({ label, heading, columns, textColumn }) {
+            prepare({ divider, label, heading, columns, textColumn }) {
+              if (divider) {
+                return {
+                  title: 'Divider',
+                  subtitle: 'Horizontal divider line',
+                };
+              }
               const title = label || (heading && toPlainText(heading)) || 'Untitled Row';
               const layout = columns === '1/1' ? 'Full Width' : `${columns} • Text ${textColumn || 'left'}`;
               return {

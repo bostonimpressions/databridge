@@ -17,6 +17,9 @@ sections:
   - type: sectionMain
     theme: light
     rows:
+      # Divider row - simple horizontal line
+      - divider: true
+
       # Full width row (1/1)
       - label: ""
         heading: ""

@@ -83,36 +83,32 @@ sections:
                 - heading: "Proven Results"
                   body: "Track record of successful implementations"
 
-  # 100% Uptime - Stacked content example
+  # Industry Challenges - Two column layout with table
   - type: sectionMain
-    theme: dark
+    theme: light
     rows:
-      - heading: "100% Uptime for Three Decades"
+      - heading: "Industry Challenges"
+        subheading: "Common IT Infrastructure Issues"
         body: |
-          DataBridge Sites has maintained 100% uptime for 30 years without experiencing a single electrical outage.
+          Many businesses face similar challenges when it comes to IT infrastructure and management.
 
-          This perfect reliability record demonstrates actual operational excellence rather than statistical projections.
+          Understanding these challenges is the first step toward solving them.
         layout:
-          columns: "1/2-1/2"
-          textColumn: "left"
+          columns: "1/3-2/3"
+          textColumn: "right"
         contentBlocks:
-          - contentRow:
-              heading: "Reliability Factors"
-              body: |
-                Our infrastructure is designed for maximum reliability and fault tolerance.
-              blocks:
-                - tableBlock:
-                    columnA: "Reliability Factor"
-                    columnB: "Implementation"
-                    rows:
-                      - a: "Redundant Power"
-                        b: "Six 2.4-megawatt generators with N+1 redundancy ensure continuous operations during extended utility outages and provide capacity for future growth."
-                      - a: "24/7/365 Staffing"
-                        b: "Professional on-site teams monitor all systems around the clock, providing immediate response to any situations and direct access for customer needs."
-                      - a: "Tier IV Design"
-                        b: "Maryland's only Tier IV-designed commercial facility implements multiple layers of redundancy throughout all infrastructure systems for maximum fault tolerance."
-          - image: "/images/it-ecosystem-photo.jpeg"
-            alt: "Data Center Infrastructure"
+          - tableBlock:
+              columnA: "Challenge"
+              columnB: "Impact"
+              rows:
+                - a: "Office-Based Infrastructure"
+                  b: "Mission critical systems running in office closets without proper environmental controls, generator backup, or UPS systems create unacceptable downtime risks."
+                - a: "End-of-Life Equipment"
+                  b: "Aging infrastructure requires expensive replacement, but CFOs won't approve building new facilities when proven alternatives exist."
+                - a: "Compliance Requirements"
+                  b: "Regulatory standards demand certifications and security measures beyond what typical office environments can provide."
+                - a: "Power and Cooling Limitations"
+                  b: "High-density computing, AI workloads, and growing data requirements exceed the capacity of standard office infrastructure."
 
   # Get Started - CTA section
   - type: sectionMain

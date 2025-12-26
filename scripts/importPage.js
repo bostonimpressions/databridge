@@ -345,10 +345,30 @@ async function importPage(mdFilePath) {
     }
   );
 
-  // Preserve orderRank if page exists
-  const orderRank = existing?.orderRank || (await getLastOrderRank(pageType));
+  // Also search for pages with "home" or slug in ID (fallback)
+  let fallbackExisting = null;
+  if (!existing && data.slug === 'home') {
+    const byId = await client.fetch(
+      `*[_type == $type && _id match "*home*"][0]{ _id, orderRank }`,
+      { type: pageType }
+    );
+    if (byId) {
+      console.log(`⚠️  Found page by ID pattern: ${byId._id}`);
+      fallbackExisting = byId;
+    }
+  }
 
-  console.log(existing ? `♻️  Overwriting existing page: ${existing._id}` : `🆕 Creating new page`);
+  const finalExisting = existing || fallbackExisting;
+
+  // Preserve orderRank if page exists
+  const orderRank = finalExisting?.orderRank || (await getLastOrderRank(pageType));
+
+  if (finalExisting) {
+    console.log(`♻️  Overwriting existing page: ${finalExisting._id}`);
+  } else {
+    console.log(`🆕 Creating new page`);
+    console.log(`⚠️  WARNING: No existing page found with slug "${data.slug}". This will create a new document.`);
+  }
   console.log(`📊 Setting orderRank: ${orderRank}`);
 
   if (!data.sections) {
@@ -360,7 +380,9 @@ async function importPage(mdFilePath) {
   // Process sections
   for (let i = 0; i < data.sections.length; i++) {
     const section = data.sections[i];
-    console.log(`  Section ${i + 1}: ${section.type || 'unknown'}`);
+    const sectionTheme = section.theme || 'default';
+    const sectionRows = section.rows?.length || 0;
+    console.log(`  Section ${i + 1}: ${section.type || 'unknown'}${section.type === 'sectionMain' ? ` (theme: ${sectionTheme}, rows: ${sectionRows})` : ''}`);
 
     section._type = section.type;
     section._key = generateKey();
@@ -633,7 +655,7 @@ async function importPage(mdFilePath) {
     }
   }
 
-  const safeId = existing?._id || `${data.slug}-import`;
+  const safeId = finalExisting?._id || `${data.slug}-import`;
 
   const doc = {
     _id: safeId,
@@ -652,14 +674,25 @@ async function importPage(mdFilePath) {
   if (data.metaDescription) doc.metaDescription = data.metaDescription;
 
   console.log(`\n📤 Creating/replacing document in Sanity...`);
+  console.log(`   Total sections in document: ${doc.sections.length}`);
+  const sectionMainCount = doc.sections.filter(s => s._type === 'sectionMain').length;
+  console.log(`   sectionMain entries: ${sectionMainCount}`);
 
-  await client.createOrReplace(doc);
-
-  console.log(`\n✅ Successfully imported: ${data.title}`);
-  console.log(`   Type: ${pageType}`);
-  console.log(`   ID: ${safeId}`);
-  console.log(`   Slug: ${data.slug}`);
-  console.log(`   Order Rank: ${orderRank}`);
+  try {
+    await client.createOrReplace(doc);
+    console.log(`\n✅ Successfully imported: ${data.title}`);
+    console.log(`   Type: ${pageType}`);
+    console.log(`   ID: ${safeId}`);
+    console.log(`   Slug: ${data.slug}`);
+    console.log(`   Order Rank: ${orderRank}`);
+    console.log(`   Total sections: ${doc.sections.length}`);
+    console.log(`   sectionMain sections: ${sectionMainCount}`);
+  } catch (error) {
+    console.error(`\n❌ Error importing page:`, error.message);
+    console.error(`   Document ID: ${safeId}`);
+    console.error(`   Slug: ${data.slug}`);
+    throw error;
+  }
 }
 
 // ------------------------

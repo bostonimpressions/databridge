@@ -15,6 +15,7 @@ import SectionComparison from '@/components/sections/SectionComparison';
 import SectionCallToAction from '@/components/sections/SectionCallToAction';
 import SectionDetails from '@/components/sections/SectionDetails';
 import SectionBody from '@/components/sections/SectionBody';
+import SectionMain from '@/components/sections/SectionMain';
 
 interface PageProps {
   params: { slug: string } | Promise<{ slug: string }>;
@@ -32,6 +33,7 @@ const sectionComponents: Record<string, React.ComponentType<any>> = {
   sectionCallToAction: SectionCallToAction,
   sectionDetails: SectionDetails,
   sectionBody: SectionBody,
+  sectionMain: SectionMain,
 };
 
 // Utility: generate safe anchor ID from heading or type

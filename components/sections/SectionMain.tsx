@@ -25,6 +25,7 @@ interface RowLayout {
 }
 
 interface Row {
+  divider?: boolean;
   label?: string;
   heading?: any[];
   subheading?: any[];
@@ -143,10 +144,38 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
   
   const proseClass = theme === 'midnight' ? 'prose-invert' : '';
 
+  // Theme-based divider colors
+  const getDividerColor = () => {
+    switch (theme) {
+      case 'midnight':
+        return 'bg-white';
+      case 'orange':
+        return 'bg-orange-600';
+      case 'dark':
+        return 'bg-gray-700';
+      case 'sky':
+        return 'bg-blue-600';
+      case 'light':
+      default:
+        return 'bg-blue-ribbon-500';
+    }
+  };
+
   return (
     <section className={`relative py-16 ${sectionBg}`}>
       <div className="container mx-auto px-4">
         {rows.map((row, i) => {
+          // DIVIDER ROW
+          if (row.divider) {
+            return (
+              <hr
+                key={i}
+                className={`h-[9px] w-full border-0 ${getDividerColor()} my-8`}
+                aria-hidden="true"
+              />
+            );
+          }
+
           const columns = row.layout?.columns || '1/1';
           const textColumn = row.layout?.textColumn || 'left';
 
