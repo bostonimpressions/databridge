@@ -7,6 +7,7 @@ import { urlFor } from '@/sanity/lib/image';
 import TextHeading from '@/components/ui/TextHeading';
 import AnimatedElement from '@/components/AnimatedElement';
 import List from '@/components/ui/List';
+import TableBlock from '@/components/blocks/TableBlock';
 
 /* -------------------------------- Types -------------------------------- */
 
@@ -157,30 +158,19 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
 
                         case 'tableBlock':
                           return (
-                            <div key={j} className="overflow-x-auto">
-                              <table className="w-full border-collapse border">
-                                <thead>
-                                <tr>
-                                  {block.headers?.map((h: string, k: number) => (
-                                    <th key={k} className="border p-2 text-left">
-                                      {h}
-                                    </th>
-                                  ))}
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {block.rows?.map((r: string[], k: number) => (
-                                  <tr key={k}>
-                                    {r.map((cell, c) => (
-                                      <td key={c} className="border p-2">
-                                        {cell}
-                                      </td>
-                                    ))}
-                                  </tr>
-                                ))}
-                                </tbody>
-                              </table>
-                            </div>
+                            <AnimatedElement
+                              key={j}
+                              animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
+                            >
+                              <TableBlock 
+                                value={{
+                                  columnA: block.columnA || '',
+                                  columnB: block.columnB || '',
+                                  rows: block.rows || []
+                                }} 
+                                theme={theme} 
+                              />
+                            </AnimatedElement>
                           );
 
                         default:
