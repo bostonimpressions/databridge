@@ -207,6 +207,107 @@ function generateKey() {
 }
 
 // ------------------------
+// Helper: Process a single content block (image, list, table, cta)
+// ------------------------
+async function processContentBlock(block) {
+  block._key = generateKey();
+
+  // Determine block type
+  if (block.image) {
+    // Image block
+    block._type = 'image';
+    const imagePath = block.image;
+    const imageData = await handleImage(imagePath);
+    if (imageData) {
+      // Merge image asset at top level (not nested)
+      block.asset = imageData.asset;
+      // Keep alt text - it's already in the block object
+      // Remove the image path property since we've converted it
+      delete block.image;
+    } else {
+      // If image upload failed, remove the block
+      return null;
+    }
+  } else if (block.listBlock) {
+    // List block
+    block._type = 'listBlock';
+    const listData = block.listBlock;
+    block.heading = listData.heading
+      ? typeof listData.heading === 'string'
+        ? convertMarkdownToBlocks(listData.heading)
+        : listData.heading
+      : undefined;
+    block.body = listData.body
+      ? typeof listData.body === 'string'
+        ? convertMarkdownToBlocks(listData.body)
+        : listData.body
+      : undefined;
+    block.variant = listData.variant || 'default';
+    block.columns = listData.columns || 2;
+    block.items = [];
+
+    if (Array.isArray(listData.items)) {
+      block.items = await Promise.all(
+        listData.items.map(async (item) => {
+          item._key = generateKey();
+          item._type = 'listItem';
+
+          ['heading', 'body'].forEach((key) => {
+            if (item[key] && typeof item[key] === 'string') {
+              item[key] = convertMarkdownToBlocks(item[key]);
+            }
+          });
+
+          if (item.icon) {
+            item.icon = await handleImage(item.icon);
+          }
+
+          return item;
+        })
+      );
+    }
+
+    delete block.listBlock;
+  } else if (block.tableBlock) {
+    // Table block
+    block._type = 'tableBlock';
+    const tableData = block.tableBlock;
+    block.columnA = tableData.columnA || '';
+    block.columnB = tableData.columnB || '';
+    block.rows = [];
+
+    if (Array.isArray(tableData.rows)) {
+      block.rows = await Promise.all(
+        tableData.rows.map(async (row) => {
+          row._key = generateKey();
+          row.a =
+            row.a && typeof row.a === 'string'
+              ? convertMarkdownToBlocks(row.a)
+              : row.a || [];
+          row.b =
+            row.b && typeof row.b === 'string'
+              ? convertMarkdownToBlocks(row.b)
+              : row.b || [];
+          return row;
+        })
+      );
+    }
+
+    delete block.tableBlock;
+  } else if (block.ctaBlock) {
+    // CTA block
+    block._type = 'ctaBlock';
+    const ctaData = block.ctaBlock;
+    block.title = ctaData.title || '';
+    block.url = ctaData.url || '';
+    block.style = ctaData.style || 'primary';
+    delete block.ctaBlock;
+  }
+
+  return block;
+}
+
+// ------------------------
 // Import page
 // ------------------------
 async function importPage(mdFilePath) {
@@ -487,102 +588,38 @@ async function importPage(mdFilePath) {
             if (Array.isArray(row.contentBlocks)) {
               const processedBlocks = await Promise.all(
                 row.contentBlocks.map(async (block) => {
-                  block._key = generateKey();
+                  // CONTENT ROW (nested row with text + blocks)
+                  if (block.contentRow) {
+                    block._key = generateKey();
+                    block._type = 'contentRow';
+                    const rowData = block.contentRow;
+                    
+                    // Convert text fields to blocks
+                    ['heading', 'body'].forEach((key) => {
+                      if (rowData[key] && typeof rowData[key] === 'string') {
+                        block[key] = convertMarkdownToBlocks(rowData[key]);
+                      } else if (rowData[key]) {
+                        block[key] = rowData[key];
+                      }
+                    });
 
-                  // Determine block type
-                  if (block.image) {
-                    // Image block
-                    block._type = 'image';
-                    const imagePath = block.image;
-                    const imageData = await handleImage(imagePath);
-                    if (imageData) {
-                      // Merge image asset at top level (not nested)
-                      // imageData has: { _type: 'image', asset: { ... } }
-                      block.asset = imageData.asset;
-                      // Keep alt text - it's already in the block object
-                      // Remove the image path property since we've converted it
-                      delete block.image;
-                    } else {
-                      // If image upload failed, remove the block
-                      return null;
-                    }
-                  } else if (block.listBlock) {
-                    // List block
-                    block._type = 'listBlock';
-                    const listData = block.listBlock;
-                    block.heading = listData.heading
-                      ? typeof listData.heading === 'string'
-                        ? convertMarkdownToBlocks(listData.heading)
-                        : listData.heading
-                      : undefined;
-                    block.body = listData.body
-                      ? typeof listData.body === 'string'
-                        ? convertMarkdownToBlocks(listData.body)
-                        : listData.body
-                      : undefined;
-                    block.variant = listData.variant || 'default';
-                    block.columns = listData.columns || 2;
-                    block.items = [];
-
-                    if (Array.isArray(listData.items)) {
-                      block.items = await Promise.all(
-                        listData.items.map(async (item) => {
-                          item._key = generateKey();
-                          item._type = 'listItem';
-
-                          ['heading', 'body'].forEach((key) => {
-                            if (item[key] && typeof item[key] === 'string') {
-                              item[key] = convertMarkdownToBlocks(item[key]);
-                            }
-                          });
-
-                          if (item.icon) {
-                            item.icon = await handleImage(item.icon);
-                          }
-
-                          return item;
+                    // Process nested blocks
+                    if (Array.isArray(rowData.blocks)) {
+                      block.blocks = await Promise.all(
+                        rowData.blocks.map(async (nestedBlock) => {
+                          return await processContentBlock(nestedBlock);
                         })
                       );
+                      // Filter out null blocks
+                      block.blocks = block.blocks.filter((b) => b !== null);
                     }
 
-                    delete block.listBlock;
-                  } else if (block.tableBlock) {
-                    // Table block
-                    block._type = 'tableBlock';
-                    const tableData = block.tableBlock;
-                    block.columnA = tableData.columnA || '';
-                    block.columnB = tableData.columnB || '';
-                    block.rows = [];
-
-                    if (Array.isArray(tableData.rows)) {
-                      block.rows = await Promise.all(
-                        tableData.rows.map(async (row) => {
-                          row._key = generateKey();
-                          row.a =
-                            row.a && typeof row.a === 'string'
-                              ? convertMarkdownToBlocks(row.a)
-                              : row.a || [];
-                          row.b =
-                            row.b && typeof row.b === 'string'
-                              ? convertMarkdownToBlocks(row.b)
-                              : row.b || [];
-                          return row;
-                        })
-                      );
-                    }
-
-                    delete block.tableBlock;
-                  } else if (block.ctaBlock) {
-                    // CTA block
-                    block._type = 'ctaBlock';
-                    const ctaData = block.ctaBlock;
-                    block.title = ctaData.title || '';
-                    block.url = ctaData.url || '';
-                    block.style = ctaData.style || 'primary';
-                    delete block.ctaBlock;
+                    delete block.contentRow;
+                    return block;
                   }
 
-                  return block;
+                  // LEGACY: Direct blocks (backwards compatibility)
+                  return await processContentBlock(block);
                 })
               );
               // Filter out null blocks (failed image uploads)

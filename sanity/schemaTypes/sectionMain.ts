@@ -122,8 +122,106 @@ export default defineType({
               name: 'contentBlocks',
               title: 'Content Blocks',
               type: 'array',
-              description: 'Add images, lists, tables, or CTAs (appears opposite the text column)',
+              description: 'Add content rows with text and/or blocks (images, lists, tables, CTAs). Appears opposite the text column.',
               of: [
+                // CONTENT ROW (can have text + blocks)
+                defineField({
+                  name: 'contentRow',
+                  title: 'Content Row',
+                  type: 'object',
+                  fields: [
+                    defineField({
+                      name: 'heading',
+                      title: 'Heading',
+                      type: 'blockContentMinimal',
+                      description: 'Optional heading for this content row',
+                    }),
+                    defineField({
+                      name: 'body',
+                      title: 'Body',
+                      type: 'blockContent',
+                      description: 'Optional body text for this content row',
+                    }),
+                    defineField({
+                      name: 'blocks',
+                      title: 'Blocks',
+                      type: 'array',
+                      description: 'Add images, lists, tables, or CTAs to this row',
+                      of: [
+                        // IMAGE BLOCK
+                        defineField({
+                          name: 'image',
+                          title: 'Image',
+                          type: 'image',
+                          options: { hotspot: true },
+                          fields: [
+                            defineField({
+                              name: 'alt',
+                              title: 'Alt Text',
+                              type: 'string',
+                              validation: (Rule) => Rule.required(),
+                            }),
+                          ],
+                        }),
+
+                        // LIST BLOCK (reference to separate schema)
+                        { type: 'listBlock' },
+
+                        // TABLE BLOCK (reference to separate schema)
+                        { type: 'tableBlock' },
+
+                        // CTA BLOCK
+                        defineField({
+                          name: 'ctaBlock',
+                          title: 'CTA Block',
+                          type: 'object',
+                          fields: [
+                            defineField({ name: 'title', title: 'Button Text', type: 'string' }),
+                            defineField({ name: 'url', title: 'URL', type: 'string' }),
+                            defineField({
+                              name: 'style',
+                              title: 'Button Style',
+                              type: 'string',
+                              options: {
+                                list: [
+                                  { title: 'Primary', value: 'primary' },
+                                  { title: 'Secondary', value: 'secondary' },
+                                  { title: 'Outline', value: 'outline' },
+                                ],
+                              },
+                              initialValue: 'primary',
+                            }),
+                          ],
+                          preview: {
+                            select: { title: 'title', url: 'url' },
+                            prepare({ title, url }) {
+                              return {
+                                title: title || 'CTA Button',
+                                subtitle: url,
+                              };
+                            },
+                          },
+                        }),
+                      ],
+                    }),
+                  ],
+                  preview: {
+                    select: {
+                      heading: 'heading',
+                      blockCount: 'blocks',
+                    },
+                    prepare({ heading, blockCount }) {
+                      const title = (heading && toPlainText(heading)) || 'Content Row';
+                      const blockText = blockCount?.length ? `${blockCount.length} block(s)` : 'No blocks';
+                      return {
+                        title,
+                        subtitle: blockText,
+                      };
+                    },
+                  },
+                }),
+
+                // LEGACY: Direct blocks (for backwards compatibility)
                 // IMAGE BLOCK
                 defineField({
                   name: 'image',

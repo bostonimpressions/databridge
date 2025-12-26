@@ -15,7 +15,7 @@ type ColumnLayout = '1/1' | '1/2-1/2' | '2/3-1/3' | '1/3-2/3';
 type TextColumn = 'left' | 'right';
 
 interface ContentBlock {
-  _type: 'image' | 'listBlock' | 'tableBlock' | 'ctaBlock';
+  _type: 'image' | 'listBlock' | 'tableBlock' | 'ctaBlock' | 'contentRow';
   [key: string]: any;
 }
 
@@ -58,6 +58,78 @@ const getGridCols = (columns?: ColumnLayout) => {
   }
 };
 
+// Helper function to render content blocks
+const renderContentBlock = (
+  block: ContentBlock,
+  isTextLeft: boolean,
+  theme: string,
+  proseClass: string
+) => {
+  switch (block._type) {
+    case 'image':
+      return (
+        <AnimatedElement
+          animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
+        >
+          <div className="relative h-64 w-full md:h-80">
+            <Image
+              src={urlFor(block).url()}
+              alt={block.alt || 'Image'}
+              fill
+              className="rounded-lg object-cover"
+            />
+          </div>
+        </AnimatedElement>
+      );
+
+    case 'listBlock':
+      return (
+        <List
+          items={block.items || []}
+          columns={block.columns || 1}
+          theme={block.variant || 'default'}
+        />
+      );
+
+    case 'tableBlock':
+      return (
+        <AnimatedElement
+          animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
+        >
+          <TableBlock 
+            value={{
+              columnA: block.columnA || '',
+              columnB: block.columnB || '',
+              rows: block.rows || []
+            }} 
+            theme={theme as 'light' | 'dark' | 'midnight'} 
+          />
+        </AnimatedElement>
+      );
+
+    case 'ctaBlock':
+      return (
+        <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+          <a
+            href={block.url || '#'}
+            className={`inline-block px-6 py-3 rounded-lg font-semibold transition-colors ${
+              block.style === 'secondary'
+                ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                : block.style === 'outline'
+                ? 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >
+            {block.title || 'Click Here'}
+          </a>
+        </AnimatedElement>
+      );
+
+    default:
+      return null;
+  }
+};
+
 /* ------------------------------ Component ------------------------------ */
 
 export default function SectionMain({ rows, theme = 'light' }: SectionMainProps) {
@@ -65,7 +137,7 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
   const proseClass = theme === 'midnight' ? 'prose-invert' : '';
 
   return (
-    <section className={`relative overflow-hidden py-16 ${sectionBg}`}>
+    <section className={`relative py-16 ${sectionBg}`}>
       <div className="container mx-auto px-4">
         {rows.map((row, i) => {
           const columns = row.layout?.columns || '1/1';
@@ -78,7 +150,7 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
           const contentColOrder = isTextLeft ? 'md:order-2' : 'md:order-1';
 
           return (
-            <div key={i} className="mb-20">
+            <div key={i} className="mb-20 min-h-0">
               {row.label && (
                 <AnimatedElement animation="fade">
                   <p className="mb-4 text-sm font-semibold uppercase">
@@ -88,8 +160,8 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
               )}
 
               <div className={`grid gap-10 ${gridCols} items-start`}>
-                {/* TEXT COLUMN */}
-                <div className={textColOrder}>
+                {/* TEXT COLUMN - Sticky so shorter column stays in view */}
+                <div className={`${textColOrder} md:sticky md:top-24 md:self-start`}>
                   {row.heading && (
                     <AnimatedElement animation="fade">
                       <TextHeading level="h2" color={proseClass}>
@@ -124,59 +196,50 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
                   )}
                 </div>
 
-                {/* CONTENT COLUMN */}
+                {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
                 {columns !== '1/1' && (
-                  <div className={contentColOrder}>
-                    {row.contentBlocks?.map((block, j) => {
-                      switch (block._type) {
-                        case 'image':
+                  <div className={`${contentColOrder} md:sticky md:top-24 md:self-start`}>
+                    <div className="space-y-8">
+                      {row.contentBlocks?.map((block, j) => {
+                        // CONTENT ROW (nested row with text + blocks)
+                        if (block._type === 'contentRow') {
                           return (
-                            <AnimatedElement
-                              key={j}
-                              animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
-                            >
-                              <div className="relative h-64 w-full md:h-80">
-                                <Image
-                                  src={urlFor(block).url()}
-                                  alt={block.alt || 'Image'}
-                                  fill
-                                  className="rounded-lg object-cover"
-                                />
-                              </div>
-                            </AnimatedElement>
-                          );
+                            <div key={j} className="space-y-6">
+                              {block.heading && (
+                                <AnimatedElement animation="fade">
+                                  <h3 className={proseClass}>
+                                    {renderPT(block.heading)}
+                                  </h3>
+                                </AnimatedElement>
+                              )}
+                              
+                              {block.body && (
+                                <AnimatedElement animation="fade" delay={0.1}>
+                                  {renderPT(block.body)}
+                                </AnimatedElement>
+                              )}
 
-                        case 'listBlock':
-                          return (
-                            <List
-                              key={j}
-                              items={block.items || []}
-                              columns={block.columns || 1}
-                              theme={block.variant || 'default'}
-                            />
+                              {block.blocks && block.blocks.length > 0 && (
+                                <div className="space-y-6">
+                                  {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
+                                    <React.Fragment key={k}>
+                                      {renderContentBlock(nestedBlock, isTextLeft, theme, proseClass)}
+                                    </React.Fragment>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
                           );
+                        }
 
-                        case 'tableBlock':
-                          return (
-                            <AnimatedElement
-                              key={j}
-                              animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
-                            >
-                              <TableBlock 
-                                value={{
-                                  columnA: block.columnA || '',
-                                  columnB: block.columnB || '',
-                                  rows: block.rows || []
-                                }} 
-                                theme={theme} 
-                              />
-                            </AnimatedElement>
-                          );
-
-                        default:
-                          return null;
-                      }
-                    })}
+                        // LEGACY: Direct blocks (backwards compatibility)
+                        return (
+                          <React.Fragment key={j}>
+                            {renderContentBlock(block, isTextLeft, theme, proseClass)}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>

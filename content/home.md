@@ -80,30 +80,72 @@ sections:
                 - heading: "Proven Results"
                   body: "Track record of successful implementations"
 
-      # Two column layout (1/3-2/3) - Text right, content left
-      - heading: "Industry Challenges"
-        subheading: "Common IT Infrastructure Issues"
+      # Example: Stacked content blocks demonstrating contentRow
+      # This shows how to stack multiple content blocks (text + table) in one column
+      # Left column: heading + body (from row fields) + tableBlock (from contentRow) - all stacked
+      # Right column: image
+      # Note: When textColumn is "left", row heading/body go left, contentBlocks go right
+      # To stack content below the text, use contentRow in contentBlocks
+      - heading: "100% Uptime for Three Decades"
         body: |
-          Many businesses face similar challenges when it comes to IT infrastructure and management.
+          DataBridge Sites has maintained 100% uptime for 30 years without experiencing a single electrical outage.
 
-          Understanding these challenges is the first step toward solving them.
+          This perfect reliability record demonstrates actual operational excellence rather than statistical projections.
         layout:
-          columns: "1/3-2/3"
+          columns: "1/2-1/2"
+          textColumn: "left"
+        contentBlocks:
+          # Content Row with tableBlock - appears on RIGHT, stacks below if we had more contentRows
+          - contentRow:
+              heading: "Reliability Factors"
+              body: |
+                Our infrastructure is designed for maximum reliability and fault tolerance.
+              blocks:
+                - tableBlock:
+                    columnA: "Reliability Factor"
+                    columnB: "Implementation"
+                    rows:
+                      - a: "Redundant Power"
+                        b: "Six 2.4-megawatt generators with N+1 redundancy ensure continuous operations during extended utility outages and provide capacity for future growth."
+                      - a: "24/7/365 Staffing"
+                        b: "Professional on-site teams monitor all systems around the clock, providing immediate response to any situations and direct access for customer needs."
+                      - a: "Tier IV Design"
+                        b: "Maryland's only Tier IV-designed commercial facility implements multiple layers of redundancy throughout all infrastructure systems for maximum fault tolerance."
+          # Image also appears on RIGHT (same side as other contentBlocks)
+          - image: "/images/it-ecosystem-photo.jpeg"
+            alt: "Data Center Infrastructure"
+
+      # Better example: All content stacked in left column using contentRows
+      # Right column stays empty (or you could add text there)
+      - layout:
+          columns: "1/2-1/2"
           textColumn: "right"
         contentBlocks:
-          # Table block
-          - tableBlock:
-              columnA: "Challenge"
-              columnB: "Impact"
-              rows:
-                - a: "Office-Based Infrastructure"
-                  b: "Mission critical systems running in office closets without proper environmental controls, generator backup, or UPS systems create unacceptable downtime risks."
-                - a: "End-of-Life Equipment"
-                  b: "Aging infrastructure requires expensive replacement, but CFOs won't approve building new facilities when proven alternatives exist."
-                - a: "Compliance Requirements"
-                  b: "Regulatory standards demand certifications and security measures beyond what typical office environments can provide."
-                - a: "Power and Cooling Limitations"
-                  b: "High-density computing, AI workloads, and growing data requirements exceed the capacity of standard office infrastructure."
+          # All contentRows appear on LEFT side (opposite of textColumn)
+          - contentRow:
+              heading: "100% Uptime for Three Decades"
+              body: |
+                DataBridge Sites has maintained 100% uptime for 30 years without experiencing a single electrical outage.
+
+                This perfect reliability record demonstrates actual operational excellence rather than statistical projections.
+
+                Organizations that cannot accept downtime depend on infrastructure designed and operated to eliminate outage risks.
+              blocks:
+                - tableBlock:
+                    columnA: "Reliability Factor"
+                    columnB: "Implementation"
+                    rows:
+                      - a: "Redundant Power"
+                        b: "Six 2.4-megawatt generators with N+1 redundancy ensure continuous operations during extended utility outages and provide capacity for future growth."
+                      - a: "24/7/365 Staffing"
+                        b: "Professional on-site teams monitor all systems around the clock, providing immediate response to any situations and direct access for customer needs."
+                      - a: "Tier IV Design"
+                        b: "Maryland's only Tier IV-designed commercial facility implements multiple layers of redundancy throughout all infrastructure systems for maximum fault tolerance."
+          # Second contentRow stacks below the first one
+          - contentRow:
+              blocks:
+                - image: "/images/it-ecosystem-photo.jpeg"
+                  alt: "Data Center Infrastructure"
 
       # Two column layout (1/2-1/2) - Text right, content left
       - heading: "Get Started Today"
