@@ -593,6 +593,17 @@ async function importPage(mdFilePath) {
     // SECTION: sectionMain
     // -------------------------------------------
     if (section._type === 'sectionMain') {
+      // Process background image if present
+      if (section.backgroundImage) {
+        const imagePath = section.backgroundImage;
+        const imageData = await handleImage(imagePath);
+        if (imageData) {
+          section.backgroundImage = imageData;
+        } else {
+          delete section.backgroundImage; // Remove if upload failed
+        }
+      }
+      
       // Process rows
       if (Array.isArray(section.rows)) {
         section.rows = await Promise.all(

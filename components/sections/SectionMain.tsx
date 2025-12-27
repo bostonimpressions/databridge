@@ -39,6 +39,7 @@ interface Row {
 interface SectionMainProps {
   rows: Row[];
   theme?: 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
+  backgroundImage?: any;
 }
 
 
@@ -134,16 +135,24 @@ const renderContentBlock = (
 
 /* ------------------------------ Component ------------------------------ */
 
-export default function SectionMain({ rows, theme = 'light' }: SectionMainProps) {
+export default function SectionMain({ rows, theme = 'light', backgroundImage }: SectionMainProps) {
   // Theme-based background colors
   const sectionBg = 
     theme === 'dark' ? 'bg-gray-100' :
     theme === 'midnight' ? 'bg-gray-900' :
     theme === 'sky' ? 'bg-blue-50' :
-    theme === 'orange' ? 'bg-orange-50' :
+    theme === 'orange' ? '' : // Orange theme uses custom gradient background
     'bg-white';
   
   const proseClass = theme === 'midnight' ? 'prose-invert' : '';
+
+  // Orange theme background style with gradient
+  const orangeGradientStyle = theme === 'orange' ? {
+    background: 'linear-gradient(179deg, var(--color-orange-100) 0.64%, #FFEEDF 91.77%)',
+  } : {};
+  
+  // Background image URL
+  const backgroundImageUrl = backgroundImage ? urlFor(backgroundImage).url() : null;
 
   // Theme-based divider colors
   const getDividerColor = () => {
@@ -163,8 +172,26 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
   };
 
   return (
-    <section className={`relative py-16 ${sectionBg}`}>
-      <div className="container mx-auto px-4">
+    <section 
+      className={`relative py-16 ${sectionBg}`}
+      style={orangeGradientStyle}
+    >
+      {/* Background image for orange theme (positioned at bottom with color-burn) */}
+      {theme === 'orange' && backgroundImageUrl && (
+        <div 
+          className="absolute bottom-0 left-0 right-0 pointer-events-none"
+          style={{
+            backgroundImage: `url(${backgroundImageUrl})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'bottom center',
+            backgroundRepeat: 'no-repeat',
+            height: '50%',
+            mixBlendMode: 'color-burn',
+          }}
+        />
+      )}
+      
+      <div className="container mx-auto px-4 relative z-10">
         {rows.map((row, i) => {
           // DIVIDER ROW
           if (row.divider) {

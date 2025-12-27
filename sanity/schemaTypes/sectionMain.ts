@@ -26,6 +26,15 @@ export default defineType({
       description: 'Controls styling for entire section including text, backgrounds, images, lists, and tables',
     }),
 
+    // BACKGROUND IMAGE
+    defineField({
+      name: 'backgroundImage',
+      title: 'Background Image',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Optional background image for the section (positioned at bottom with color-burn blend mode for orange theme)',
+    }),
+
     // ROWS
     defineField({
       name: 'rows',

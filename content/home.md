@@ -68,25 +68,48 @@ sections:
                 - a: "Power and Cooling Limitations"
                   b: "High-density computing, AI workloads, and growing data requirements exceed the capacity of standard office infrastructure."
 
-  # Our Services - Two column layout
+  # Section two - Maryland's Premier Data Center Infrastructure
   - type: sectionMain
-    theme: sky
+    theme: orange
+    backgroundImage: "/images/data-center-bg.jpg"
     rows:
-      - heading: "Our Services"
-        subheading: "Comprehensive IT Solutions"
+      # First row: Full width heading and body
+      - heading: "Maryland's Premier Data Center Infrastructure"
         body: |
-          We offer a wide range of IT services designed to meet your business needs.
+          DataBridge Sites operates Maryland's largest and most secure data center facility in Silver Spring. Our 214,000 square foot facility represents Maryland's only Tier IV-designed commercial data center, delivering infrastructure reliability unmatched in the region.
 
-          From managed IT to cybersecurity, we've got you covered.
-        link:
-          text: "Learn More"
-          url: "/services"
+          We've maintained 100% uptime for 30 years without a single electrical outage. This perfect reliability record isn't a projection or statistical claim—it's actual operational performance spanning three decades.
+
+          Six 2.4-megawatt generators provide redundancy far exceeding those of competitors, who typically deploy only two 1-1.5 megawatt generators.
+
+          Organizations choose DataBridge when downtime isn't an option. Whether you need secure colocation space, compliant cloud environments, or disaster recovery capabilities, our infrastructure supports your most demanding requirements without the inconvenience of traveling to Northern Virginia.
+        layout:
+          columns: "1/1"
+
+      # Second row: Two columns - text on left, table on right
+      - heading: "Infrastructure That Sets Us Apart"
+        body: |
+          Our technical specifications demonstrate the superior capabilities that distinguish DataBridge from other regional data centers.
         layout:
           columns: "1/2-1/2"
           textColumn: "left"
         contentBlocks:
-          - image: "/images/it-ecosystem-photo.jpeg"
-            alt: "IT Ecosystem"
+          - tableBlock:
+              columnA: "Differentiator"
+              columnB: "Technical Advantage"
+              rows:
+                - a: "Six 2.4-Megawatt Generators"
+                  b: "Superior power redundancy with six 2.4-MW generators compared to competitors' two 1-1.5 MW generators ensures continuous operations during extended outages."
+                - a: "30-Year Perfect Uptime"
+                  b: "100% uptime record spanning three decades without a single electrical outage proves exceptional operational reliability."
+                - a: "Tier IV-Designed Facility"
+                  b: "Maryland's only Tier IV-designed commercial data center provides the highest level of infrastructure redundancy and fault tolerance."
+                - a: "High-Density Support"
+                  b: "Infrastructure engineered to support power-hungry deployments exceeding 150 W/sq.ft handles AI, machine learning, and supercomputing workloads."
+                - a: "Express Connect Network"
+                  b: "Proprietary under-river fiber path provides the fastest route to Ashburn, VA—the East Coast's major Internet exchange hub."
+                - a: "Comprehensive Compliance"
+                  b: "ISO 27001, ISO 9001, SOC 2 Type II, HIPAA/HITECH, PCI, FedRAMP, and FISMA certifications serve highly regulated industries."
 
   # Why Choose Us - Two column layout
   - type: sectionMain

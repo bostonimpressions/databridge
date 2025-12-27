@@ -17,57 +17,87 @@ interface TableBlockProps {
 }
 
 export default function TableBlock({ value, theme = 'light' }: TableBlockProps) {
-  // Theme-based styling
-  const isDark = theme === 'dark' || theme === 'midnight';
-  const isLight = theme === 'light';
-  const isSky = theme === 'sky';
-  const isOrange = theme === 'orange';
-  
-  // Border colors - thicker borders (2px)
-  const borderColor = isDark ? 'border-gray-400' : 'border-gray-300';
-  const headerBorderColor = isDark 
-    ? 'border-gray-500' 
-    : isSky 
-    ? 'border-blue-600' 
-    : isOrange 
-    ? 'border-orange-600' 
-    : 'border-blue-ribbon-500';
-  
-  // Text colors - black for light theme, white for dark/midnight, sapphire for sky/orange
-  const textColor = isDark 
-    ? 'text-white' 
-    : isLight 
-    ? 'text-black' 
-    : 'text-sapphire-500';
-  const headerTextColor = isDark 
-    ? 'text-white' 
-    : isLight 
-    ? 'text-black' 
-    : 'text-sapphire-500';
-  
-  // Row background - same for all rows, no zebra striping
-  const rowBg = isDark ? 'bg-gray-800' : 'bg-gray-50';
+  // Theme-specific class configurations
+  const themeClasses = {
+    light: {
+      headerBorder: 'border-blue-ribbon-500',
+      headerText: 'text-black',
+      text: 'text-black',
+      rowBorder: 'border-gray-300',
+      rowBg: 'bg-gray-50',
+      tbodyBorder: 'border-perano-300',
+      rowStyle: {},
+    },
+    dark: {
+      headerBorder: 'border-gray-500',
+      headerText: 'text-white',
+      text: 'text-white',
+      rowBorder: 'border-gray-400',
+      rowBg: 'bg-gray-800',
+      tbodyBorder: 'border-perano-300',
+      rowStyle: {},
+    },
+    midnight: {
+      headerBorder: 'border-gray-500',
+      headerText: 'text-white',
+      text: 'text-white',
+      rowBorder: 'border-gray-400',
+      rowBg: 'bg-gray-800',
+      tbodyBorder: 'border-perano-300',
+      rowStyle: {},
+    },
+    sky: {
+      headerBorder: 'border-blue-600',
+      headerText: 'text-sapphire-500',
+      text: 'text-sapphire-500',
+      rowBorder: 'border-gray-300',
+      rowBg: 'bg-gray-50',
+      tbodyBorder: 'border-perano-300',
+      rowStyle: {},
+    },
+    orange: {
+      headerBorder: 'border-orange-500',
+      headerText: 'text-black',
+      text: 'text-black',
+      rowBorder: 'border-orange-100',
+      rowBg: 'bg-black/5',
+      tbodyBorder: 'border-orange-300',
+      rowStyle: {},
+    },
+  };
+
+  // Get theme classes with fallback to light/default
+  const classes = themeClasses[theme] || themeClasses.light;
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th className={`${headerTextColor} px-4 py-3 text-left text-xl font-semibold border-b-8 ${headerBorderColor}`}>
+            <th className={`${classes.headerText} px-4 py-3 text-left text-xl font-semibold border-b-8 ${classes.headerBorder}`}>
               {value.columnA}
             </th>
-            <th className={`${headerTextColor} px-4 py-3 text-left text-xl font-semibold border-b-8 ${headerBorderColor}`}>
+            <th className={`${classes.headerText} px-4 py-3 text-left text-xl font-semibold border-b-8 ${classes.headerBorder}`}>
               {value.columnB}
             </th>
           </tr>
         </thead>
-        <tbody className="border-b-8 border-perano-300">
+        <tbody className={`border-b-8 ${classes.tbodyBorder}`}>
           {value.rows.map((row, i) => (
-            <tr key={i} className={`border-b-2 ${borderColor}`}>
-              <td className={`${rowBg} ${textColor} px-4 py-5`}>
+            <tr 
+              key={i} 
+              className={`border-b-2 ${classes.rowBorder}`}
+            >
+              <td 
+                className={`${classes.rowBg} ${classes.text} px-4 py-5`}
+                style={classes.rowStyle}
+              >
                 <PortableText value={row.a} />
               </td>
-              <td className={`${rowBg} ${textColor} px-4 py-5`}>
+              <td 
+                className={`${classes.rowBg} ${classes.text} px-4 py-5`}
+                style={classes.rowStyle}
+              >
                 <PortableText value={row.b} />
               </td>
             </tr>
