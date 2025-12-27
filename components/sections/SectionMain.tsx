@@ -227,44 +227,46 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
 
               <div className={`grid gap-20 ${gridCols} items-start`}>
                 {/* TEXT COLUMN - Sticky so shorter column stays in view */}
-                <div className={`${textColOrder} md:sticky md:top-24 md:self-start`}>
+                <AnimatedElement 
+                  animation={columns === '1/1' ? 'fadeUp' : (isTextLeft ? 'fadeLeft' : 'fadeRight')}
+                  className={`${textColOrder} md:sticky md:top-24 md:self-start`}
+                  once={false}
+                >
                   {row.heading && (
-                    <AnimatedElement animation="fade">
-                      <TextHeading level="h2" color={proseClass}>
-                        {renderPT(row.heading)}
-                      </TextHeading>
-                    </AnimatedElement>
+                    <TextHeading level="h2" color={proseClass}>
+                      {renderPT(row.heading)}
+                    </TextHeading>
                   )}
 
                   {row.subheading && (
-                    <AnimatedElement animation="fade" delay={0.1}>
-                      <h4 className="mt-2">
-                        {renderPT(row.subheading)}
-                      </h4>
-                    </AnimatedElement>
+                    <h4 className="mt-2">
+                      {renderPT(row.subheading)}
+                    </h4>
                   )}
 
                   {row.body && (
-                    <AnimatedElement animation="fade" delay={0.2}>
+                    <div>
                       {renderPT(row.body)}
-                    </AnimatedElement>
+                    </div>
                   )}
 
                   {row.link && (
-                    <AnimatedElement animation="fade" delay={0.3}>
-                      <a
-                        href={row.link.url}
-                        className="mt-4 inline-block text-blue-600 hover:underline"
-                      >
-                        {row.link.text}
-                      </a>
-                    </AnimatedElement>
+                    <a
+                      href={row.link.url}
+                      className="mt-4 inline-block text-blue-600 hover:underline"
+                    >
+                      {row.link.text}
+                    </a>
                   )}
-                </div>
+                </AnimatedElement>
 
                 {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
                 {columns !== '1/1' && (
-                  <div className={`${contentColOrder} md:sticky md:top-24 md:self-start`}>
+                  <AnimatedElement 
+                    animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
+                    className={`${contentColOrder} md:sticky md:top-24 md:self-start`}
+                    once={false}
+                  >
                     <div className="space-y-8">
                       {row.contentBlocks?.map((block, j) => {
                         // CONTENT ROW (nested row with text + blocks)
@@ -306,12 +308,12 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                         );
                       })}
                     </div>
-                  </div>
+                  </AnimatedElement>
                 )}
 
                 {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
                 {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
-                  <div className="mt-0">
+                  <AnimatedElement animation="fadeUp" once={false} className="mt-0">
                     <div className="space-y-8">
                       {row.contentBlocks.map((block, j) => {
                         // CONTENT ROW (nested row with text + blocks)
@@ -353,7 +355,7 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                         );
                       })}
                     </div>
-                  </div>
+                  </AnimatedElement>
                 )}
               </div>
             </div>
