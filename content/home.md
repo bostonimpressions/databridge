@@ -111,23 +111,26 @@ sections:
                 - a: "Comprehensive Compliance"
                   b: "ISO 27001, ISO 9001, SOC 2 Type II, HIPAA/HITECH, PCI, FedRAMP, and FISMA certifications serve highly regulated industries."
 
-  # Why Choose Us - Two column layout
+  # Section three
   - type: sectionMain
     theme: light
     rows:
-      - heading: "Why Choose Us"
+      # First row: 2 columns, text on left, nothing in right
+      - label: "Complete Data Center Solutions"
+        heading: "We create reliable technology that drives your success"
         body: |
-          We provide exceptional service and support to help your business grow.
-
-          Our team is dedicated to your success.
+          DataBridge delivers enterprise-grade infrastructure services designed to support mission critical applications. Organizations deploy single services or combine multiple solutions to achieve optimal hybrid IT strategies.
         layout:
-          columns: "2/3-1/3"
+          columns: "1/2-1/2"
           textColumn: "left"
+      
+      # Second row: List with 2 columns, cards-blue variant, then a link
+      - layout:
+          columns: "1/1"
         contentBlocks:
           - listBlock:
-              heading: "Key Benefits"
-              variant: "checks"
-              columns: 1
+              variant: "cards-blue"
+              columns: 2
               items:
                 - heading: "24/7 Support"
                   body: "Round-the-clock assistance when you need it"
@@ -135,6 +138,11 @@ sections:
                   body: "Certified professionals with years of experience"
                 - heading: "Proven Results"
                   body: "Track record of successful implementations"
+                - heading: "Scalable Solutions"
+                  body: "Infrastructure that grows with your business needs"
+        link:
+          text: "Learn More About Our Services"
+          url: "/services"
 
   # Industry Challenges - Two column layout with table
   - type: sectionMain
