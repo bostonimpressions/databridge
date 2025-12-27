@@ -13,49 +13,65 @@ interface TableBlockValue {
 
 interface TableBlockProps {
   value: TableBlockValue;
-  theme?: 'light' | 'dark' | 'midnight';
+  theme?: 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
 }
 
 export default function TableBlock({ value, theme = 'light' }: TableBlockProps) {
   // Theme-based styling
   const isDark = theme === 'dark' || theme === 'midnight';
+  const isLight = theme === 'light';
+  const isSky = theme === 'sky';
+  const isOrange = theme === 'orange';
+  
+  // Border colors - thicker borders (2px)
   const borderColor = isDark ? 'border-gray-400' : 'border-gray-300';
-  const headerBg = isDark ? 'bg-gray-700' : 'bg-white';
-  const textColor = isDark ? 'text-white' : 'text-sapphire-500';
-  const headerTextColor = isDark ? 'text-white' : 'text-sapphire-500';
-  const headerBorderColor = isDark ? 'border-gray-500' : 'border-blue-ribbon-500';
+  const headerBorderColor = isDark 
+    ? 'border-gray-500' 
+    : isSky 
+    ? 'border-blue-600' 
+    : isOrange 
+    ? 'border-orange-600' 
+    : 'border-blue-ribbon-500';
+  
+  // Text colors - black for light theme, white for dark/midnight, sapphire for sky/orange
+  const textColor = isDark 
+    ? 'text-white' 
+    : isLight 
+    ? 'text-black' 
+    : 'text-sapphire-500';
+  const headerTextColor = isDark 
+    ? 'text-white' 
+    : isLight 
+    ? 'text-black' 
+    : 'text-sapphire-500';
+  
+  // Row background - same for all rows, no zebra striping
+  const rowBg = isDark ? 'bg-gray-800' : 'bg-gray-50';
 
   return (
     <div className="overflow-x-auto">
-      <table className={`w-full border-collapse border ${borderColor}`}>
+      <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th className={`border ${borderColor} ${headerBg} ${headerTextColor} px-4 py-3 text-left font-semibold`}>
+            <th className={`${headerTextColor} px-4 py-3 text-left text-xl font-semibold border-b-8 ${headerBorderColor}`}>
               {value.columnA}
             </th>
-            <th className={`border ${borderColor} ${headerBg} ${headerTextColor} px-4 py-3 text-left font-semibold`}>
+            <th className={`${headerTextColor} px-4 py-3 text-left text-xl font-semibold border-b-8 ${headerBorderColor}`}>
               {value.columnB}
             </th>
           </tr>
         </thead>
-        <tbody>
-          {value.rows.map((row, i) => {
-            // Alternating row backgrounds: white for even, light gray for odd
-            const rowBg = isDark 
-              ? (i % 2 === 0 ? 'bg-gray-800' : 'bg-gray-700')
-              : (i % 2 === 0 ? 'bg-white' : 'bg-gray-50');
-            
-            return (
-              <tr key={i} className={i === 0 ? `border-t-2 ${headerBorderColor}` : ''}>
-                <td className={`border ${borderColor} ${rowBg} ${textColor} px-4 py-3`}>
-                  <PortableText value={row.a} />
-                </td>
-                <td className={`border ${borderColor} ${rowBg} ${textColor} px-4 py-3`}>
-                  <PortableText value={row.b} />
-                </td>
-              </tr>
-            );
-          })}
+        <tbody className="border-b-8 border-perano-300">
+          {value.rows.map((row, i) => (
+            <tr key={i} className={`border-b-2 ${borderColor}`}>
+              <td className={`${rowBg} ${textColor} px-4 py-5`}>
+                <PortableText value={row.a} />
+              </td>
+              <td className={`${rowBg} ${textColor} px-4 py-5`}>
+                <PortableText value={row.b} />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

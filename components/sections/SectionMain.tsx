@@ -104,7 +104,7 @@ const renderContentBlock = (
               columnB: block.columnB || '',
               rows: block.rows || []
             }} 
-            theme={theme as 'light' | 'dark' | 'midnight'} 
+            theme={theme as 'light' | 'dark' | 'midnight' | 'sky' | 'orange'} 
           />
         </AnimatedElement>
       );
@@ -198,7 +198,7 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
                 </AnimatedElement>
               )}
 
-              <div className={`grid gap-10 ${gridCols} items-start`}>
+              <div className={`grid gap-20 ${gridCols} items-start`}>
                 {/* TEXT COLUMN - Sticky so shorter column stays in view */}
                 <div className={`${textColOrder} md:sticky md:top-24 md:self-start`}>
                   {row.heading && (
