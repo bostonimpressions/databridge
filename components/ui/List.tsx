@@ -6,6 +6,7 @@ import { SanityImageSource } from '@sanity/image-url';
 import { urlFor } from '@/sanity/lib/image';
 import type { PortableTextBlock } from '@portabletext/types';
 import AnimatedElement from '@/components/AnimatedElement';
+import CountUp from '@/components/ui/CountUp';
 
 interface ListItemProps {
   heading?: PortableTextBlock[];
@@ -31,7 +32,8 @@ interface ListProps {
     | 'negatives'
     | 'positives'
     | 'good'
-    | 'bad';
+    | 'bad'
+    | 'counter';
 }
 
 const defaultIcons: Record<string, string> = {
@@ -68,6 +70,7 @@ export default function List({
   const shouldShowImage = (item: ListItemProps) => {
     if (theme === 'snapshot') return true;
     if (theme === 'flags') return false;
+    if (theme === 'counter') return false;
     if (themeAllowsUploaded) return !!item.icon;
     return !!defaultIcons[theme];
   };
@@ -137,7 +140,16 @@ export default function List({
               <div className="list-content">
                 {item.heading && (
                   <h4 className="heading">
-                    <PortableText value={item.heading} components={portableComponents} />
+                    {theme === 'counter' ? (
+                      // For counter variant, extract number from heading and animate it
+                      <CountUp 
+                        value={toPlainText(item.heading)} 
+                        duration={2000}
+                        className="counter-number"
+                      />
+                    ) : (
+                      <PortableText value={item.heading} components={portableComponents} />
+                    )}
                   </h4>
                 )}
 

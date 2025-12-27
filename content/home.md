@@ -26,6 +26,24 @@ sections:
   - type: sectionMain
     theme: light
     rows:
+      # 4-column counter list row
+      - layout:
+          columns: "1/1"
+        spacing: "compact"
+        contentBlocks:
+          - listBlock:
+              variant: "counter"
+              columns: 4
+              items:
+                - heading: "100"
+                  body: "100% Uptime - 30 Years"
+                - heading: "6"
+                  body: "Six 2.4-MW Generators"
+                - heading: "214,000"
+                  body: "214,000 Sq Ft Facility"
+                - heading: "10"
+                  body: "10 MW Power Capacity"
+    
       - label: "About Us"
         heading: "Who We Are"
         subheading: "Your trusted technology partner"

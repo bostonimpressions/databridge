@@ -134,6 +134,23 @@ export default defineType({
               hidden: ({ parent }) => parent?.divider === true,
             }),
 
+            // SPACING
+            defineField({
+              name: 'spacing',
+              title: 'Spacing',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Default', value: 'default' },
+                  { title: 'Compact', value: 'compact' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'default',
+              description: 'Controls the bottom margin spacing after this row. Compact reduces spacing for rows that should be closer together.',
+              hidden: ({ parent }) => parent?.divider === true,
+            }),
+
             // CONTENT BLOCKS
             defineField({
               name: 'contentBlocks',

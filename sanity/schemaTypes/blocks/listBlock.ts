@@ -13,7 +13,7 @@ export default defineType({
       name: 'variant',
       type: 'string',
       options: {
-        list: ['default', 'cards', 'checks', 'flags', 'positives', 'negatives'],
+        list: ['default', 'cards', 'checks', 'flags', 'positives', 'negatives', 'counter'],
       },
       initialValue: 'default',
     }),

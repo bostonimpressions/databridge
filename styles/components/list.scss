@@ -160,6 +160,34 @@
     }
   }
 
+  &[data-theme='counter'] {
+    @apply gap-4;
+    .list-item {
+      @apply flex-col items-center justify-center text-center;
+      background: var(--color-blue-ribbon-500);
+      color: white;
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      min-height: 180px;
+
+      .heading {
+        @apply text-5xl md:text-6xl font-bold mb-2;
+        color: white;
+        line-height: 1.1;
+      }
+
+      .list-content {
+        @apply max-w-none;
+        
+        > div {
+          @apply text-base md:text-lg;
+          color: white;
+          opacity: 0.95;
+        }
+      }
+    }
+  }
+
   .list-item {
     h4 {
       @apply mb-1;

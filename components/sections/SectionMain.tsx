@@ -32,6 +32,7 @@ interface Row {
   body?: any[];
   link?: { text: string; url: string };
   layout?: RowLayout;
+  spacing?: 'default' | 'compact';
   contentBlocks?: ContentBlock[];
 }
 
@@ -185,8 +186,10 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
           const textColOrder = isTextLeft ? 'md:order-1' : 'md:order-2';
           const contentColOrder = isTextLeft ? 'md:order-2' : 'md:order-1';
 
+          const spacingClass = row.spacing === 'compact' ? 'mb-8' : 'mb-20';
+          
           return (
-            <div key={i} className="mb-20 min-h-0">
+            <div key={i} className={`${spacingClass} min-h-0`}>
               {row.label && (
                 <AnimatedElement animation="fade">
                   <p className="mb-4 text-sm font-semibold uppercase">
@@ -269,6 +272,53 @@ export default function SectionMain({ rows, theme = 'light' }: SectionMainProps)
                         }
 
                         // LEGACY: Direct blocks (backwards compatibility)
+                        return (
+                          <React.Fragment key={j}>
+                            {renderContentBlock(block, isTextLeft, theme, proseClass)}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
+                {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
+                  <div className="mt-0">
+                    <div className="space-y-8">
+                      {row.contentBlocks.map((block, j) => {
+                        // CONTENT ROW (nested row with text + blocks)
+                        if (block._type === 'contentRow') {
+                          return (
+                            <div key={j} className="space-y-6">
+                              {block.heading && (
+                                <AnimatedElement animation="fade">
+                                  <h3 className={proseClass}>
+                                    {renderPT(block.heading)}
+                                  </h3>
+                                </AnimatedElement>
+                              )}
+                              
+                              {block.body && (
+                                <AnimatedElement animation="fade" delay={0.1}>
+                                  {renderPT(block.body)}
+                                </AnimatedElement>
+                              )}
+
+                              {block.blocks && block.blocks.length > 0 && (
+                                <div className="space-y-6">
+                                  {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
+                                    <React.Fragment key={k}>
+                                      {renderContentBlock(nestedBlock, isTextLeft, theme, proseClass)}
+                                    </React.Fragment>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        // Direct blocks
                         return (
                           <React.Fragment key={j}>
                             {renderContentBlock(block, isTextLeft, theme, proseClass)}
