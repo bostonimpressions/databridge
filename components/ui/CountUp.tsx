@@ -44,24 +44,34 @@ export default function CountUp({ value, duration = 2000, className = '' }: Coun
   const targetValue = parseValue(value);
   const originalValue = value;
 
-  // Subscribe to motion value changes
-  useMotionValueEvent(motionValue, 'change', (latest) => {
-    setDisplayValue(formatValue(latest, originalValue));
-  });
-
   // Animate when in view
   useEffect(() => {
     if (isInView) {
+      // Reset to 0 first
+      motionValue.set(0);
+      setDisplayValue('0');
+      
+      // Start animation with a faster, smoother easing curve
       const controls = animate(motionValue, targetValue, {
         duration: duration / 1000,
-        ease: [0.16, 1, 0.3, 1], // Smooth ease-out curve
+        ease: [0.25, 0.1, 0.25, 1], // Faster ease-out that doesn't slow too much
+        onUpdate: (latest) => {
+          // Update display during animation - use Math.ceil to avoid pause at end
+          const displayNum = latest >= targetValue - 0.5 ? targetValue : latest;
+          setDisplayValue(formatValue(displayNum, originalValue));
+        },
+        onComplete: () => {
+          // Ensure we end exactly at target
+          setDisplayValue(formatValue(targetValue, originalValue));
+        },
       });
+      
       return controls.stop;
     } else {
       motionValue.set(0);
       setDisplayValue('0');
     }
-  }, [isInView, targetValue, duration, motionValue]);
+  }, [isInView, targetValue, duration, motionValue, originalValue]);
 
   return (
     <motion.span ref={ref} className={className}>
