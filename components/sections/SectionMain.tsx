@@ -215,23 +215,26 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
 
           const spacingClass = row.spacing === 'compact' ? 'mb-8' : 'mb-20';
           
+          // Determine animation for this row
+          const rowAnimation = columns === '1/1' ? 'fadeUp' : (isTextLeft ? 'fadeLeft' : 'fadeRight');
+          const contentAnimation = columns === '1/1' ? 'fadeUp' : (isTextLeft ? 'fadeRight' : 'fadeLeft');
+          
           return (
-            <div key={i} className={`${spacingClass} min-h-0`}>
+            <AnimatedElement 
+              key={i} 
+              animation={rowAnimation}
+              once={false}
+              className={`${spacingClass} min-h-0`}
+            >
               {row.label && (
-                <AnimatedElement animation="fade">
-                  <p className="mb-4 text-sm font-semibold uppercase">
-                    {row.label}
-                  </p>
-                </AnimatedElement>
+                <p className="mb-4 text-sm font-semibold uppercase">
+                  {row.label}
+                </p>
               )}
 
               <div className={`grid gap-20 ${gridCols} items-start`}>
                 {/* TEXT COLUMN - Sticky so shorter column stays in view */}
-                <AnimatedElement 
-                  animation={columns === '1/1' ? 'fadeUp' : (isTextLeft ? 'fadeLeft' : 'fadeRight')}
-                  className={`${textColOrder} md:sticky md:top-24 md:self-start`}
-                  once={false}
-                >
+                <div className={`${textColOrder} md:sticky md:top-24 md:self-start`}>
                   {row.heading && (
                     <TextHeading level="h2" color={proseClass}>
                       {renderPT(row.heading)}
@@ -258,15 +261,11 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                       {row.link.text}
                     </a>
                   )}
-                </AnimatedElement>
+                </div>
 
                 {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
                 {columns !== '1/1' && (
-                  <AnimatedElement 
-                    animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
-                    className={`${contentColOrder} md:sticky md:top-24 md:self-start`}
-                    once={false}
-                  >
+                  <div className={`${contentColOrder} md:sticky md:top-24 md:self-start`}>
                     <div className="space-y-8">
                       {row.contentBlocks?.map((block, j) => {
                         // CONTENT ROW (nested row with text + blocks)
@@ -308,12 +307,12 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                         );
                       })}
                     </div>
-                  </AnimatedElement>
+                  </div>
                 )}
 
                 {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
                 {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
-                  <AnimatedElement animation="fadeUp" once={false} className="mt-0">
+                  <div className="mt-0">
                     <div className="space-y-8">
                       {row.contentBlocks.map((block, j) => {
                         // CONTENT ROW (nested row with text + blocks)
@@ -355,10 +354,10 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                         );
                       })}
                     </div>
-                  </AnimatedElement>
+                  </div>
                 )}
               </div>
-            </div>
+            </AnimatedElement>
           );
         })}
       </div>
