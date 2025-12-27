@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { motion, useInView, useMotionValue, useMotionValueEvent, animate } from 'framer-motion';
+import { motion, useInView, useMotionValue, animate, AnimatePresence } from 'framer-motion';
 
 interface CountUpProps {
   value: string | number;
@@ -14,6 +14,8 @@ export default function CountUp({ value, duration = 2000, className = '' }: Coun
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const motionValue = useMotionValue(0);
   const [displayValue, setDisplayValue] = useState('0');
+  const [showGhost, setShowGhost] = useState(false);
+  const [ghostValue, setGhostValue] = useState('');
 
   // Parse the value to extract the number
   const parseValue = (val: string | number): number => {
@@ -50,6 +52,7 @@ export default function CountUp({ value, duration = 2000, className = '' }: Coun
       // Reset to 0 first
       motionValue.set(0);
       setDisplayValue('0');
+      setShowGhost(false);
       
       // Start animation with a faster, smoother easing curve
       const controls = animate(motionValue, targetValue, {
@@ -62,7 +65,17 @@ export default function CountUp({ value, duration = 2000, className = '' }: Coun
         },
         onComplete: () => {
           // Ensure we end exactly at target
-          setDisplayValue(formatValue(targetValue, originalValue));
+          const finalValue = formatValue(targetValue, originalValue);
+          setDisplayValue(finalValue);
+          
+          // Trigger ghost effect
+          setGhostValue(finalValue);
+          setShowGhost(true);
+          
+          // Hide ghost after animation
+          setTimeout(() => {
+            setShowGhost(false);
+          }, 1000);
         },
       });
       
@@ -70,13 +83,41 @@ export default function CountUp({ value, duration = 2000, className = '' }: Coun
     } else {
       motionValue.set(0);
       setDisplayValue('0');
+      setShowGhost(false);
     }
   }, [isInView, targetValue, duration, motionValue, originalValue]);
 
   return (
-    <motion.span ref={ref} className={className}>
-      {displayValue}
-    </motion.span>
+    <span ref={ref} className={`${className} relative inline-block`}>
+      {/* Original number */}
+      <span className="relative z-10">{displayValue}</span>
+      
+      {/* Ghost effect - absolutely positioned clone */}
+      <AnimatePresence>
+        {showGhost && (
+          <motion.span
+            className="absolute inset-0 z-20 pointer-events-none"
+            initial={{ opacity: 1, scale: 1, y: 0 }}
+            animate={{ 
+              opacity: 0, 
+              scale: 1.5, 
+              y: -30 
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ 
+              duration: 0.8, 
+              ease: [0.25, 0.1, 0.25, 1] 
+            }}
+            style={{ 
+              left: 0,
+              top: 0,
+            }}
+          >
+            {ghostValue}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </span>
   );
 }
 
