@@ -88,9 +88,9 @@ export default function CountUp({ value, duration = 2000, className = '' }: Coun
   }, [isInView, targetValue, duration, motionValue, originalValue]);
 
   return (
-    <span ref={ref} className={`${className} relative inline-block`}>
+    <span ref={ref} className={`${className} relative inline-block tracking-normal`}>
       {/* Original number */}
-      <span className="relative z-10">{displayValue}</span>
+      <span className="relative z-10 tracking-normal">{displayValue}</span>
       
       {/* Ghost effect - absolutely positioned clone */}
       <AnimatePresence>
