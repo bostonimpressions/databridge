@@ -26,7 +26,7 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
   const headerBorderColor = isDark ? 'border-gray-500' : 'border-blue-ribbon-500';
 
   return (
-    <div className="overflow-x-auto my-6">
+    <div className="overflow-x-auto">
       <table className={`w-full border-collapse border ${borderColor}`}>
         <thead>
           <tr>

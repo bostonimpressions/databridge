@@ -22,7 +22,7 @@ sections:
         backgroundType: "video"
         backgroundVideo: "/videos/hero-video.mp4"
 
-  # Who We Are - Full width section
+  # First section
   - type: sectionMain
     theme: light
     rows:
@@ -44,17 +44,29 @@ sections:
                 - heading: "10"
                   body: "10 MW Power Capacity"
     
-      - label: "About Us"
-        heading: "Who We Are"
-        subheading: "Your trusted technology partner"
+      - heading: "Your Infrastructure Deserves Better"
         body: |
-          We are a leading IT services company dedicated to helping businesses succeed through innovative technology solutions.
+          Running mission critical systems in inadequate environments puts your business at risk.
 
-          Our team of experts brings years of experience in:
-          - Cloud infrastructure
-          - Cybersecurity
-          - Managed IT services
-          - Digital transformation
+          Organizations across Maryland face the same infrastructure challenges that threaten uptime and limit growth.
+
+          DataBridge Sites provides the enterprise-grade infrastructure your mission critical applications require.
+        layout:
+          columns: "1/3-2/3"
+          textColumn: "left"
+        contentBlocks:
+          - tableBlock:
+              columnA: "Challenge"
+              columnB: "Impact"
+              rows:
+                - a: "Office-Based Infrastructure"
+                  b: "Mission critical systems running in office closets without proper environmental controls, generator backup, or UPS systems create unacceptable downtime risks."
+                - a: "End-of-Life Equipment"
+                  b: "Aging infrastructure requires expensive replacement, but CFOs won't approve building new facilities when proven alternatives exist."
+                - a: "Compliance Requirements"
+                  b: "Regulatory standards demand certifications and security measures beyond what typical office environments can provide."
+                - a: "Power and Cooling Limitations"
+                  b: "High-density computing, AI workloads, and growing data requirements exceed the capacity of standard office infrastructure."
 
   # Our Services - Two column layout
   - type: sectionMain
