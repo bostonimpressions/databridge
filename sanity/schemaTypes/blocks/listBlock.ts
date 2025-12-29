@@ -6,14 +6,21 @@ export default defineType({
   title: 'List',
   type: 'object',
   fields: [
-    defineField({ name: 'heading', type: 'blockContentMinimal' }),
-    defineField({ name: 'body', type: 'blockContent' }),
-
     defineField({
       name: 'variant',
       type: 'string',
       options: {
-        list: ['default', 'cards', 'checks', 'flags', 'positives', 'negatives', 'counter'],
+        list: [
+          'default',
+          'cards',
+          'cards-blue',
+          'cards-service',
+          'checks',
+          'flags',
+          'positives',
+          'negatives',
+          'counter',
+        ],
       },
       initialValue: 'default',
     }),
@@ -36,14 +43,15 @@ export default defineType({
 
   preview: {
     select: {
-      heading: 'heading',
+      variant: 'variant',
+      itemCount: 'items',
     },
-    prepare(selection: { heading?: any[] }) {
-      const { heading } = selection;
-      const firstHeadingText = heading?.[0]?.children?.[0]?.text?.trim() || 'List';
+    prepare(selection: { variant?: string; itemCount?: unknown[] }) {
+      const { variant, itemCount } = selection;
+      const count = itemCount?.length || 0;
       return {
-        title: firstHeadingText,
-        subtitle: 'List block',
+        title: `List (${variant || 'default'})`,
+        subtitle: `${count} item${count !== 1 ? 's' : ''}`,
       };
     },
   },

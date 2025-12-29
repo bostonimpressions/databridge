@@ -9,6 +9,12 @@ export default defineType({
     { name: 'heading', type: 'blockContentMinimal' },
     { name: 'body', type: 'blockContent' },
     { name: 'icon', type: 'image', options: { hotspot: true } },
+    {
+      name: 'url',
+      type: 'string',
+      title: 'URL',
+      description: 'Optional link URL. If provided, the card will be clickable.',
+    },
   ],
   preview: {
     select: {

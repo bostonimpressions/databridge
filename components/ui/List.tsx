@@ -13,6 +13,7 @@ interface ListItemProps {
   subheading?: PortableTextBlock[];
   body?: PortableTextBlock[];
   icon?: SanityImageSource;
+  url?: string;
 }
 
 interface ListProps {
@@ -27,6 +28,7 @@ interface ListProps {
     | 'cards'
     | 'cards-blue'
     | 'cards-white'
+    | 'cards-service'
     | 'checks'
     | 'flags'
     | 'negatives'
@@ -45,13 +47,12 @@ const defaultIcons: Record<string, string> = {
 };
 
 export default function List({
-                               items,
-                               columns = 2,
-                               theme = 'default',
-                               compact,
-                               className
-                             }: ListProps) {
-
+  items,
+  columns = 2,
+  theme = 'default',
+  compact,
+  className,
+}: ListProps) {
   const colClass = `cols-${columns}`;
 
   const snapshotIcons = [
@@ -65,7 +66,8 @@ export default function List({
     theme === 'image-only' ||
     theme === 'cards' ||
     theme === 'cards-blue' ||
-    theme === 'cards-white';
+    theme === 'cards-white' ||
+    theme === 'cards-service';
 
   const shouldShowImage = (item: ListItemProps) => {
     if (theme === 'snapshot') return true;
@@ -90,12 +92,14 @@ export default function List({
     // },
     list: {
       bullet: ({ children }: any) => (
-        <ul className="list-disc list-outside space-y-2 text-sapphire-500 marker:text-sapphire-500 my-3 pl-4">
+        <ul className="my-3 list-outside list-disc space-y-2 pl-4 text-sapphire-500 marker:text-sapphire-500">
           {children}
         </ul>
       ),
       number: ({ children }: any) => (
-        <ol className="list-decimal list-outside space-y-2 text-sapphire-500 my-3 pl-4">{children}</ol>
+        <ol className="my-3 list-outside list-decimal space-y-2 pl-4 text-sapphire-500">
+          {children}
+        </ol>
       ),
     },
     listItem: {
@@ -114,6 +118,85 @@ export default function List({
         const src = getImageUrl(item, i);
         // Alternate animations: even items from left, odd items from right
         const animation = i % 2 === 0 ? 'fadeLeft' : 'fadeRight';
+        const hasUrl = !!item.url;
+        const isCardsServiceWithIcon = theme === 'cards-service' && shouldShowImage(item) && src;
+
+        const listItemContent = (
+          <>
+            {theme === 'flags' && <span className="flag-bar" />}
+
+            {isCardsServiceWithIcon ? (
+              // Special layout for cards-service with icon: icon and heading inline, body below
+              <>
+                <div className="icon-heading-row">
+                  {src && (
+                    <div className="icon-wrapper">
+                      <Image
+                        src={src}
+                        alt={`Icon ${item.heading && '- ' + toPlainText(item.heading)}`}
+                        fill
+                      />
+                    </div>
+                  )}
+                  {item.heading && (
+                    <h4 className="heading">
+                      <PortableText value={item.heading} components={portableComponents} />
+                    </h4>
+                  )}
+                </div>
+                {item.body && (
+                  <div className="list-content">
+                    <PortableText value={item.body} components={portableComponents} />
+                  </div>
+                )}
+              </>
+            ) : (
+              // Default layout for other themes
+              <>
+                {shouldShowImage(item) && src && (
+                  <div className="icon-wrapper">
+                    <Image
+                      src={src}
+                      alt={`Icon ${item.heading && '- ' + toPlainText(item.heading)}`}
+                      fill
+                    />
+                  </div>
+                )}
+
+                {theme !== 'image-only' && (
+                  <div className="list-content">
+                    {item.heading && (
+                      <h4 className="heading">
+                        {theme === 'counter' ? (
+                          // For counter variant, extract number from heading and animate it
+                          <CountUp
+                            value={toPlainText(item.heading)}
+                            duration={2000}
+                            className="counter-number"
+                          />
+                        ) : (
+                          <PortableText value={item.heading} components={portableComponents} />
+                        )}
+                      </h4>
+                    )}
+
+                    {item.subheading && (
+                      <h5 className="subheading">
+                        <PortableText value={item.subheading} components={portableComponents} />
+                      </h5>
+                    )}
+
+                    {item.body && (
+                      <div>
+                        <PortableText value={item.body} components={portableComponents} />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        );
 
         return (
           <AnimatedElement
@@ -122,49 +205,18 @@ export default function List({
             animation={animation}
             delay={i * 0.1}
             duration={0.5}
-            className="list-item"
+            className={`list-item ${hasUrl ? 'has-link' : ''}`}
           >
-            {theme === 'flags' && <span className="flag-bar" />}
-
-            {shouldShowImage(item) && src && (
-              <div className="icon-wrapper">
-                <Image
-                  src={src}
-                  alt={`Icon ${item.heading && '- ' + toPlainText(item.heading)}`}
-                  fill
-                />
-              </div>
-            )}
-
-            {theme !== 'image-only' && (
-              <div className="list-content">
-                {item.heading && (
-                  <h4 className="heading">
-                    {theme === 'counter' ? (
-                      // For counter variant, extract number from heading and animate it
-                      <CountUp 
-                        value={toPlainText(item.heading)} 
-                        duration={2000}
-                        className="counter-number"
-                      />
-                    ) : (
-                      <PortableText value={item.heading} components={portableComponents} />
-                    )}
-                  </h4>
-                )}
-
-                {item.subheading && (
-                  <h5 className="subheading">
-                    <PortableText value={item.subheading} components={portableComponents} />
-                  </h5>
-                )}
-
-                {item.body && (
-                  <div>
-                    <PortableText value={item.body} components={portableComponents} />
-                  </div>
-                )}
-              </div>
+            {hasUrl ? (
+              <a
+                href={item.url}
+                className="list-item-link"
+                aria-label={item.heading ? toPlainText(item.heading) : 'Learn more'}
+              >
+                {listItemContent}
+              </a>
+            ) : (
+              listItemContent
             )}
           </AnimatedElement>
         );

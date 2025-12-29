@@ -79,6 +79,10 @@
       border: 1px solid rgba(0, 0, 0, 0.11);
       background: rgba(161, 175, 229, 0.06);
       color: var(--color-sapphire-500);
+
+      &.has-link {
+        @apply cursor-pointer;
+      }
     }
   }
 
@@ -88,6 +92,10 @@
       @apply flex-col items-start;
       background: var(--color-solitude-500);
       color: var(--color-sapphire-500);
+
+      &.has-link {
+        @apply cursor-pointer;
+      }
     }
     .icon-wrapper {
       max-width: 100px;
@@ -100,6 +108,48 @@
       @apply items-start;
       background: white;
       color: var(--color-biscay-600);
+
+      &.has-link {
+        @apply cursor-pointer;
+      }
+    }
+  }
+
+  &[data-theme='cards-service'] {
+    @apply gap-4;
+    .list-item {
+      @apply flex-col items-start rounded-3xl text-white;
+      border: 1px solid rgba(0, 0, 0, 0.11);
+      background: var(--color-blue-ribbon-500);
+      padding: 2.5rem;
+
+      &.has-link {
+        @apply cursor-pointer;
+
+        &:hover {
+          background: var(--color-blue-ribbon-600);
+        }
+      }
+    }
+
+    .icon-heading-row {
+      @apply mb-3 flex w-full items-center gap-6;
+
+      .heading {
+        @apply mb-0 flex-1 text-2xl tracking-normal md:text-3xl;
+        font-family: var(--font-share-tech);
+      }
+    }
+
+    .icon-wrapper {
+      flex-shrink: 0;
+      max-width: 50px;
+      width: 50px;
+      height: 50px;
+    }
+
+    .list-content {
+      @apply w-full;
     }
   }
 
@@ -171,14 +221,14 @@
       min-height: 180px;
 
       .heading {
-        @apply text-5xl md:text-6xl font-bold mb-2 tracking-normal;
+        @apply mb-2 text-5xl font-bold tracking-normal md:text-6xl;
         color: white;
         line-height: 1.1;
       }
 
       .list-content {
         @apply max-w-none;
-        
+
         > div {
           @apply text-base md:text-lg;
           color: white;
@@ -204,6 +254,38 @@
 
 .list-item {
   @apply flex items-center gap-5 rounded-lg p-5 md:gap-6 md:p-8;
+
+  &.has-link {
+    @apply transition-transform duration-300 ease-out;
+
+    &:hover {
+      @apply scale-[1.02] shadow-lg;
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.list-item-link {
+  @apply block h-full w-full text-inherit no-underline;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  color: inherit;
+
+  @media (min-width: 768px) {
+    gap: 1.5rem;
+  }
+
+  &:hover,
+  &:focus {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .list[data-theme*='cards'] & {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .list-content {

@@ -232,16 +232,6 @@ async function processContentBlock(block) {
     // List block
     block._type = 'listBlock';
     const listData = block.listBlock;
-    block.heading = listData.heading
-      ? typeof listData.heading === 'string'
-        ? convertMarkdownToBlocks(listData.heading)
-        : listData.heading
-      : undefined;
-    block.body = listData.body
-      ? typeof listData.body === 'string'
-        ? convertMarkdownToBlocks(listData.body)
-        : listData.body
-      : undefined;
     block.variant = listData.variant || 'default';
     block.columns = listData.columns || 2;
     block.items = [];
