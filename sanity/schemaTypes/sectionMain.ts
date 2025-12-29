@@ -23,7 +23,8 @@ export default defineType({
         layout: 'radio',
       },
       initialValue: 'light',
-      description: 'Controls styling for entire section including text, backgrounds, images, lists, and tables',
+      description:
+        'Controls styling for entire section including text, backgrounds, images, lists, and tables',
     }),
 
     // BACKGROUND IMAGE
@@ -32,14 +33,25 @@ export default defineType({
       title: 'Background Image',
       type: 'image',
       options: { hotspot: true },
-      description: 'Optional background image for the section (positioned at bottom with color-burn blend mode for orange theme)',
-      validation: (Rule) => Rule.custom((value) => {
-        // Allow null, undefined, or valid image objects
-        if (value === null || value === undefined || (value && value._type === 'image')) {
-          return true;
-        }
-        return 'Must be a valid image or empty';
-      }),
+      description:
+        'Optional background image for the section (positioned at bottom with color-burn blend mode for orange theme)',
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          // Allow null, undefined, or valid image objects
+          if (value === null || value === undefined || (value && value._type === 'image')) {
+            return true;
+          }
+          return 'Must be a valid image or empty';
+        }),
+    }),
+
+    // TOP BORDER
+    defineField({
+      name: 'topBorder',
+      title: 'Top Border',
+      type: 'boolean',
+      description: 'Add a 2px top border in color #DEE2FF',
+      initialValue: false,
     }),
 
     // ROWS
@@ -143,7 +155,8 @@ export default defineType({
                     layout: 'radio',
                   },
                   initialValue: 'left',
-                  description: 'Which column should text content appear in? (Content blocks appear in the opposite column)',
+                  description:
+                    'Which column should text content appear in? (Content blocks appear in the opposite column)',
                   hidden: ({ parent }) => parent?.columns === '1/1',
                 }),
               ],
@@ -163,7 +176,8 @@ export default defineType({
                 layout: 'radio',
               },
               initialValue: 'default',
-              description: 'Controls the bottom margin spacing after this row. Compact reduces spacing for rows that should be closer together.',
+              description:
+                'Controls the bottom margin spacing after this row. Compact reduces spacing for rows that should be closer together.',
               hidden: ({ parent }) => parent?.divider === true,
             }),
 
@@ -172,7 +186,8 @@ export default defineType({
               name: 'contentBlocks',
               title: 'Content Blocks',
               type: 'array',
-              description: 'Add content rows with text and/or blocks (images, lists, tables, CTAs). Appears opposite the text column.',
+              description:
+                'Add content rows with text and/or blocks (images, lists, tables, CTAs). Appears opposite the text column.',
               of: [
                 // CONTENT ROW (can have text + blocks)
                 defineField({
@@ -181,10 +196,23 @@ export default defineType({
                   type: 'object',
                   fields: [
                     defineField({
+                      name: 'label',
+                      title: 'Label',
+                      type: 'string',
+                      description: 'Optional eyebrow label (appears above the heading)',
+                    }),
+                    defineField({
                       name: 'heading',
                       title: 'Heading',
                       type: 'blockContentMinimal',
                       description: 'Optional heading for this content row',
+                    }),
+                    defineField({
+                      name: 'subheading',
+                      title: 'Subheading',
+                      type: 'blockContentMinimal',
+                      description:
+                        'Optional subheading for this content row (smaller than heading)',
                     }),
                     defineField({
                       name: 'body',
@@ -262,7 +290,9 @@ export default defineType({
                     },
                     prepare({ heading, blockCount }) {
                       const title = (heading && toPlainText(heading)) || 'Content Row';
-                      const blockText = blockCount?.length ? `${blockCount.length} block(s)` : 'No blocks';
+                      const blockText = blockCount?.length
+                        ? `${blockCount.length} block(s)`
+                        : 'No blocks';
                       return {
                         title,
                         subtitle: blockText,
@@ -347,7 +377,8 @@ export default defineType({
                 };
               }
               const title = label || (heading && toPlainText(heading)) || 'Untitled Row';
-              const layout = columns === '1/1' ? 'Full Width' : `${columns} • Text ${textColumn || 'left'}`;
+              const layout =
+                columns === '1/1' ? 'Full Width' : `${columns} • Text ${textColumn || 'left'}`;
               return {
                 title,
                 subtitle: layout,

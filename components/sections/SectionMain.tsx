@@ -41,6 +41,7 @@ interface SectionMainProps {
   rows: Row[];
   theme?: 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
   backgroundImage?: any;
+  topBorder?: boolean;
 }
 
 const renderPT = (value?: any[]) => {
@@ -131,7 +132,12 @@ const renderContentBlock = (
 
 /* ------------------------------ Component ------------------------------ */
 
-export default function SectionMain({ rows, theme = 'light', backgroundImage }: SectionMainProps) {
+export default function SectionMain({
+  rows,
+  theme = 'light',
+  backgroundImage,
+  topBorder,
+}: SectionMainProps) {
   // Theme-based background colors
   const sectionBg =
     theme === 'dark'
@@ -174,8 +180,13 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
     }
   };
 
+  const borderStyle = topBorder ? { borderTop: '2px solid #DEE2FF' } : {};
+
   return (
-    <section className={`relative py-16 ${sectionBg}`} style={orangeGradientStyle}>
+    <section
+      className={`relative py-16 ${sectionBg}`}
+      style={{ ...orangeGradientStyle, ...borderStyle }}
+    >
       {/* Background image for orange theme (positioned at bottom with color-burn) */}
       {theme === 'orange' && backgroundImageUrl && (
         <div
@@ -227,11 +238,11 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
               once={false}
               className={`${spacingClass} min-h-0`}
             >
-              {row.label && <p className="mb-4 text-sm font-semibold uppercase">{row.label}</p>}
-
               <div className={`grid gap-20 ${gridCols} items-start`}>
                 {/* TEXT COLUMN - Sticky so shorter column stays in view */}
                 <div className={`${textColOrder} md:sticky md:top-24 md:self-start`}>
+                  {row.label && <p className="mb-4 text-sm font-semibold uppercase">{row.label}</p>}
+
                   {row.heading && (
                     <TextHeading level="h2" color={proseClass}>
                       {renderPT(row.heading)}
@@ -261,9 +272,23 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                         if (block._type === 'contentRow') {
                           return (
                             <div key={j} className="space-y-6">
+                              {block.label && (
+                                <p className="mb-4 text-sm font-semibold uppercase">
+                                  {block.label}
+                                </p>
+                              )}
+
                               {block.heading && (
                                 <AnimatedElement animation="fade">
                                   <h3 className={proseClass}>{renderPT(block.heading)}</h3>
+                                </AnimatedElement>
+                              )}
+
+                              {block.subheading && (
+                                <AnimatedElement animation="fade">
+                                  <h4 className={`mt-2 ${proseClass}`}>
+                                    {renderPT(block.subheading)}
+                                  </h4>
                                 </AnimatedElement>
                               )}
 
@@ -311,9 +336,23 @@ export default function SectionMain({ rows, theme = 'light', backgroundImage }: 
                         if (block._type === 'contentRow') {
                           return (
                             <div key={j} className="space-y-6">
+                              {block.label && (
+                                <p className="mb-4 text-sm font-semibold uppercase">
+                                  {block.label}
+                                </p>
+                              )}
+
                               {block.heading && (
                                 <AnimatedElement animation="fade">
                                   <h3 className={proseClass}>{renderPT(block.heading)}</h3>
+                                </AnimatedElement>
+                              )}
+
+                              {block.subheading && (
+                                <AnimatedElement animation="fade">
+                                  <h4 className={`mt-2 ${proseClass}`}>
+                                    {renderPT(block.subheading)}
+                                  </h4>
                                 </AnimatedElement>
                               )}
 

@@ -155,4 +155,63 @@ sections:
         link:
           text: 'View All Services'
           url: '/services'
+
+  # Section four
+  - type: sectionMain
+    theme: light
+    topBorder: true
+    rows:
+      # First row: Label on left, contentRow with heading on right
+      - label: 'Data Center'
+        layout:
+          columns: '1/3-2/3'
+          textColumn: 'left'
+        contentBlocks:
+          - contentRow:
+              heading: 'See Our Infrastructure Firsthand'
+
+      # Second row: Heading and body on left, image on right
+      - heading: |
+          Facility tours demonstrate why DataBridge Sites delivers superior data center services.
+        body: |
+          Organizations that tour our Silver Spring facility see the scale of infrastructure investment and operational excellence that sets us apart.
+        layout:
+          columns: '1/2-1/2'
+          textColumn: 'left'
+        contentBlocks:
+          - image: '/images/data-center-facility.jpg'
+            alt: 'DataBridge Sites Silver Spring data center facility'
+
+      # Third row: Subheading full width with compact spacing
+      - subheading: |
+          What You'll See
+        layout:
+          columns: '1/1'
+        spacing: 'compact'
+
+      # Fourth row: Flags list full width
+      - layout:
+          columns: '1/1'
+        contentBlocks:
+          - listBlock:
+              variant: 'flags'
+              columns: 2
+              items:
+                - body: |
+                    Six 2.4-megawatt generators providing exceptional power redundancy
+                - body: |
+                    214,000 square feet of purpose-built data center space with 90,000 sq ft raised floor
+                - body: |
+                    Advanced physical security including biometric access controls, mantraps, and comprehensive CCTV
+                - body: |
+                    Professional 24/7/365 operations with clean, well-managed environments
+
+      # Fifth row: Body text with highlighted phone number
+      - body: |
+          Our conversion rate for prospects who complete facility tours is exceptionally high because the infrastructure speaks for itself.
+
+          ==Contact us today: (855) 495-0098==
+        layout:
+          columns: '1/2-1/2'
+          textColumn: 'left'
 ---
