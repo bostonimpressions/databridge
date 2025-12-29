@@ -1,10 +1,20 @@
-/**
-* This configuration file lets you run `$ sanity [command]` in this folder
-* Go to https://www.sanity.io/docs/cli to learn more.
-**/
-import { defineCliConfig } from 'sanity/cli'
+import { defineCliConfig } from 'sanity/cli';
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
+// If these aren't picking up locally, ensure you are running
+// the command in a shell where these are exported.
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
 
-export default defineCliConfig({ api: { projectId, dataset } })
+export default defineCliConfig({
+  api: {
+    projectId,
+    dataset,
+  },
+  /**
+   * This is the fix for the 500 error in the Sanity Dashboard.
+   * It tells the Sanity manifest that your studio is located at /studio.
+   */
+  project: {
+    basePath: '/studio',
+  },
+});

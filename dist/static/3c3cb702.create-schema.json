@@ -1,0 +1,2094 @@
+[
+  {
+    "fields": [
+      {
+        "readOnly": true,
+        "hidden": true,
+        "name": "orderRank",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Click \"Generate\" once to create the slug. Cannot be changed after to preserve SEO.",
+        "readOnly": "conditional",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "metaTitle",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "warning",
+            "message": "Meta descriptions should be 160 characters or less."
+          }
+        ],
+        "description": "Used for SEO meta description. Aim for 140–160 characters.",
+        "name": "metaDescription",
+        "type": "text"
+      },
+      {
+        "of": [
+          {
+            "type": "sectionHeroMain",
+            "title": "Hero (main)"
+          },
+          {
+            "type": "sectionMain"
+          },
+          {
+            "type": "sectionBody",
+            "title": "Body Section"
+          }
+        ],
+        "name": "sections",
+        "type": "array"
+      }
+    ],
+    "name": "page",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      }
+    ],
+    "name": "blogPage",
+    "type": "document",
+    "title": "Blog page"
+  },
+  {
+    "fields": [
+      {
+        "readOnly": true,
+        "hidden": true,
+        "name": "orderRank",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Click \"Generate\" once to create the slug. Cannot be changed after to preserve SEO.",
+        "readOnly": "conditional",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "metaTitle",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "warning",
+            "message": "Meta descriptions should be 160 characters or less."
+          }
+        ],
+        "description": "Used for SEO meta description. Aim for 140–160 characters.",
+        "name": "metaDescription",
+        "type": "text"
+      },
+      {
+        "of": [
+          {
+            "type": "sectionHeroSubpage",
+            "title": "Hero (subpage)"
+          },
+          {
+            "type": "sectionOverview",
+            "title": "Overview Section"
+          },
+          {
+            "type": "sectionBanner",
+            "title": "Banner Section"
+          },
+          {
+            "type": "sectionDetails",
+            "title": "Details Section"
+          },
+          {
+            "type": "sectionCallToAction",
+            "title": "Call To Action Section"
+          }
+        ],
+        "name": "sections",
+        "type": "array"
+      }
+    ],
+    "name": "servicePage",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "readOnly": true,
+        "hidden": true,
+        "name": "orderRank",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Click \"Generate\" once to create the slug. Cannot be changed after to preserve SEO.",
+        "readOnly": "conditional",
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "metaTitle",
+        "type": "string"
+      },
+      {
+        "rows": 3,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 200
+              }
+            ],
+            "level": "warning",
+            "message": "Meta descriptions should be 160 characters or less."
+          }
+        ],
+        "description": "Used for SEO meta description. Aim for 140–160 characters.",
+        "name": "metaDescription",
+        "type": "text"
+      },
+      {
+        "of": [
+          {
+            "type": "sectionHeroSubpage",
+            "title": "Hero (subpage)"
+          },
+          {
+            "type": "sectionOverview",
+            "title": "Overview Section"
+          },
+          {
+            "type": "sectionBanner",
+            "title": "Banner Section"
+          },
+          {
+            "type": "sectionDetails",
+            "title": "Details Section"
+          },
+          {
+            "type": "sectionSnapshots",
+            "title": "Snapshots Section"
+          },
+          {
+            "type": "sectionCallToAction",
+            "title": "Call To Action Section"
+          }
+        ],
+        "name": "sections",
+        "type": "array"
+      }
+    ],
+    "name": "industryPage",
+    "type": "document"
+  },
+  {
+    "of": [
+      {
+        "marks": {
+          "annotations": [
+            {
+              "fields": [
+                {
+                  "validation": [
+                    {
+                      "rules": [
+                        {
+                          "flag": "uri",
+                          "constraint": {
+                            "options": {
+                              "scheme": [
+                                "/^http$/",
+                                "/^https$/"
+                              ],
+                              "allowRelative": false,
+                              "relativeOnly": false,
+                              "allowCredentials": false
+                            }
+                          }
+                        }
+                      ],
+                      "level": "error"
+                    }
+                  ],
+                  "name": "href",
+                  "type": "url"
+                }
+              ],
+              "name": "link",
+              "type": "object",
+              "title": "URL"
+            }
+          ],
+          "decorators": [
+            {
+              "value": "strong",
+              "title": "Strong"
+            },
+            {
+              "value": "em",
+              "title": "Emphasis"
+            },
+            {
+              "value": "highlight",
+              "title": "Highlight"
+            }
+          ]
+        },
+        "lists": [
+          {
+            "value": "bullet",
+            "title": "Bullet"
+          },
+          {
+            "value": "number",
+            "title": "Numbered"
+          }
+        ],
+        "styles": [
+          {
+            "value": "normal",
+            "title": "Normal"
+          }
+        ],
+        "of": [],
+        "type": "block"
+      }
+    ],
+    "name": "blockContent",
+    "type": "array"
+  },
+  {
+    "of": [
+      {
+        "marks": {
+          "annotations": [],
+          "decorators": [
+            {
+              "value": "strong",
+              "title": "Strong"
+            },
+            {
+              "value": "em",
+              "title": "Emphasis"
+            },
+            {
+              "value": "highlight",
+              "title": "Highlight"
+            }
+          ]
+        },
+        "styles": [
+          {
+            "value": "normal",
+            "title": "Normal"
+          }
+        ],
+        "of": [],
+        "type": "block"
+      }
+    ],
+    "name": "blockContentMinimal",
+    "type": "array",
+    "title": "Simple Text"
+  },
+  {
+    "fields": [
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "options": {
+          "list": [
+            "default",
+            "cards",
+            "checks",
+            "flags",
+            "positives",
+            "negatives",
+            "counter"
+          ]
+        },
+        "initialValue": "default",
+        "name": "variant",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        "initialValue": 2,
+        "name": "columns",
+        "type": "number"
+      },
+      {
+        "of": [
+          {
+            "type": "listItem"
+          }
+        ],
+        "name": "items",
+        "type": "array"
+      }
+    ],
+    "name": "listBlock",
+    "type": "object",
+    "title": "List"
+  },
+  {
+    "fields": [
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "icon",
+        "type": "image"
+      }
+    ],
+    "name": "listItem",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "columnA",
+        "type": "string",
+        "title": "Left Column Header"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "columnB",
+        "type": "string",
+        "title": "Right Column Header"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "a",
+                "type": "blockContentMinimal",
+                "title": "Column A Value"
+              },
+              {
+                "name": "b",
+                "type": "blockContentMinimal",
+                "title": "Column B Value"
+              }
+            ],
+            "type": "object",
+            "name": "row"
+          }
+        ],
+        "name": "rows",
+        "type": "array"
+      }
+    ],
+    "name": "tableBlock",
+    "type": "object",
+    "title": "Data Table"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            },
+            {
+              "title": "Midnight",
+              "value": "midnight"
+            },
+            {
+              "title": "Sky",
+              "value": "sky"
+            },
+            {
+              "title": "Orange",
+              "value": "orange"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "description": "Controls styling for entire section including text, backgrounds, images, lists, and tables",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Optional background image for the section (positioned at bottom with color-burn blend mode for orange theme)",
+        "name": "backgroundImage",
+        "type": "image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 10
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "initialValue": false,
+                "description": "If enabled, this row will render as a simple horizontal divider line",
+                "name": "divider",
+                "type": "boolean",
+                "title": "Divider Row"
+              },
+              {
+                "description": "Optional eyebrow label (appears above the grid)",
+                "hidden": "conditional",
+                "name": "label",
+                "type": "string"
+              },
+              {
+                "hidden": "conditional",
+                "name": "heading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "hidden": "conditional",
+                "name": "subheading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "hidden": "conditional",
+                "name": "body",
+                "type": "blockContent"
+              },
+              {
+                "description": "Optional link at the bottom of the text content",
+                "fields": [
+                  {
+                    "name": "text",
+                    "type": "string",
+                    "title": "Link Text"
+                  },
+                  {
+                    "name": "url",
+                    "type": "string",
+                    "title": "URL"
+                  }
+                ],
+                "hidden": "conditional",
+                "name": "link",
+                "type": "object"
+              },
+              {
+                "fields": [
+                  {
+                    "options": {
+                      "list": [
+                        {
+                          "title": "Full Width (1/1)",
+                          "value": "1/1"
+                        },
+                        {
+                          "title": "Equal Split (1/2 - 1/2)",
+                          "value": "1/2-1/2"
+                        },
+                        {
+                          "title": "Wide Right (2/3 - 1/3)",
+                          "value": "2/3-1/3"
+                        },
+                        {
+                          "title": "Wide Left (1/3 - 2/3)",
+                          "value": "1/3-2/3"
+                        }
+                      ],
+                      "layout": "dropdown"
+                    },
+                    "initialValue": "1/1",
+                    "name": "columns",
+                    "type": "string",
+                    "title": "Column Layout"
+                  },
+                  {
+                    "options": {
+                      "list": [
+                        {
+                          "title": "Left",
+                          "value": "left"
+                        },
+                        {
+                          "title": "Right",
+                          "value": "right"
+                        }
+                      ],
+                      "layout": "radio"
+                    },
+                    "initialValue": "left",
+                    "description": "Which column should text content appear in? (Content blocks appear in the opposite column)",
+                    "hidden": "conditional",
+                    "name": "textColumn",
+                    "type": "string",
+                    "title": "Text Column Position"
+                  }
+                ],
+                "hidden": "conditional",
+                "name": "layout",
+                "type": "object",
+                "title": "Layout Options"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "Default",
+                      "value": "default"
+                    },
+                    {
+                      "title": "Compact",
+                      "value": "compact"
+                    }
+                  ],
+                  "layout": "radio"
+                },
+                "initialValue": "default",
+                "description": "Controls the bottom margin spacing after this row. Compact reduces spacing for rows that should be closer together.",
+                "hidden": "conditional",
+                "name": "spacing",
+                "type": "string"
+              },
+              {
+                "description": "Add content rows with text and/or blocks (images, lists, tables, CTAs). Appears opposite the text column.",
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "description": "Optional heading for this content row",
+                        "name": "heading",
+                        "type": "blockContentMinimal"
+                      },
+                      {
+                        "description": "Optional body text for this content row",
+                        "name": "body",
+                        "type": "blockContent"
+                      },
+                      {
+                        "description": "Add images, lists, tables, or CTAs to this row",
+                        "of": [
+                          {
+                            "options": {
+                              "hotspot": true
+                            },
+                            "fields": [
+                              {
+                                "validation": [
+                                  {
+                                    "rules": [
+                                      {
+                                        "flag": "presence",
+                                        "constraint": "required"
+                                      }
+                                    ],
+                                    "level": "error"
+                                  }
+                                ],
+                                "name": "alt",
+                                "type": "string",
+                                "title": "Alt Text"
+                              }
+                            ],
+                            "type": "image"
+                          },
+                          {
+                            "type": "listBlock",
+                            "title": "List"
+                          },
+                          {
+                            "type": "tableBlock",
+                            "title": "Data Table"
+                          },
+                          {
+                            "fields": [
+                              {
+                                "name": "title",
+                                "type": "string",
+                                "title": "Button Text"
+                              },
+                              {
+                                "name": "url",
+                                "type": "string",
+                                "title": "URL"
+                              },
+                              {
+                                "options": {
+                                  "list": [
+                                    {
+                                      "title": "Primary",
+                                      "value": "primary"
+                                    },
+                                    {
+                                      "title": "Secondary",
+                                      "value": "secondary"
+                                    },
+                                    {
+                                      "title": "Outline",
+                                      "value": "outline"
+                                    }
+                                  ]
+                                },
+                                "initialValue": "primary",
+                                "name": "style",
+                                "type": "string",
+                                "title": "Button Style"
+                              }
+                            ],
+                            "type": "object",
+                            "name": "ctaBlock",
+                            "title": "CTA Block"
+                          }
+                        ],
+                        "name": "blocks",
+                        "type": "array"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "contentRow"
+                  },
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "fields": [
+                      {
+                        "validation": [
+                          {
+                            "rules": [
+                              {
+                                "flag": "presence",
+                                "constraint": "required"
+                              }
+                            ],
+                            "level": "error"
+                          }
+                        ],
+                        "name": "alt",
+                        "type": "string",
+                        "title": "Alt Text"
+                      }
+                    ],
+                    "type": "image"
+                  },
+                  {
+                    "type": "listBlock",
+                    "title": "List"
+                  },
+                  {
+                    "type": "tableBlock",
+                    "title": "Data Table"
+                  },
+                  {
+                    "fields": [
+                      {
+                        "name": "title",
+                        "type": "string",
+                        "title": "Button Text"
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "title": "URL"
+                      },
+                      {
+                        "options": {
+                          "list": [
+                            {
+                              "title": "Primary",
+                              "value": "primary"
+                            },
+                            {
+                              "title": "Secondary",
+                              "value": "secondary"
+                            },
+                            {
+                              "title": "Outline",
+                              "value": "outline"
+                            }
+                          ]
+                        },
+                        "initialValue": "primary",
+                        "name": "style",
+                        "type": "string",
+                        "title": "Button Style"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "ctaBlock",
+                    "title": "CTA Block"
+                  }
+                ],
+                "name": "contentBlocks",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "title": "Row"
+          }
+        ],
+        "name": "rows",
+        "type": "array"
+      }
+    ],
+    "name": "sectionMain",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "min",
+                "constraint": 1
+              },
+              {
+                "flag": "max",
+                "constraint": 5
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "blockContentMinimal"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "heading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "subheading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "lead",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "body",
+                "type": "blockContentMinimal"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "max",
+                        "constraint": 2
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "title",
+                        "type": "string"
+                      },
+                      {
+                        "name": "url",
+                        "type": "string",
+                        "title": "URL"
+                      },
+                      {
+                        "initialValue": false,
+                        "name": "internal",
+                        "type": "boolean",
+                        "title": "Internal link?"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "button"
+                  }
+                ],
+                "name": "buttons",
+                "type": "array"
+              },
+              {
+                "options": {
+                  "list": [
+                    "default",
+                    "service"
+                  ],
+                  "layout": "radio"
+                },
+                "initialValue": "default",
+                "name": "theme",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    "image",
+                    "video"
+                  ],
+                  "layout": "radio"
+                },
+                "initialValue": "image",
+                "name": "backgroundType",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "hotspot": true
+                },
+                "hidden": "conditional",
+                "name": "backgroundImage",
+                "type": "image"
+              },
+              {
+                "options": {
+                  "accept": "video/*"
+                },
+                "hidden": "conditional",
+                "name": "backgroundVideo",
+                "type": "file"
+              },
+              {
+                "description": "If true, the Hero section will use height:auto instead of min-height.",
+                "name": "autoHeight",
+                "type": "boolean"
+              }
+            ],
+            "type": "object",
+            "name": "heroSlide"
+          }
+        ],
+        "name": "slides",
+        "type": "array"
+      }
+    ],
+    "name": "sectionHeroMain",
+    "type": "object",
+    "title": "Hero (main)"
+  },
+  {
+    "fields": [
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "subheading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "lead",
+        "type": "blockContent"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "options": {
+          "list": [
+            "default",
+            "service",
+            "industry"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "default",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            "image",
+            "video"
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "image",
+        "name": "backgroundType",
+        "type": "string"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "hidden": "conditional",
+        "name": "backgroundImage",
+        "type": "image"
+      },
+      {
+        "options": {
+          "accept": "video/*"
+        },
+        "hidden": "conditional",
+        "name": "backgroundVideo",
+        "type": "file"
+      }
+    ],
+    "name": "sectionHeroSubpage",
+    "type": "object",
+    "title": "Hero (subpage)"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            },
+            {
+              "title": "Midnight",
+              "value": "midnight"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "subheading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Square",
+              "value": "square"
+            },
+            {
+              "title": "Landscape",
+              "value": "landscape"
+            },
+            {
+              "title": "Portrait",
+              "value": "portrait"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "landscape",
+        "hidden": "conditional",
+        "name": "imageRatio",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Image Left",
+              "value": "imgLeft"
+            },
+            {
+              "title": "Image Right",
+              "value": "imgRight"
+            }
+          ],
+          "layout": "radio"
+        },
+        "hidden": "conditional",
+        "name": "imageLayout",
+        "type": "string"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "1/1 (two equal columns)",
+              "value": "1/1"
+            },
+            {
+              "title": "2/3",
+              "value": "2/3"
+            },
+            {
+              "title": "3/2",
+              "value": "3/2"
+            },
+            {
+              "title": "1/3",
+              "value": "1/3"
+            },
+            {
+              "title": "3/1",
+              "value": "3/1"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "1/1",
+        "hidden": "conditional",
+        "name": "imageGrid",
+        "type": "string",
+        "title": "Layout Grid"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "1 Column (stacked)",
+              "value": 1
+            },
+            {
+              "title": "2 Columns",
+              "value": 2
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": 1,
+        "name": "listColumns",
+        "type": "number",
+        "title": "List Layout Columns (for multiple lists)"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "heading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "subheading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "body",
+                "type": "blockContent"
+              },
+              {
+                "options": {
+                  "list": [
+                    "default",
+                    "cards",
+                    "cards-blue",
+                    "cards-white",
+                    "checks",
+                    "flags",
+                    "negatives",
+                    "positives"
+                  ],
+                  "layout": "radio"
+                },
+                "initialValue": "default",
+                "name": "theme",
+                "type": "string"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "1",
+                      "value": 1
+                    },
+                    {
+                      "title": "2",
+                      "value": 2
+                    },
+                    {
+                      "title": "3",
+                      "value": 3
+                    },
+                    {
+                      "title": "4",
+                      "value": 4
+                    }
+                  ]
+                },
+                "initialValue": 2,
+                "name": "columns",
+                "type": "number"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "heading",
+                        "type": "blockContentMinimal"
+                      },
+                      {
+                        "name": "subheading",
+                        "type": "blockContentMinimal"
+                      },
+                      {
+                        "name": "body",
+                        "type": "blockContent"
+                      },
+                      {
+                        "options": {
+                          "hotspot": true
+                        },
+                        "name": "icon",
+                        "type": "image"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "item"
+                  }
+                ],
+                "name": "items",
+                "type": "array"
+              }
+            ],
+            "type": "object",
+            "name": "list",
+            "title": "List Section"
+          }
+        ],
+        "name": "lists",
+        "type": "array"
+      },
+      {
+        "fields": [
+          {
+            "name": "heading",
+            "type": "blockContentMinimal"
+          },
+          {
+            "name": "body",
+            "type": "blockContent"
+          },
+          {
+            "options": {
+              "hotspot": true
+            },
+            "name": "icon",
+            "type": "image"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "uri",
+                    "constraint": {
+                      "options": {
+                        "scheme": [
+                          "/^http$/",
+                          "/^https$/"
+                        ],
+                        "allowRelative": false,
+                        "relativeOnly": false,
+                        "allowCredentials": false
+                      }
+                    }
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "link",
+            "type": "url"
+          }
+        ],
+        "name": "cta",
+        "type": "object",
+        "title": "Call To Action"
+      }
+    ],
+    "name": "sectionOverview",
+    "type": "object",
+    "title": "Overview Section"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Medium",
+              "value": "medium"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            },
+            {
+              "title": "Green",
+              "value": "green"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "name": "reference",
+        "type": "blockContent"
+      }
+    ],
+    "name": "sectionBanner",
+    "type": "object",
+    "title": "Banner Section"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "subheading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                "default",
+                "image-only",
+                "cards",
+                "cards-white",
+                "checks",
+                "flags",
+                "negatives",
+                "positives"
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "default",
+            "name": "theme",
+            "type": "string"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "1",
+                  "value": 1
+                },
+                {
+                  "title": "2",
+                  "value": 2
+                },
+                {
+                  "title": "3",
+                  "value": 3
+                },
+                {
+                  "title": "4",
+                  "value": 4
+                }
+              ]
+            },
+            "initialValue": 2,
+            "name": "columns",
+            "type": "number"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "heading",
+                    "type": "blockContentMinimal"
+                  },
+                  {
+                    "name": "subheading",
+                    "type": "blockContentMinimal"
+                  },
+                  {
+                    "name": "body",
+                    "type": "blockContent"
+                  },
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "name": "icon",
+                    "type": "image"
+                  }
+                ],
+                "type": "object",
+                "name": "item"
+              }
+            ],
+            "name": "items",
+            "type": "array"
+          }
+        ],
+        "name": "list",
+        "type": "object",
+        "title": "List Section"
+      }
+    ],
+    "name": "sectionFeatureList",
+    "type": "object",
+    "title": "Feature List Section"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "subheading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "name": "image",
+        "type": "image"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Image Left",
+              "value": "imgLeft"
+            },
+            {
+              "title": "Image Right",
+              "value": "imgRight"
+            }
+          ],
+          "layout": "radio"
+        },
+        "hidden": "conditional",
+        "name": "imageLayout",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                "default",
+                "cards",
+                "cards-white",
+                "checks",
+                "flags",
+                "negatives",
+                "positives"
+              ],
+              "layout": "radio"
+            },
+            "initialValue": "default",
+            "name": "theme",
+            "type": "string"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "1",
+                  "value": 1
+                },
+                {
+                  "title": "2",
+                  "value": 2
+                },
+                {
+                  "title": "3",
+                  "value": 3
+                },
+                {
+                  "title": "4",
+                  "value": 4
+                }
+              ]
+            },
+            "initialValue": 2,
+            "name": "columns",
+            "type": "number"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "heading",
+                    "type": "blockContentMinimal"
+                  },
+                  {
+                    "name": "subheading",
+                    "type": "blockContentMinimal"
+                  },
+                  {
+                    "name": "body",
+                    "type": "blockContent"
+                  },
+                  {
+                    "options": {
+                      "hotspot": true
+                    },
+                    "name": "icon",
+                    "type": "image"
+                  }
+                ],
+                "type": "object",
+                "name": "item"
+              }
+            ],
+            "name": "items",
+            "type": "array"
+          }
+        ],
+        "name": "list",
+        "type": "object",
+        "title": "List Section"
+      }
+    ],
+    "name": "sectionFeature",
+    "type": "object",
+    "title": "Feature Section"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            },
+            {
+              "title": "None",
+              "value": "none"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "heading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "subheading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "body",
+                "type": "blockContent"
+              },
+              {
+                "name": "challenge",
+                "type": "blockContent"
+              },
+              {
+                "name": "solution",
+                "type": "blockContent"
+              },
+              {
+                "name": "impact",
+                "type": "blockContent",
+                "title": "Outcome"
+              }
+            ],
+            "type": "object",
+            "name": "panel"
+          }
+        ],
+        "name": "panels",
+        "type": "array",
+        "title": "Snapshots Panels"
+      }
+    ],
+    "name": "sectionSnapshots",
+    "type": "object",
+    "title": "Snapshots Section"
+  },
+  {
+    "fields": [
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "fields": [
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "heading",
+                    "type": "blockContentMinimal"
+                  }
+                ],
+                "type": "object",
+                "name": "item"
+              }
+            ],
+            "name": "items",
+            "type": "array"
+          }
+        ],
+        "name": "nuview",
+        "type": "object",
+        "title": "NuView Panel"
+      },
+      {
+        "fields": [
+          {
+            "initialValue": [
+              {
+                "_type": "block",
+                "style": "normal",
+                "children": [
+                  {
+                    "_type": "span",
+                    "text": "Piecemeal MSPs"
+                  }
+                ]
+              }
+            ],
+            "name": "heading",
+            "type": "blockContentMinimal"
+          },
+          {
+            "of": [
+              {
+                "fields": [
+                  {
+                    "name": "heading",
+                    "type": "blockContentMinimal"
+                  }
+                ],
+                "type": "object",
+                "name": "item"
+              }
+            ],
+            "name": "items",
+            "type": "array"
+          }
+        ],
+        "name": "competitor",
+        "type": "object",
+        "title": "Competitor Panel"
+      }
+    ],
+    "name": "sectionComparison",
+    "type": "object",
+    "title": "Comparison Section"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "subheading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "fields": [
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "text",
+            "type": "string",
+            "title": "Link Text"
+          },
+          {
+            "validation": [
+              {
+                "rules": [
+                  {
+                    "flag": "presence",
+                    "constraint": "required"
+                  }
+                ],
+                "level": "error"
+              }
+            ],
+            "name": "url",
+            "type": "string",
+            "title": "URL"
+          }
+        ],
+        "name": "link",
+        "type": "object"
+      }
+    ],
+    "name": "sectionCallToAction",
+    "type": "object",
+    "title": "Call To Action Section"
+  },
+  {
+    "fields": [
+      {
+        "name": "heading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "subheading",
+        "type": "blockContentMinimal"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "heading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "subheading",
+                "type": "blockContentMinimal"
+              },
+              {
+                "name": "body",
+                "type": "blockContent"
+              }
+            ],
+            "type": "object",
+            "name": "step"
+          }
+        ],
+        "name": "steps",
+        "type": "array",
+        "title": "Steps List"
+      },
+      {
+        "fields": [
+          {
+            "name": "heading",
+            "type": "blockContentMinimal"
+          },
+          {
+            "name": "subheading",
+            "type": "blockContentMinimal"
+          },
+          {
+            "name": "body",
+            "type": "blockContent"
+          }
+        ],
+        "name": "secondary",
+        "type": "object",
+        "title": "Secondary Content"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "heading",
+                "type": "blockContentMinimal",
+                "title": "Row Heading"
+              },
+              {
+                "of": [
+                  {
+                    "fields": [
+                      {
+                        "name": "heading",
+                        "type": "blockContentMinimal"
+                      },
+                      {
+                        "name": "label",
+                        "type": "string"
+                      },
+                      {
+                        "name": "subheading",
+                        "type": "blockContentMinimal"
+                      },
+                      {
+                        "name": "body",
+                        "type": "blockContent"
+                      }
+                    ],
+                    "type": "object",
+                    "name": "statItem"
+                  }
+                ],
+                "name": "list",
+                "type": "array",
+                "title": "List Items"
+              }
+            ],
+            "type": "object",
+            "name": "statRow"
+          }
+        ],
+        "name": "stats",
+        "type": "array"
+      }
+    ],
+    "name": "sectionDetails",
+    "type": "object",
+    "title": "Details Section"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Light",
+              "value": "light"
+            },
+            {
+              "title": "Medium",
+              "value": "medium"
+            },
+            {
+              "title": "Dark",
+              "value": "dark"
+            }
+          ],
+          "layout": "radio"
+        },
+        "initialValue": "light",
+        "name": "theme",
+        "type": "string"
+      },
+      {
+        "name": "body",
+        "type": "blockContent"
+      }
+    ],
+    "name": "sectionBody",
+    "type": "object",
+    "title": "Body Section"
+  }
+]

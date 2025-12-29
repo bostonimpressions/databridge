@@ -33,6 +33,13 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
       description: 'Optional background image for the section (positioned at bottom with color-burn blend mode for orange theme)',
+      validation: (Rule) => Rule.custom((value) => {
+        // Allow null, undefined, or valid image objects
+        if (value === null || value === undefined || (value && value._type === 'image')) {
+          return true;
+        }
+        return 'Must be a valid image or empty';
+      }),
     }),
 
     // ROWS

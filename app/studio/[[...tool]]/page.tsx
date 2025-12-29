@@ -11,7 +11,8 @@ import { NextStudio } from 'next-sanity/studio';
 import config from '../../../sanity.config';
 import './studio.scss';
 
-export const dynamic = 'force-static';
+// Remove force-static to allow write operations
+// export const dynamic = 'force-static';
 
 export { metadata, viewport } from 'next-sanity/studio';
 
