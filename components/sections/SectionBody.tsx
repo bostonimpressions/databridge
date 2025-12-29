@@ -3,6 +3,7 @@
 import { PortableText } from '@portabletext/react';
 import type { PortableTextBlock } from '@portabletext/types';
 import React from 'react';
+import { portableTextComponents } from '@/lib/portableTextComponents';
 
 interface Props {
   theme?: 'light' | 'medium' | 'dark' | 'green';
@@ -21,7 +22,7 @@ export default function SectionBody({ body, theme = 'light' }: Props) {
       className={`relative overflow-hidden py-12 ${themeClasses[theme] || themeClasses.light}`}
     >
       <div className="container mx-auto px-4">
-        <PortableText value={body} />
+        <PortableText value={body} components={portableTextComponents} />
       </div>
     </section>
   );

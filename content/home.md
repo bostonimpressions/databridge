@@ -117,11 +117,11 @@ sections:
     rows:
       # First row: 2 columns, text on left, nothing in right
       - label: 'Complete Data Center Solutions'
-        heading: 'We create reliable technology that drives your success'
+        heading: 'We create ==reliable== technology that drives your success'
         body: |
           DataBridge delivers enterprise-grade infrastructure services designed to support mission critical applications. Organizations deploy single services or combine multiple solutions to achieve optimal hybrid IT strategies.
         layout:
-          columns: '1/2-1/2'
+          columns: '2/3-1/3'
           textColumn: 'left'
 
       # Second row: List with 2 columns, cards-blue variant, then a link
@@ -132,18 +132,26 @@ sections:
               variant: 'cards-service'
               columns: 2
               items:
-                - heading: '24/7 Support'
-                  body: 'Round-the-clock assistance when you need it'
+                - heading: 'Colocation Services'
+                  body: |
+                    Secure, managed space, power, and cooling for your IT hardware in Maryland's only Tier IV-designed facility. Deploy single rack units, full 42U+ cabinets, private cages, or dedicated suites with 24/7/365 on-site support.
                   icon: '/images/icon-colocation.png'
-                - heading: 'Expert Team'
-                  body: 'Certified professionals with years of experience'
-                  icon: '/images/icon-colocation.png'
-                - heading: 'Proven Results'
-                  body: 'Track record of successful implementations'
-                  icon: '/images/icon-colocation.png'
-                - heading: 'Scalable Solutions'
-                  body: 'Infrastructure that grows with your business needs'
-                  icon: '/images/icon-colocation.png'
+                  url: '/services/colocation-services'
+                - heading: 'Cloud Services'
+                  body: |
+                    Managed cloud on VMware vSphere, custom private cloud on dedicated hardware, or compliant cloud solutions meeting specific regulatory requirements. Public cloud flexibility with data center security and local support.
+                  icon: '/images/icon-cloud-services.png'
+                  url: '/services/cloud-services'
+                - heading: 'Disaster Recovery'
+                  body: |
+                    Comprehensive business continuity solutions with geographic redundancy between our Silver Spring and Aurora facilities. Off-site backup, real-time replication, and managed DR environments ensure rapid recovery.
+                  icon: '/images/icon-disaster-recovery.png'
+                  url: '/services/disaster-recovery-services'
+                - heading: 'Network Services'
+                  body: |
+                    Carrier-neutral facility with direct access to major telecommunications providers. Express Connect network, internet transit from multiple Tier-1 carriers, and direct cloud connectivity options.
+                  icon: '/images/icon-network-services.png'
+                  url: '/services/network-services'
         link:
           text: 'View All Services'
           url: '/services'

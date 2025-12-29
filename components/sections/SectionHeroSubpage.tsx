@@ -1,6 +1,7 @@
 'use client';
 
 import { PortableText, toPlainText } from '@portabletext/react';
+import { mergePortableTextComponents } from '@/lib/portableTextComponents';
 import type { PortableTextBlock } from '@portabletext/types';
 import React from 'react';
 import TextHeading from '@/components/ui/TextHeading';
@@ -143,16 +144,13 @@ export default function SectionHeroSubpage({
               <div className="mt-4 max-w-lg">
                 <PortableText
                   value={lead}
-                  components={{
+                  components={mergePortableTextComponents({
                     block: {
                       normal: ({ children }) => (
                         <p className="text-white text-base md:text-lg font-semibold">{children}</p>
                       ),
                     },
-                    marks: {
-                      highlight: ({ children }) => <span className="text-highlight">{children}</span>,
-                    },
-                  }}
+                  })}
                 />
               </div>
             )}
@@ -161,22 +159,9 @@ export default function SectionHeroSubpage({
               <div className="mt-6 max-w-lg">
                 <PortableText
                   value={body}
-                  components={{
+                  components={mergePortableTextComponents({
                     block: { normal: ({ children }) => <p className="text-white text-sm">{children}</p> },
-                    marks: {
-                      highlight: ({ children }) => <span className="text-highlight">{children}</span>,
-                      link: ({ value, children }) => (
-                        <a
-                          href={value?.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 underline"
-                        >
-                          {children}
-                        </a>
-                      ),
-                    },
-                  }}
+                  })}
                 />
               </div>
             )}

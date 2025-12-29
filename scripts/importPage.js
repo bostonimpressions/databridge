@@ -132,7 +132,7 @@ async function handleVideo(videoPath) {
 
 // ------------------------
 // Convert Markdown string to Sanity Portable Text blocks
-// Supports paragraphs, bold text, and bullet lists
+// Supports paragraphs, bold text, highlights (==text==), and bullet lists
 // ------------------------
 function convertMarkdownToBlocks(text) {
   if (!text || typeof text !== 'string') return [];
@@ -144,6 +144,64 @@ function convertMarkdownToBlocks(text) {
   function flushList() {
     currentList.forEach((item) => blocks.push(item));
     currentList = [];
+  }
+
+  // Parse a line for highlights (==text==) and convert to spans
+  function parseLineForHighlights(line) {
+    const children = [];
+    const highlightRegex = /==([^=]+)==/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = highlightRegex.exec(line)) !== null) {
+      // Add text before the highlight
+      if (match.index > lastIndex) {
+        const beforeText = line.substring(lastIndex, match.index);
+        if (beforeText) {
+          children.push({
+            _type: 'span',
+            _key: generateKey(),
+            text: beforeText,
+            marks: [],
+          });
+        }
+      }
+
+      // Add the highlighted text
+      children.push({
+        _type: 'span',
+        _key: generateKey(),
+        text: match[1],
+        marks: ['highlight'],
+      });
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    // Add remaining text after the last highlight
+    if (lastIndex < line.length) {
+      const afterText = line.substring(lastIndex);
+      if (afterText) {
+        children.push({
+          _type: 'span',
+          _key: generateKey(),
+          text: afterText,
+          marks: [],
+        });
+      }
+    }
+
+    // If no highlights found, return a single span
+    if (children.length === 0) {
+      children.push({
+        _type: 'span',
+        _key: generateKey(),
+        text: line,
+        marks: [],
+      });
+    }
+
+    return children;
   }
 
   lines.forEach((line) => {
@@ -158,14 +216,7 @@ function convertMarkdownToBlocks(text) {
         style: 'normal',
         listItem: 'bullet',
         level: 1,
-        children: [
-          {
-            _type: 'span',
-            _key: generateKey(),
-            text: content,
-            marks: [],
-          },
-        ],
+        children: parseLineForHighlights(content),
         markDefs: [],
       });
       return;
@@ -183,14 +234,7 @@ function convertMarkdownToBlocks(text) {
       _type: 'block',
       _key: generateKey(),
       style: 'normal',
-      children: [
-        {
-          _type: 'span',
-          _key: generateKey(),
-          text: trimmed,
-          marks: [],
-        },
-      ],
+      children: parseLineForHighlights(trimmed),
       markDefs: [],
     });
   });

@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { SanityImageSource } from '@sanity/image-url';
 import { urlFor } from '@/sanity/lib/image';
 import TextHeading from '@/components/ui/TextHeading';
+import { mergePortableTextComponents } from '@/lib/portableTextComponents';
 
 interface Button {
   title: string;
@@ -157,18 +158,13 @@ export default function SectionHeroMain({ slides }: Props) {
               {slide.label && (
                 <PortableText
                   value={slide.label}
-                  components={{
+                  components={mergePortableTextComponents({
                     block: {
                       normal: ({ children }) => (
                         <p className={`text-sm font-semibold ${textColor}`}>{children}</p>
                       ),
                     },
-                    marks: {
-                      highlight: ({ children }) => (
-                        <span className="text-highlight">{children}</span>
-                      ),
-                    },
-                  }}
+                  })}
                 />
               )}
 
@@ -223,26 +219,11 @@ export default function SectionHeroMain({ slides }: Props) {
                 <div className="mb-6 max-w-lg">
                   <PortableText
                     value={slide.body}
-                    components={{
+                    components={mergePortableTextComponents({
                       block: {
                         normal: ({ children }) => <p className={textColor}>{children}</p>,
                       },
-                      marks: {
-                        highlight: ({ children }) => (
-                          <span className="text-highlight">{children}</span>
-                        ),
-                        link: ({ value, children }) => (
-                          <a
-                            href={value?.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 underline"
-                          >
-                            {children}
-                          </a>
-                        ),
-                      },
-                    }}
+                    })}
                   />
                 </div>
               )}

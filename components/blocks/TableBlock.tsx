@@ -1,6 +1,7 @@
 // components/blocks/TableBlock.tsx
 import { PortableText } from '@portabletext/react';
 import type { PortableTextBlock } from '@portabletext/types';
+import { portableTextComponents } from '@/lib/portableTextComponents';
 
 interface TableBlockValue {
   columnA: string;
@@ -92,13 +93,13 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
                 className={`${classes.rowBg} ${classes.text} px-4 py-5`}
                 style={classes.rowStyle}
               >
-                <PortableText value={row.a} />
+                <PortableText value={row.a} components={portableTextComponents} />
               </td>
               <td 
                 className={`${classes.rowBg} ${classes.text} px-4 py-5`}
                 style={classes.rowStyle}
               >
-                <PortableText value={row.b} />
+                <PortableText value={row.b} components={portableTextComponents} />
               </td>
             </tr>
           ))}
