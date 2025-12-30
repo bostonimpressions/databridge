@@ -322,7 +322,7 @@ const LayoutWrapper = ({ children, servicePages = [], industryPages = [] }: Layo
 
       <div className="pt-20">{children}</div>
 
-      <footer className="bg-biscay-500 mt-10 p-12 text-white">
+      <footer className="bg-stellarnight-800 mt-10 p-12 text-white">
         <div className="container mx-auto">
           <div className="border-b-2 border-dashed border-white/20 pb-20 md:flex md:justify-between">
             <div className="mb-20 grid grid-cols-1 gap-10 md:m-0 md:grid-cols-3 md:gap-20">
@@ -375,7 +375,7 @@ const LayoutWrapper = ({ children, servicePages = [], industryPages = [] }: Layo
                   href="https://www.linkedin.com/company/nuview-it/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-apple-500 hover:text-apple-600 transition"
+                  className="text-apple-500 transition hover:text-apple-600"
                   aria-label="LinkedIn"
                 >
                   <FaLinkedin size={30} />
@@ -387,7 +387,12 @@ const LayoutWrapper = ({ children, servicePages = [], industryPages = [] }: Layo
           <div className="flex flex-col justify-between py-10 md:flex-row">
             <div>
               <div className="pb-5">
-                <Image src="/images/logo-horizontal.png" alt="Databridge Sites" width={200} height={40} />
+                <Image
+                  src="/images/logo-horizontal.png"
+                  alt="Databridge Sites"
+                  width={200}
+                  height={40}
+                />
               </div>
               <p className="text-sm opacity-80">
                 &copy; {new Date().getFullYear()} Databridge Sites. All rights reserved.

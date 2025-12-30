@@ -15,6 +15,13 @@ export default defineType({
       title: 'URL',
       description: 'Optional link URL. If provided, the card will be clickable.',
     },
+    {
+      name: 'label',
+      type: 'string',
+      title: 'Label',
+      description:
+        'Optional label (e.g., "sq. ft") to display inline next to the heading. Used with cards-data variant.',
+    },
   ],
   preview: {
     select: {

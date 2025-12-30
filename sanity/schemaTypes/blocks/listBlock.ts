@@ -15,6 +15,7 @@ export default defineType({
           'cards',
           'cards-blue',
           'cards-service',
+          'cards-data',
           'checks',
           'flags',
           'positives',

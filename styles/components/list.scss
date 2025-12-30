@@ -107,7 +107,7 @@
     .list-item {
       @apply items-start;
       background: white;
-      color: var(--color-biscay-600);
+      color: var(--color-stellarnight-600);
 
       &.has-link {
         @apply cursor-pointer;
@@ -150,6 +150,94 @@
 
     .list-content {
       @apply w-full;
+    }
+  }
+
+  &[data-theme='cards-data'] {
+    @apply gap-4;
+    .list-item {
+      @apply flex-col items-start;
+      padding: 0;
+
+      /* Body content is outside the card */
+      .list-content {
+        @apply w-full;
+
+        > div {
+          @apply text-base md:text-lg;
+        }
+      }
+    }
+
+    .card-data-card {
+      @apply w-full;
+      padding: 2.5rem;
+    }
+
+    /* Background color based on section theme */
+    &[data-section-theme='dark'] {
+      .card-data-card {
+        background: #d2ff78;
+        color: black;
+      }
+
+      .list-item {
+        color: white;
+
+        .list-content > div {
+          color: white;
+        }
+      }
+    }
+
+    &[data-section-theme]:not([data-section-theme='dark']),
+    &:not([data-section-theme]) {
+      .card-data-card {
+        background: var(--color-blue-ribbon-500);
+        color: black;
+      }
+
+      .list-item {
+        color: black;
+
+        .list-content > div {
+          color: black;
+        }
+      }
+    }
+
+    .card-data-header {
+      @apply mb-0 flex w-full items-baseline justify-between gap-4;
+      width: 100%;
+
+      .heading {
+        @apply mb-0 text-4xl tracking-normal md:text-5xl;
+        font-family: var(--font-share-tech);
+        line-height: 1.1;
+        flex: 1;
+      }
+
+      .label {
+        @apply text-lg font-normal md:text-xl;
+        opacity: 0.8;
+        white-space: nowrap;
+      }
+    }
+
+    /* Inherit color from parent for heading and label */
+    &[data-section-theme='dark'] .card-data-header {
+      .heading,
+      .label {
+        color: black;
+      }
+    }
+
+    &[data-section-theme]:not([data-section-theme='dark']) .card-data-header,
+    &:not([data-section-theme]) .card-data-header {
+      .heading,
+      .label {
+        color: black;
+      }
     }
   }
 

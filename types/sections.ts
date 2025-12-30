@@ -5,6 +5,9 @@ export interface BaseSection {
   _type: string;
 }
 
+/* --- THEME TYPE --- */
+export type SectionTheme = 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
+
 /* --- HERO --- */
 export interface SectionHeroMain extends BaseSection {
   _type: 'sectionHeroMain';

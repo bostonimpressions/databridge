@@ -53,7 +53,7 @@ export default function SectionDetails({
   return (
     <section className="bg-white">
       <div className="container mx-auto p-0! sm:p-6! md:p-8!">
-        <div className="bg-biscay-500 text-white sm:rounded-xl p-0!">
+        <div className="bg-stellarnight-800 text-white sm:rounded-xl p-0!">
 
           {/* Top heading/subheading/body */}
           <div className="mb-12 px-10 py-10! md:pt-20! sm:px-14! md:px-20!">

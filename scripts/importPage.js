@@ -261,28 +261,32 @@ async function processContentBlock(block) {
     // Image block (supports single image or array of images for slideshow)
     block._type = 'image';
     
-    // Check if it's the new structure with images array
-    if (block.image.images && Array.isArray(block.image.images)) {
-      // New structure: array of images for slideshow
-      block.images = await Promise.all(
-        block.image.images.map(async (imgItem) => {
-          const imageData = await handleImage(imgItem.image);
-          if (imageData) {
-            return {
-              _type: 'image',
-              asset: imageData.asset,
-              alt: imgItem.alt || '',
-            };
-          }
-          return null;
-        })
-      );
-      // Filter out failed uploads
-      block.images = block.images.filter((img) => img !== null);
-      if (block.images.length === 0) {
-        return null; // All images failed
-      }
-      delete block.image;
+      // Check if it's the new structure with images array
+      if (block.image.images && Array.isArray(block.image.images)) {
+        // New structure: array of images for slideshow
+        block.images = await Promise.all(
+          block.image.images.map(async (imgItem) => {
+            const imageData = await handleImage(imgItem.image);
+            if (imageData) {
+              return {
+                _type: 'image',
+                asset: imageData.asset,
+                alt: imgItem.alt || '',
+              };
+            }
+            return null;
+          })
+        );
+        // Filter out failed uploads
+        block.images = block.images.filter((img) => img !== null);
+        if (block.images.length === 0) {
+          return null; // All images failed
+        }
+        // Preserve display option if present
+        if (block.image.display) {
+          block.display = block.image.display;
+        }
+        delete block.image;
     } else {
       // Legacy structure: single image
       const imagePath = typeof block.image === 'string' ? block.image : block.image.image;

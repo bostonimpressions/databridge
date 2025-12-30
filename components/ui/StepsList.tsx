@@ -30,7 +30,7 @@ export default function StepsList({ items }: StepsListProps) {
             delay={i * 0.15}
             duration={0.5}
           >
-          <div className="flex w-14 h-14 md:h-18 md:w-18 mb-2 flex-shrink-0 items-center justify-center rounded-lg bg-perano-500 text-biscay-500 text-5xl md:text-6xl font-semibold">
+          <div className="flex w-14 h-14 md:h-18 md:w-18 mb-2 flex-shrink-0 items-center justify-center rounded-lg bg-perano-500 text-stellarnight-800 text-5xl md:text-6xl font-semibold">
             {i + 1}
           </div>
 

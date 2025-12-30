@@ -15,7 +15,7 @@ const themeClasses: Record<string, string> = {
   light: 'bg-white text-sapphire-500',
   medium: 'bg-solitude-500 text-sapphire-500',
   dark: 'bg-perano-500 text-white',
-  green: 'bg-apple-500 text-biscay-500',
+  green: 'bg-apple-500 text-stellarnight-800',
 };
 
 export default function SectionBanner({ body, reference, theme = 'light' }: Props) {

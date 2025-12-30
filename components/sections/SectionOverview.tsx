@@ -112,7 +112,7 @@ export default function SectionOverview({
   const sectionBgClass = theme === 'dark' ? 'bg-perano-200' : 'bg-white';
 
   const containerClass = isMidnight
-    ? 'sm:rounded-xl bg-biscay-500 text-white px-10! py-20! md:px-20!'
+    ? 'sm:rounded-xl bg-stellarnight-800 text-white px-10! py-20! md:px-20!'
     : '';
 
   const proseClass = isMidnight ? 'prose-invert' : '';

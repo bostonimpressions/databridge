@@ -7,6 +7,7 @@ import { urlFor } from '@/sanity/lib/image';
 import type { PortableTextBlock } from '@portabletext/types';
 import AnimatedElement from '@/components/AnimatedElement';
 import CountUp from '@/components/ui/CountUp';
+import type { SectionTheme } from '@/types/sections';
 
 interface ListItemProps {
   heading?: PortableTextBlock[];
@@ -14,6 +15,7 @@ interface ListItemProps {
   body?: PortableTextBlock[];
   icon?: SanityImageSource;
   url?: string;
+  label?: string;
 }
 
 interface ListProps {
@@ -29,6 +31,7 @@ interface ListProps {
     | 'cards-blue'
     | 'cards-white'
     | 'cards-service'
+    | 'cards-data'
     | 'checks'
     | 'flags'
     | 'negatives'
@@ -36,6 +39,7 @@ interface ListProps {
     | 'good'
     | 'bad'
     | 'counter';
+  sectionTheme?: SectionTheme;
 }
 
 const defaultIcons: Record<string, string> = {
@@ -52,8 +56,10 @@ export default function List({
   theme = 'default',
   compact,
   className,
+  sectionTheme = 'light',
 }: ListProps) {
   const colClass = `cols-${columns}`;
+  const isCardsData = theme === 'cards-data';
 
   const snapshotIcons = [
     '/images/icon-challenge.svg',
@@ -112,6 +118,7 @@ export default function List({
     <ul
       className={`list ${colClass} ${compact ? 'compact' : ''} ${className}`}
       data-theme={theme}
+      data-section-theme={isCardsData ? sectionTheme : undefined}
       role="list"
     >
       {items.map((item, i) => {
@@ -120,12 +127,44 @@ export default function List({
         const animation = i % 2 === 0 ? 'fadeLeft' : 'fadeRight';
         const hasUrl = !!item.url;
         const isCardsServiceWithIcon = theme === 'cards-service' && shouldShowImage(item) && src;
+        const isCardsData = theme === 'cards-data';
+
+        // Check if heading is a number for animation
+        const headingText = item.heading ? toPlainText(item.heading) : '';
+        const isHeadingNumber = isCardsData && /^\d+([,.]\d+)*$/.test(headingText.trim());
 
         const listItemContent = (
           <>
             {theme === 'flags' && <span className="flag-bar" />}
 
-            {isCardsServiceWithIcon ? (
+            {isCardsData ? (
+              // Special layout for cards-data: heading + label in card, body below card
+              <>
+                <div className="card-data-card">
+                  <div className="card-data-header">
+                    {item.heading && (
+                      <h4 className="heading">
+                        {isHeadingNumber ? (
+                          <CountUp
+                            value={headingText.trim()}
+                            duration={2000}
+                            className="counter-number"
+                          />
+                        ) : (
+                          <PortableText value={item.heading} components={portableComponents} />
+                        )}
+                      </h4>
+                    )}
+                    {item.label && <span className="label">{item.label}</span>}
+                  </div>
+                </div>
+                {item.body && (
+                  <div className="list-content">
+                    <PortableText value={item.body} components={portableComponents} />
+                  </div>
+                )}
+              </>
+            ) : isCardsServiceWithIcon ? (
               // Special layout for cards-service with icon: icon and heading inline, body below
               <>
                 <div className="icon-heading-row">
@@ -203,6 +242,7 @@ export default function List({
             key={i}
             as="li"
             animation={animation}
+            data-section-theme={isCardsData ? sectionTheme : undefined}
             delay={i * 0.1}
             duration={0.5}
             className={`list-item ${hasUrl ? 'has-link' : ''}`}

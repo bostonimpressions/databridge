@@ -2,6 +2,7 @@
 import { PortableText } from '@portabletext/react';
 import type { PortableTextBlock } from '@portabletext/types';
 import { portableTextComponents } from '@/lib/portableTextComponents';
+import type { SectionTheme } from '@/types/sections';
 
 interface TableBlockValue {
   columnA: string;
@@ -14,7 +15,7 @@ interface TableBlockValue {
 
 interface TableBlockProps {
   value: TableBlockValue;
-  theme?: 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
+  theme?: SectionTheme;
 }
 
 export default function TableBlock({ value, theme = 'light' }: TableBlockProps) {

@@ -7,7 +7,7 @@
 }
 
 @utility btn-primary-light {
-  @apply rounded-4xl hover:bg-perano-600 text-biscay-500 cursor-pointer border-2 border-transparent bg-perano-500 px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl hover:bg-perano-600 text-stellarnight-800 cursor-pointer border-2 border-transparent bg-perano-500 px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-secondary-light {
@@ -53,6 +53,12 @@
 
 .text-highlight {
   @apply text-blue-ribbon-500;
+}
+
+/* Dark section highlights use yellowish-green */
+[data-section-theme='dark'] .text-highlight,
+.text-white .text-highlight {
+  color: #d2ff78;
 }
 
 .icon-wrapper {

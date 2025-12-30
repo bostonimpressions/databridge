@@ -10,6 +10,7 @@ import AnimatedElement from '@/components/AnimatedElement';
 import List from '@/components/ui/List';
 import TableBlock from '@/components/blocks/TableBlock';
 import { portableTextComponents } from '@/lib/portableTextComponents';
+import type { SectionTheme } from '@/types/sections';
 
 /* -------------------------------- Types -------------------------------- */
 
@@ -47,7 +48,7 @@ interface Row {
 
 interface SectionMainProps {
   rows: Row[];
-  theme?: 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
+  theme?: SectionTheme;
   backgroundImage?: any;
   topBorder?: boolean;
 }
@@ -76,8 +77,8 @@ const getGridCols = (columns?: ColumnLayout) => {
 const renderContentBlock = (
   block: ContentBlock,
   isTextLeft: boolean,
-  theme: string,
-  proseClass: string
+  theme: SectionTheme,
+  textColorClass: string
 ) => {
   switch (block._type) {
     case 'image':
@@ -93,16 +94,33 @@ const renderContentBlock = (
       } else if (images.length === 1) {
         // Single image
         const image = images[0];
+        const display = block.display || 'cover';
+        const isSquare = display === 'square';
+
         return (
           <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
-            <div className="relative h-64 w-full md:h-80">
-              <Image
-                src={urlFor(image).url()}
-                alt={image.alt || 'Image'}
-                fill
-                className="rounded-lg object-cover"
-              />
-            </div>
+            {isSquare ? (
+              <div
+                className="relative mx-auto"
+                style={{ width: '350px', height: '350px', maxWidth: '100%' }}
+              >
+                <Image
+                  src={urlFor(image).url()}
+                  alt={image.alt || 'Image'}
+                  fill
+                  className="rounded-lg object-contain"
+                />
+              </div>
+            ) : (
+              <div className="relative h-64 w-full md:h-80">
+                <Image
+                  src={urlFor(image).url()}
+                  alt={image.alt || 'Image'}
+                  fill
+                  className="rounded-lg object-cover"
+                />
+              </div>
+            )}
           </AnimatedElement>
         );
       }
@@ -114,6 +132,7 @@ const renderContentBlock = (
           items={block.items || []}
           columns={block.columns || 1}
           theme={block.variant || 'default'}
+          sectionTheme={theme as 'light' | 'dark' | 'midnight' | 'sky' | 'orange'}
         />
       );
 
@@ -126,7 +145,7 @@ const renderContentBlock = (
               columnB: block.columnB || '',
               rows: block.rows || [],
             }}
-            theme={theme as 'light' | 'dark' | 'midnight' | 'sky' | 'orange'}
+            theme={theme as SectionTheme}
           />
         </AnimatedElement>
       );
@@ -265,7 +284,7 @@ export default function SectionMain({
   // Theme-based background colors
   const sectionBg =
     theme === 'dark'
-      ? 'bg-gray-100'
+      ? '' // Dark theme uses custom background color
       : theme === 'midnight'
         ? 'bg-gray-900'
         : theme === 'sky'
@@ -274,7 +293,7 @@ export default function SectionMain({
             ? '' // Orange theme uses custom gradient background
             : 'bg-white';
 
-  const proseClass = theme === 'midnight' ? 'prose-invert' : '';
+  const textColorClass = theme === 'dark' ? 'text-white' : theme === 'midnight' ? 'text-white' : '';
 
   // Orange theme background style with gradient
   const orangeGradientStyle =
@@ -305,11 +324,13 @@ export default function SectionMain({
   };
 
   const borderStyle = topBorder ? { borderTop: '2px solid #DEE2FF' } : {};
+  const darkBgStyle = theme === 'dark' ? { backgroundColor: '#1C2D50' } : {};
 
   return (
     <section
-      className={`relative py-16 ${sectionBg}`}
-      style={{ ...orangeGradientStyle, ...borderStyle }}
+      className={`relative py-16 ${sectionBg} ${textColorClass}`}
+      data-section-theme={theme}
+      style={{ ...orangeGradientStyle, ...darkBgStyle, ...borderStyle }}
     >
       {/* Background image for orange theme (positioned at bottom with color-burn) */}
       {theme === 'orange' && backgroundImageUrl && (
@@ -364,17 +385,23 @@ export default function SectionMain({
                   delay={0}
                   className={`${textColOrder} md:sticky md:top-24 md:self-start`}
                 >
-                  {row.label && <p className="mb-4 text-sm font-semibold uppercase">{row.label}</p>}
+                  {row.label && (
+                    <p className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}>
+                      {row.label}
+                    </p>
+                  )}
 
                   {row.heading && (
-                    <TextHeading level="h2" color={proseClass}>
+                    <TextHeading level="h2" color={textColorClass}>
                       {renderPT(row.heading)}
                     </TextHeading>
                   )}
 
-                  {row.subheading && <h3 className="mt-2">{renderPT(row.subheading)}</h3>}
+                  {row.subheading && (
+                    <h3 className={`mt-2 ${textColorClass}`}>{renderPT(row.subheading)}</h3>
+                  )}
 
-                  {row.body && <div>{renderPT(row.body)}</div>}
+                  {row.body && <div className={textColorClass}>{renderPT(row.body)}</div>}
 
                   {/* Support buttonBlock in text column when no heading/body (for buttons on left) */}
                   {!row.heading && !row.body && !row.subheading && row.contentBlocks && (
@@ -383,7 +410,7 @@ export default function SectionMain({
                         .filter((block) => block._type === 'buttonBlock')
                         .map((block, j) => (
                           <React.Fragment key={j}>
-                            {renderContentBlock(block, isTextLeft, theme, proseClass)}
+                            {renderContentBlock(block, isTextLeft, theme, textColorClass)}
                           </React.Fragment>
                         ))}
                     </div>
@@ -416,14 +443,16 @@ export default function SectionMain({
                             return (
                               <div key={j} className="space-y-6">
                                 {block.label && (
-                                  <p className="mb-4 text-sm font-semibold uppercase">
+                                  <p
+                                    className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
+                                  >
                                     {block.label}
                                   </p>
                                 )}
 
                                 {block.heading && (
                                   <AnimatedElement animation="fade">
-                                    <TextHeading level="h2" color={proseClass}>
+                                    <TextHeading level="h2" color={textColorClass}>
                                       {renderPT(block.heading)}
                                     </TextHeading>
                                   </AnimatedElement>
@@ -431,7 +460,7 @@ export default function SectionMain({
 
                                 {block.subheading && (
                                   <AnimatedElement animation="fade">
-                                    <h3 className={`mt-2 ${proseClass}`}>
+                                    <h3 className={`mt-2 ${textColorClass}`}>
                                       {renderPT(block.subheading)}
                                     </h3>
                                   </AnimatedElement>
@@ -439,7 +468,7 @@ export default function SectionMain({
 
                                 {block.body && (
                                   <AnimatedElement animation="fade" delay={0.1}>
-                                    {renderPT(block.body)}
+                                    <div className={textColorClass}>{renderPT(block.body)}</div>
                                   </AnimatedElement>
                                 )}
 
@@ -451,7 +480,7 @@ export default function SectionMain({
                                           nestedBlock,
                                           isTextLeft,
                                           theme,
-                                          proseClass
+                                          textColorClass
                                         )}
                                       </React.Fragment>
                                     ))}
@@ -464,7 +493,7 @@ export default function SectionMain({
                           // LEGACY: Direct blocks (backwards compatibility)
                           return (
                             <React.Fragment key={j}>
-                              {renderContentBlock(block, isTextLeft, theme, proseClass)}
+                              {renderContentBlock(block, isTextLeft, theme, textColorClass)}
                             </React.Fragment>
                           );
                         })}
@@ -482,14 +511,16 @@ export default function SectionMain({
                           return (
                             <div key={j} className="space-y-6">
                               {block.label && (
-                                <p className="mb-4 text-sm font-semibold uppercase">
+                                <p
+                                  className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
+                                >
                                   {block.label}
                                 </p>
                               )}
 
                               {block.heading && (
                                 <AnimatedElement animation="fade">
-                                  <TextHeading level="h2" color={proseClass}>
+                                  <TextHeading level="h2" color={textColorClass}>
                                     {renderPT(block.heading)}
                                   </TextHeading>
                                 </AnimatedElement>
@@ -497,7 +528,7 @@ export default function SectionMain({
 
                               {block.subheading && (
                                 <AnimatedElement animation="fade">
-                                  <h3 className={`mt-2 ${proseClass}`}>
+                                  <h3 className={`mt-2 ${textColorClass}`}>
                                     {renderPT(block.subheading)}
                                   </h3>
                                 </AnimatedElement>
@@ -505,7 +536,7 @@ export default function SectionMain({
 
                               {block.body && (
                                 <AnimatedElement animation="fade" delay={0.1}>
-                                  {renderPT(block.body)}
+                                  <div className={textColorClass}>{renderPT(block.body)}</div>
                                 </AnimatedElement>
                               )}
 
@@ -517,7 +548,7 @@ export default function SectionMain({
                                         nestedBlock,
                                         isTextLeft,
                                         theme,
-                                        proseClass
+                                        textColorClass
                                       )}
                                     </React.Fragment>
                                   ))}
@@ -530,7 +561,7 @@ export default function SectionMain({
                         // Direct blocks
                         return (
                           <React.Fragment key={j}>
-                            {renderContentBlock(block, isTextLeft, theme, proseClass)}
+                            {renderContentBlock(block, isTextLeft, theme, textColorClass)}
                           </React.Fragment>
                         );
                       })}

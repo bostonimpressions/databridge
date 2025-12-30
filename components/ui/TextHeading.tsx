@@ -12,14 +12,14 @@ export default function TextHeading({
   level = 'h1',
   children,
   border = false,
-  color = 'text-biscay-600',
+  color = 'text-stellarnight-600',
   barColor = 'bg-apple-500',
 }: TextHeadingProps) {
   const Tag = level === 'h2' ? 'h2' : 'h1';
 
   return (
     <div className="inline-block">
-      <Tag className={`${color} relative mb-6 inline-block md:mb-10`}>
+      <Tag className={`${color} relative mb-6 inline-block`}>
         {children}
         {border && (
           <div

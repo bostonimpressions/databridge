@@ -239,4 +239,48 @@ sections:
         layout:
           columns: '1/2-1/2'
           textColumn: 'left'
+
+  # Section five
+  - type: sectionMain
+    theme: dark
+    rows:
+      # Row 1
+      - label: 'Data Center'
+        heading: |
+          ==Future-proof==, AI-ready data center designed for scale.
+        body: |
+          Designed for uptime and flexibility, our data centers provide a secure foundation for your operations
+        layout:
+          columns: '1/2-1/2'
+          textColumn: 'left'
+        contentBlocks:
+          - image:
+              images:
+                - image: '/images/illustration-hud-sphere.png'
+                  alt: 'DataBridge Sites core infrastructure illustration'
+              display: 'square'
+
+      # Row 2
+      - heading: |
+          Core Infrastructure
+        layout:
+          columns: '1/1'
+        spacing: 'compact'
+
+      # Row 3
+      - layout:
+          columns: '1/1'
+        contentBlocks:
+          - listBlock:
+              variant: 'cards-data'
+              columns: 2
+              items:
+                - heading: '214,000'
+                  label: 'sq. ft.'
+                  body: |
+                    214,000 sq. ft. purpose-built facility on 11 acres
+                - heading: '91,000'
+                  label: 'sq. ft.'
+                  body: |
+                    91,000 sq. ft. raised floor space for enterprise, government, and research clients
 ---

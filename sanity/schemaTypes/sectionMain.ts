@@ -262,6 +262,21 @@ export default defineType({
                               ],
                               validation: (Rule) => Rule.min(1).max(10),
                             }),
+                            defineField({
+                              name: 'display',
+                              title: 'Image Display',
+                              type: 'string',
+                              options: {
+                                list: [
+                                  { title: 'Cover (default)', value: 'cover' },
+                                  { title: 'Square (350px max)', value: 'square' },
+                                ],
+                                layout: 'radio',
+                              },
+                              initialValue: 'cover',
+                              description:
+                                'Cover fills container, Square is 350px max with square aspect ratio',
+                            }),
                           ],
                           preview: {
                             select: {
@@ -447,6 +462,21 @@ export default defineType({
                         }),
                       ],
                       validation: (Rule) => Rule.min(1).max(10),
+                    }),
+                    defineField({
+                      name: 'display',
+                      title: 'Image Display',
+                      type: 'string',
+                      options: {
+                        list: [
+                          { title: 'Cover (default)', value: 'cover' },
+                          { title: 'Square (350px max)', value: 'square' },
+                        ],
+                        layout: 'radio',
+                      },
+                      initialValue: 'cover',
+                      description:
+                        'Cover fills container, Square is 350px max with square aspect ratio',
                     }),
                   ],
                   preview: {
