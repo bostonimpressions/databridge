@@ -182,7 +182,10 @@
   &[data-theme='flags'] {
     @apply gap-12;
     .list-item {
-      @apply items-start gap-8 bg-transparent p-0 text-sapphire-700;
+      @apply items-start gap-5 bg-transparent p-0;
+      p {
+        @apply font-semibold text-black;
+      }
     }
   }
 
@@ -301,9 +304,9 @@
 }
 
 .flag-bar {
-  width: 14px;
-  background: var(--color-perano-500);
-  border-radius: 50px;
+  width: 10px;
+  background: var(--color-sapphire-500);
+  border-radius: 1px;
   align-self: stretch;
 }
 

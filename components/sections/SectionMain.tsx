@@ -372,7 +372,7 @@ export default function SectionMain({
                     </TextHeading>
                   )}
 
-                  {row.subheading && <h4 className="mt-2">{renderPT(row.subheading)}</h4>}
+                  {row.subheading && <h3 className="mt-2">{renderPT(row.subheading)}</h3>}
 
                   {row.body && <div>{renderPT(row.body)}</div>}
 
@@ -431,9 +431,9 @@ export default function SectionMain({
 
                                 {block.subheading && (
                                   <AnimatedElement animation="fade">
-                                    <h4 className={`mt-2 ${proseClass}`}>
+                                    <h3 className={`mt-2 ${proseClass}`}>
                                       {renderPT(block.subheading)}
-                                    </h4>
+                                    </h3>
                                   </AnimatedElement>
                                 )}
 
@@ -497,9 +497,9 @@ export default function SectionMain({
 
                               {block.subheading && (
                                 <AnimatedElement animation="fade">
-                                  <h4 className={`mt-2 ${proseClass}`}>
+                                  <h3 className={`mt-2 ${proseClass}`}>
                                     {renderPT(block.subheading)}
-                                  </h4>
+                                  </h3>
                                 </AnimatedElement>
                               )}
 
