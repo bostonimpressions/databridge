@@ -348,4 +348,21 @@ sections:
                     Silver Spring, Maryland — near Washington DC and Baltimore
                 - body: |
                     Proximity to airports, research hubs, and government centers
+
+  # Section six
+  - type: sectionMain
+    theme: light
+    rows:
+      # Row 1
+      - heading: 'Compliance for Regulated Industries'
+        body: |
+          Organizations in healthcare, financial services, government, and other regulated sectors trust DataBridge to meet stringent compliance requirements.
+
+          Our comprehensive certification portfolio and dedicated compliance team handle the regulatory burden.
+
+      # Row 2
+      - body: |
+          Our ultra-secure facilities are ready to be conditioned as SCIF environments for classified data.
+
+          Annual compliance reports, initial qualification processes, and ongoing support from our full compliance team ensure your infrastructure meets all applicable regulatory requirements.
 ---
