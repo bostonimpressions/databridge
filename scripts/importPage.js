@@ -258,19 +258,50 @@ async function processContentBlock(block) {
 
   // Determine block type
   if (block.image) {
-    // Image block
+    // Image block (supports single image or array of images for slideshow)
     block._type = 'image';
-    const imagePath = block.image;
-    const imageData = await handleImage(imagePath);
-    if (imageData) {
-      // Merge image asset at top level (not nested)
-      block.asset = imageData.asset;
-      // Keep alt text - it's already in the block object
-      // Remove the image path property since we've converted it
+    
+    // Check if it's the new structure with images array
+    if (block.image.images && Array.isArray(block.image.images)) {
+      // New structure: array of images for slideshow
+      block.images = await Promise.all(
+        block.image.images.map(async (imgItem) => {
+          const imageData = await handleImage(imgItem.image);
+          if (imageData) {
+            return {
+              _type: 'image',
+              asset: imageData.asset,
+              alt: imgItem.alt || '',
+            };
+          }
+          return null;
+        })
+      );
+      // Filter out failed uploads
+      block.images = block.images.filter((img) => img !== null);
+      if (block.images.length === 0) {
+        return null; // All images failed
+      }
       delete block.image;
     } else {
-      // If image upload failed, remove the block
-      return null;
+      // Legacy structure: single image
+      const imagePath = typeof block.image === 'string' ? block.image : block.image.image;
+      const imageData = await handleImage(imagePath);
+      if (imageData) {
+        // For backward compatibility, also support single image
+        block.images = [
+          {
+            _type: 'image',
+            asset: imageData.asset,
+            alt: block.image.alt || block.alt || '',
+          },
+        ];
+        delete block.image;
+        delete block.alt;
+      } else {
+        // If image upload failed, remove the block
+        return null;
+      }
     }
   } else if (block.listBlock) {
     // List block
@@ -336,6 +367,32 @@ async function processContentBlock(block) {
     block.url = ctaData.url || '';
     block.style = ctaData.style || 'primary';
     delete block.ctaBlock;
+  } else if (block.buttonBlock) {
+    // Button block (multiple buttons)
+    block._type = 'buttonBlock';
+    const buttonData = block.buttonBlock;
+    block.buttons = [];
+    
+    if (Array.isArray(buttonData.buttons)) {
+      block.buttons = buttonData.buttons.map((button) => {
+        button._key = generateKey();
+        button._type = 'button';
+        return {
+          title: button.title || '',
+          url: button.url || '',
+          style: button.style || 'primary',
+        };
+      });
+    }
+    
+    delete block.buttonBlock;
+  } else if (block.linkBlock) {
+    // Link block (single link with arrow)
+    block._type = 'linkBlock';
+    const linkData = block.linkBlock;
+    block.text = linkData.text || '';
+    block.url = linkData.url || '';
+    delete block.linkBlock;
   }
 
   return block;

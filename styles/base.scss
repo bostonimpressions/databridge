@@ -1,9 +1,9 @@
 @utility btn-primary {
-  @apply rounded-4xl bg-blue-ribbon-500 hover:bg-blue-ribbon-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl hover:bg-blue-ribbon-600 cursor-pointer border-2 border-transparent bg-blue-ribbon-500 px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-secondary {
-  @apply rounded-4xl border-blue-ribbon-500 text-blue-ribbon-500 hover:border-blue-ribbon-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl hover:border-blue-ribbon-600 cursor-pointer border-2 border-blue-ribbon-500 bg-transparent px-4 py-1 text-center text-xs font-semibold text-blue-ribbon-500 shadow-md transition duration-150 md:text-sm;
 }
 
 @utility btn-primary-light {
@@ -15,11 +15,11 @@
 }
 
 @utility btn-primary-green {
-  @apply rounded-4xl bg-apple-500 hover:bg-apple-600 cursor-pointer border-2 border-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl cursor-pointer border-2 border-transparent bg-apple-500 px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 hover:bg-apple-600 md:text-sm;
 }
 
 @utility btn-secondary-green {
-  @apply rounded-4xl border-apple-500 text-apple-500 hover:border-apple-600 cursor-pointer border-2 bg-transparent px-4 py-1 text-center text-xs font-semibold shadow-md transition duration-150 md:text-sm;
+  @apply rounded-4xl cursor-pointer border-2 border-apple-500 bg-transparent px-4 py-1 text-center text-xs font-semibold text-apple-500 shadow-md transition duration-150 hover:border-apple-600 md:text-sm;
 }
 
 @utility btn-primary-white {
@@ -28,6 +28,23 @@
 
 @utility btn-secondary-white {
   @apply rounded-4xl cursor-pointer border-2 border-white bg-transparent px-4 py-1 text-center text-xs font-semibold text-white shadow-md transition duration-150 hover:border-gray-100 md:text-sm;
+}
+
+.link-w-arrow {
+  @apply underline-offset-6 decoration-blue-ribbon-100 relative inline-block pr-4 text-sm font-semibold text-blue-600 underline decoration-4 transition-all duration-200;
+
+  &::after {
+    content: '→';
+    @apply absolute top-1/2 ml-1 -translate-y-1/2 translate-x-0 opacity-0 transition-all duration-200 ease-out;
+  }
+
+  &:hover {
+    @apply decoration-sky-100;
+
+    &::after {
+      @apply translate-x-1 opacity-100;
+    }
+  }
 }
 
 .container {

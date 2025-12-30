@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { PortableText } from '@portabletext/react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { urlFor } from '@/sanity/lib/image';
 import TextHeading from '@/components/ui/TextHeading';
 import AnimatedElement from '@/components/AnimatedElement';
@@ -12,17 +13,25 @@ import { portableTextComponents } from '@/lib/portableTextComponents';
 
 /* -------------------------------- Types -------------------------------- */
 
-type ColumnLayout = '1/1' | '1/2-1/2' | '2/3-1/3' | '1/3-2/3';
+type ColumnLayout = '1/1' | '1/2-1/2' | '2/3-1/3' | '1/3-2/3' | '1/4-3/4';
 type TextColumn = 'left' | 'right';
 
 interface ContentBlock {
-  _type: 'image' | 'listBlock' | 'tableBlock' | 'ctaBlock' | 'contentRow';
+  _type:
+    | 'image'
+    | 'listBlock'
+    | 'tableBlock'
+    | 'ctaBlock'
+    | 'contentRow'
+    | 'buttonBlock'
+    | 'linkBlock';
   [key: string]: any;
 }
 
 interface RowLayout {
   columns?: ColumnLayout;
   textColumn?: TextColumn;
+  contentAlign?: 'left' | 'right';
 }
 
 interface Row {
@@ -31,7 +40,6 @@ interface Row {
   heading?: any[];
   subheading?: any[];
   body?: any[];
-  link?: { text: string; url: string };
   layout?: RowLayout;
   spacing?: 'default' | 'compact';
   contentBlocks?: ContentBlock[];
@@ -57,6 +65,8 @@ const getGridCols = (columns?: ColumnLayout) => {
       return 'md:grid-cols-[2fr_1fr]';
     case '1/3-2/3':
       return 'md:grid-cols-[1fr_2fr]';
+    case '1/4-3/4':
+      return 'md:grid-cols-[1fr_3fr]';
     default:
       return 'md:grid-cols-1';
   }
@@ -71,18 +81,32 @@ const renderContentBlock = (
 ) => {
   switch (block._type) {
     case 'image':
-      return (
-        <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
-          <div className="relative h-64 w-full md:h-80">
-            <Image
-              src={urlFor(block).url()}
-              alt={block.alt || 'Image'}
-              fill
-              className="rounded-lg object-cover"
-            />
-          </div>
-        </AnimatedElement>
-      );
+      // Check if it's an array of images (slideshow) or single image (legacy format)
+      // New structure: block.images is an array
+      // Legacy structure: block.asset exists (single image)
+      const images = block.images || (block.asset ? [{ asset: block.asset, alt: block.alt }] : []);
+      const isSlideshow = images.length > 1;
+
+      if (isSlideshow) {
+        // Image slideshow component
+        return <ImageSlideshow images={images} isTextLeft={isTextLeft} />;
+      } else if (images.length === 1) {
+        // Single image
+        const image = images[0];
+        return (
+          <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+            <div className="relative h-64 w-full md:h-80">
+              <Image
+                src={urlFor(image).url()}
+                alt={image.alt || 'Image'}
+                fill
+                className="rounded-lg object-cover"
+              />
+            </div>
+          </AnimatedElement>
+        );
+      }
+      return null;
 
     case 'listBlock':
       return (
@@ -125,10 +149,110 @@ const renderContentBlock = (
         </AnimatedElement>
       );
 
+    case 'buttonBlock':
+      return (
+        <div className="flex flex-wrap gap-3">
+          {block.buttons?.map((btn: any, i: number) => (
+            <a
+              key={i}
+              href={btn.url || '#'}
+              className={`inline-block rounded-lg px-6 py-3 font-semibold transition-colors ${
+                btn.style === 'secondary'
+                  ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                  : btn.style === 'outline'
+                    ? 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
+            >
+              {btn.title || 'Button'}
+            </a>
+          ))}
+        </div>
+      );
+
+    case 'linkBlock':
+      return (
+        <a href={block.url || '#'} className="link-w-arrow">
+          {block.text || 'Link'}
+        </a>
+      );
+
     default:
       return null;
   }
 };
+
+/* ------------------------- Image Slideshow Component ------------------------- */
+interface ImageSlideshowProps {
+  images: any[];
+  isTextLeft: boolean;
+}
+
+function ImageSlideshow({ images, isTextLeft }: ImageSlideshowProps) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % images.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  // Preload images
+  useEffect(() => {
+    images.forEach((img) => {
+      if (img.asset || img._type === 'image') {
+        const imageUrl = urlFor(img).width(1920).url();
+        const imgElement = new window.Image();
+        imgElement.src = imageUrl;
+      }
+    });
+  }, [images]);
+
+  return (
+    <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+      <div className="relative h-64 w-full overflow-hidden rounded-lg md:h-80">
+        {images.map((img, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === current ? 1 : 0 }}
+            transition={{ duration: 1.5, ease: 'easeInOut' }}
+            className="absolute inset-0"
+            style={{ zIndex: index === current ? 1 : 0 }}
+          >
+            <Image
+              src={urlFor(img).url()}
+              alt={img.alt || `Slide ${index + 1}`}
+              fill
+              className="object-cover"
+              priority={index === 0}
+            />
+          </motion.div>
+        ))}
+
+        {/* Slide indicators */}
+        {images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrent(index)}
+                className={`h-2 rounded-full transition-all ${
+                  index === current ? 'w-8 bg-white' : 'w-2 bg-white/50'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </AnimatedElement>
+  );
+}
 
 /* ------------------------------ Component ------------------------------ */
 
@@ -217,6 +341,7 @@ export default function SectionMain({
 
           const columns = row.layout?.columns || '1/1';
           const textColumn = row.layout?.textColumn || 'left';
+          const contentAlign = row.layout?.contentAlign || 'left';
 
           const isTextLeft = textColumn === 'left';
           const gridCols = getGridCols(columns);
@@ -224,23 +349,21 @@ export default function SectionMain({
           const textColOrder = isTextLeft ? 'md:order-1' : 'md:order-2';
           const contentColOrder = isTextLeft ? 'md:order-2' : 'md:order-1';
 
-          const spacingClass = row.spacing === 'compact' ? 'mb-8' : 'mb-20';
-
-          // Determine animation for this row
-          const rowAnimation = columns === '1/1' ? 'fadeUp' : isTextLeft ? 'fadeLeft' : 'fadeRight';
-          const contentAnimation =
-            columns === '1/1' ? 'fadeUp' : isTextLeft ? 'fadeRight' : 'fadeLeft';
+          const spacingClass = row.spacing === 'compact' ? 'mb-6 md:mb-10' : 'mb-12 md:mb-20';
+          // Only apply gap for multi-column layouts (not 1/1)
+          const gapClass = columns === '1/1' ? '' : 'gap-10 md:gap-20';
+          // Content alignment class
+          const contentAlignClass = contentAlign === 'right' ? 'md:text-right' : '';
 
           return (
-            <AnimatedElement
-              key={i}
-              animation={rowAnimation}
-              once={false}
-              className={`${spacingClass} min-h-0`}
-            >
-              <div className={`grid gap-20 ${gridCols} items-start`}>
+            <div key={i} className={`${spacingClass} min-h-0`}>
+              <div className={`grid ${gapClass} ${gridCols} items-start`}>
                 {/* TEXT COLUMN - Sticky so shorter column stays in view */}
-                <div className={`${textColOrder} md:sticky md:top-24 md:self-start`}>
+                <AnimatedElement
+                  animation={columns === '1/1' ? 'fadeUp' : isTextLeft ? 'fadeLeft' : 'fadeRight'}
+                  delay={0}
+                  className={`${textColOrder} md:sticky md:top-24 md:self-start`}
+                >
                   {row.label && <p className="mb-4 text-sm font-semibold uppercase">{row.label}</p>}
 
                   {row.heading && (
@@ -253,84 +376,106 @@ export default function SectionMain({
 
                   {row.body && <div>{renderPT(row.body)}</div>}
 
-                  {row.link && (
-                    <a
-                      href={row.link.url}
-                      className="mt-4 inline-block text-blue-600 hover:underline"
-                    >
-                      {row.link.text}
-                    </a>
-                  )}
-                </div>
-
-                {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
-                {columns !== '1/1' && (
-                  <div className={`${contentColOrder} md:sticky md:top-24 md:self-start`}>
+                  {/* Support buttonBlock in text column when no heading/body (for buttons on left) */}
+                  {!row.heading && !row.body && !row.subheading && row.contentBlocks && (
                     <div className="space-y-8">
-                      {row.contentBlocks?.map((block, j) => {
-                        // CONTENT ROW (nested row with text + blocks)
-                        if (block._type === 'contentRow') {
-                          return (
-                            <div key={j} className="space-y-6">
-                              {block.label && (
-                                <p className="mb-4 text-sm font-semibold uppercase">
-                                  {block.label}
-                                </p>
-                              )}
-
-                              {block.heading && (
-                                <AnimatedElement animation="fade">
-                                  <h3 className={proseClass}>{renderPT(block.heading)}</h3>
-                                </AnimatedElement>
-                              )}
-
-                              {block.subheading && (
-                                <AnimatedElement animation="fade">
-                                  <h4 className={`mt-2 ${proseClass}`}>
-                                    {renderPT(block.subheading)}
-                                  </h4>
-                                </AnimatedElement>
-                              )}
-
-                              {block.body && (
-                                <AnimatedElement animation="fade" delay={0.1}>
-                                  {renderPT(block.body)}
-                                </AnimatedElement>
-                              )}
-
-                              {block.blocks && block.blocks.length > 0 && (
-                                <div className="space-y-6">
-                                  {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
-                                    <React.Fragment key={k}>
-                                      {renderContentBlock(
-                                        nestedBlock,
-                                        isTextLeft,
-                                        theme,
-                                        proseClass
-                                      )}
-                                    </React.Fragment>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        }
-
-                        // LEGACY: Direct blocks (backwards compatibility)
-                        return (
+                      {row.contentBlocks
+                        .filter((block) => block._type === 'buttonBlock')
+                        .map((block, j) => (
                           <React.Fragment key={j}>
                             {renderContentBlock(block, isTextLeft, theme, proseClass)}
                           </React.Fragment>
-                        );
-                      })}
+                        ))}
                     </div>
-                  </div>
+                  )}
+                </AnimatedElement>
+
+                {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
+                {columns !== '1/1' && (
+                  <AnimatedElement
+                    animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
+                    delay={0.1}
+                    className={`${contentColOrder} md:sticky md:top-24 md:self-start`}
+                  >
+                    <div className={`space-y-8 ${contentAlignClass}`}>
+                      {row.contentBlocks
+                        ?.filter(
+                          (block) =>
+                            // If text column has no heading/body, filter out buttonBlock (it goes in text column)
+                            // linkBlock stays in content column
+                            !(
+                              !row.heading &&
+                              !row.body &&
+                              !row.subheading &&
+                              block._type === 'buttonBlock'
+                            )
+                        )
+                        .map((block, j) => {
+                          // CONTENT ROW (nested row with text + blocks)
+                          if (block._type === 'contentRow') {
+                            return (
+                              <div key={j} className="space-y-6">
+                                {block.label && (
+                                  <p className="mb-4 text-sm font-semibold uppercase">
+                                    {block.label}
+                                  </p>
+                                )}
+
+                                {block.heading && (
+                                  <AnimatedElement animation="fade">
+                                    <TextHeading level="h2" color={proseClass}>
+                                      {renderPT(block.heading)}
+                                    </TextHeading>
+                                  </AnimatedElement>
+                                )}
+
+                                {block.subheading && (
+                                  <AnimatedElement animation="fade">
+                                    <h4 className={`mt-2 ${proseClass}`}>
+                                      {renderPT(block.subheading)}
+                                    </h4>
+                                  </AnimatedElement>
+                                )}
+
+                                {block.body && (
+                                  <AnimatedElement animation="fade" delay={0.1}>
+                                    {renderPT(block.body)}
+                                  </AnimatedElement>
+                                )}
+
+                                {block.blocks && block.blocks.length > 0 && (
+                                  <div className="space-y-6">
+                                    {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
+                                      <React.Fragment key={k}>
+                                        {renderContentBlock(
+                                          nestedBlock,
+                                          isTextLeft,
+                                          theme,
+                                          proseClass
+                                        )}
+                                      </React.Fragment>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          }
+
+                          // LEGACY: Direct blocks (backwards compatibility)
+                          return (
+                            <React.Fragment key={j}>
+                              {renderContentBlock(block, isTextLeft, theme, proseClass)}
+                            </React.Fragment>
+                          );
+                        })}
+                    </div>
+                  </AnimatedElement>
                 )}
 
                 {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
                 {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
-                  <div className="mt-0">
-                    <div className="space-y-8">
+                  <AnimatedElement animation="fadeUp" delay={0} className="mt-0">
+                    <div className={`space-y-8 ${contentAlignClass}`}>
                       {row.contentBlocks.map((block, j) => {
                         // CONTENT ROW (nested row with text + blocks)
                         if (block._type === 'contentRow') {
@@ -344,7 +489,9 @@ export default function SectionMain({
 
                               {block.heading && (
                                 <AnimatedElement animation="fade">
-                                  <h3 className={proseClass}>{renderPT(block.heading)}</h3>
+                                  <TextHeading level="h2" color={proseClass}>
+                                    {renderPT(block.heading)}
+                                  </TextHeading>
                                 </AnimatedElement>
                               )}
 
@@ -388,10 +535,10 @@ export default function SectionMain({
                         );
                       })}
                     </div>
-                  </div>
+                  </AnimatedElement>
                 )}
               </div>
-            </AnimatedElement>
+            </div>
           );
         })}
       </div>

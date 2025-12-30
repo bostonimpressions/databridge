@@ -124,9 +124,10 @@ sections:
           columns: '2/3-1/3'
           textColumn: 'left'
 
-      # Second row: List with 2 columns, cards-blue variant, then a link
+      # Second row: List with 2 columns, cards-service variant
       - layout:
           columns: '1/1'
+        spacing: 'compact'
         contentBlocks:
           - listBlock:
               variant: 'cards-service'
@@ -152,9 +153,27 @@ sections:
                     Carrier-neutral facility with direct access to major telecommunications providers. Express Connect network, internet transit from multiple Tier-1 carriers, and direct cloud connectivity options.
                   icon: '/images/icon-network-services.png'
                   url: '/services/network-services'
-        link:
-          text: 'View All Services'
-          url: '/services'
+
+      # Third row: Buttons in left column, link in right column
+      # With textColumn: 'left' and no heading/body, buttonBlock goes in left (text) column
+      # Other blocks (like linkBlock) go in right (content) column
+      - layout:
+          columns: '1/2-1/2'
+          textColumn: 'left'
+          contentAlign: 'right'
+        spacing: 'compact'
+        contentBlocks:
+          - buttonBlock:
+              buttons:
+                - title: 'Get Started'
+                  url: '/contact'
+                  style: 'primary'
+                - title: 'Learn More'
+                  url: '/about'
+                  style: 'secondary'
+          - linkBlock:
+              text: 'View All Services'
+              url: '/services'
 
   # Section four
   - type: sectionMain
@@ -164,7 +183,7 @@ sections:
       # First row: Label on left, contentRow with heading on right
       - label: 'Data Center'
         layout:
-          columns: '1/3-2/3'
+          columns: '1/4-3/4'
           textColumn: 'left'
         contentBlocks:
           - contentRow:
@@ -179,8 +198,14 @@ sections:
           columns: '1/2-1/2'
           textColumn: 'left'
         contentBlocks:
-          - image: '/images/data-center-facility.jpg'
-            alt: 'DataBridge Sites Silver Spring data center facility'
+          - image:
+              images:
+                - image: '/images/databridge-datacenter.jpg'
+                  alt: 'DataBridge Sites Silver Spring data center facility'
+                - image: '/images/databridge-datacenter-2.jpg'
+                  alt: 'DataBridge Sites Silver Spring data center facility - view 2'
+                - image: '/images/databridge-datacenter-3.jpg'
+                  alt: 'DataBridge Sites Silver Spring data center facility - view 3'
 
       # Third row: Subheading full width with compact spacing
       - subheading: |

@@ -106,19 +106,6 @@ export default defineType({
               hidden: ({ parent }) => parent?.divider === true,
             }),
 
-            // LINK
-            defineField({
-              name: 'link',
-              title: 'Link',
-              type: 'object',
-              fields: [
-                defineField({ name: 'text', title: 'Link Text', type: 'string' }),
-                defineField({ name: 'url', title: 'URL', type: 'string' }),
-              ],
-              description: 'Optional link at the bottom of the text content',
-              hidden: ({ parent }) => parent?.divider === true,
-            }),
-
             // LAYOUT
             defineField({
               name: 'layout',
@@ -136,6 +123,7 @@ export default defineType({
                       { title: 'Equal Split (1/2 - 1/2)', value: '1/2-1/2' },
                       { title: 'Wide Right (2/3 - 1/3)', value: '2/3-1/3' },
                       { title: 'Wide Left (1/3 - 2/3)', value: '1/3-2/3' },
+                      { title: 'Narrow Left (1/4 - 3/4)', value: '1/4-3/4' },
                     ],
                     layout: 'dropdown',
                   },
@@ -157,6 +145,24 @@ export default defineType({
                   initialValue: 'left',
                   description:
                     'Which column should text content appear in? (Content blocks appear in the opposite column)',
+                  hidden: ({ parent }) => parent?.columns === '1/1',
+                }),
+
+                // CONTENT COLUMN ALIGNMENT
+                defineField({
+                  name: 'contentAlign',
+                  title: 'Content Column Alignment',
+                  type: 'string',
+                  options: {
+                    list: [
+                      { title: 'Left', value: 'left' },
+                      { title: 'Right', value: 'right' },
+                    ],
+                    layout: 'radio',
+                  },
+                  initialValue: 'left',
+                  description:
+                    'Align content blocks to the left or right within the content column',
                   hidden: ({ parent }) => parent?.columns === '1/1',
                 }),
               ],
@@ -226,20 +232,49 @@ export default defineType({
                       type: 'array',
                       description: 'Add images, lists, tables, or CTAs to this row',
                       of: [
-                        // IMAGE BLOCK
+                        // IMAGE BLOCK (single image or multiple images for slideshow)
                         defineField({
                           name: 'image',
                           title: 'Image',
-                          type: 'image',
-                          options: { hotspot: true },
+                          type: 'object',
                           fields: [
                             defineField({
-                              name: 'alt',
-                              title: 'Alt Text',
-                              type: 'string',
-                              validation: (Rule) => Rule.required(),
+                              name: 'images',
+                              title: 'Images',
+                              type: 'array',
+                              description:
+                                'Add one or more images. Multiple images will create an automatic slideshow.',
+                              of: [
+                                defineField({
+                                  name: 'image',
+                                  title: 'Image',
+                                  type: 'image',
+                                  options: { hotspot: true },
+                                  fields: [
+                                    defineField({
+                                      name: 'alt',
+                                      title: 'Alt Text',
+                                      type: 'string',
+                                      validation: (Rule) => Rule.required(),
+                                    }),
+                                  ],
+                                }),
+                              ],
+                              validation: (Rule) => Rule.min(1).max(10),
                             }),
                           ],
+                          preview: {
+                            select: {
+                              images: 'images',
+                            },
+                            prepare({ images }) {
+                              const count = images?.length || 0;
+                              return {
+                                title: count === 1 ? 'Image' : `Image Slideshow (${count} images)`,
+                                subtitle: count > 1 ? 'Auto-fade slideshow' : 'Single image',
+                              };
+                            },
+                          },
                         }),
 
                         // LIST BLOCK (reference to separate schema)
@@ -280,6 +315,87 @@ export default defineType({
                             },
                           },
                         }),
+
+                        // BUTTON BLOCK (multiple buttons)
+                        defineField({
+                          name: 'buttonBlock',
+                          title: 'Button Block',
+                          type: 'object',
+                          fields: [
+                            defineField({
+                              name: 'buttons',
+                              title: 'Buttons',
+                              type: 'array',
+                              of: [
+                                defineField({
+                                  name: 'button',
+                                  title: 'Button',
+                                  type: 'object',
+                                  fields: [
+                                    defineField({
+                                      name: 'title',
+                                      title: 'Button Text',
+                                      type: 'string',
+                                    }),
+                                    defineField({ name: 'url', title: 'URL', type: 'string' }),
+                                    defineField({
+                                      name: 'style',
+                                      title: 'Button Style',
+                                      type: 'string',
+                                      options: {
+                                        list: [
+                                          { title: 'Primary', value: 'primary' },
+                                          { title: 'Secondary', value: 'secondary' },
+                                          { title: 'Outline', value: 'outline' },
+                                        ],
+                                      },
+                                      initialValue: 'primary',
+                                    }),
+                                  ],
+                                  preview: {
+                                    select: { title: 'title', url: 'url' },
+                                    prepare({ title, url }) {
+                                      return {
+                                        title: title || 'Button',
+                                        subtitle: url,
+                                      };
+                                    },
+                                  },
+                                }),
+                              ],
+                              validation: (Rule) => Rule.max(3),
+                            }),
+                          ],
+                          preview: {
+                            select: { buttons: 'buttons' },
+                            prepare({ buttons }) {
+                              const count = buttons?.length || 0;
+                              return {
+                                title: `Button Block (${count} button${count !== 1 ? 's' : ''})`,
+                              };
+                            },
+                          },
+                        }),
+
+                        // LINK BLOCK (single link with arrow)
+                        defineField({
+                          name: 'linkBlock',
+                          title: 'Link Block',
+                          type: 'object',
+                          fields: [
+                            defineField({ name: 'text', title: 'Link Text', type: 'string' }),
+                            defineField({ name: 'url', title: 'URL', type: 'string' }),
+                          ],
+                          preview: {
+                            select: { text: 'text', url: 'url' },
+                            prepare({ text, url }) {
+                              return {
+                                title: text || 'Link',
+                                subtitle: url,
+                              };
+                            },
+                          },
+                        }),
                       ],
                     }),
                   ],
@@ -302,20 +418,49 @@ export default defineType({
                 }),
 
                 // LEGACY: Direct blocks (for backwards compatibility)
-                // IMAGE BLOCK
+                // IMAGE BLOCK (single image or multiple images for slideshow)
                 defineField({
                   name: 'image',
                   title: 'Image',
-                  type: 'image',
-                  options: { hotspot: true },
+                  type: 'object',
                   fields: [
                     defineField({
-                      name: 'alt',
-                      title: 'Alt Text',
-                      type: 'string',
-                      validation: (Rule) => Rule.required(),
+                      name: 'images',
+                      title: 'Images',
+                      type: 'array',
+                      description:
+                        'Add one or more images. Multiple images will create an automatic slideshow.',
+                      of: [
+                        defineField({
+                          name: 'image',
+                          title: 'Image',
+                          type: 'image',
+                          options: { hotspot: true },
+                          fields: [
+                            defineField({
+                              name: 'alt',
+                              title: 'Alt Text',
+                              type: 'string',
+                              validation: (Rule) => Rule.required(),
+                            }),
+                          ],
+                        }),
+                      ],
+                      validation: (Rule) => Rule.min(1).max(10),
                     }),
                   ],
+                  preview: {
+                    select: {
+                      images: 'images',
+                    },
+                    prepare({ images }) {
+                      const count = images?.length || 0;
+                      return {
+                        title: count === 1 ? 'Image' : `Image Slideshow (${count} images)`,
+                        subtitle: count > 1 ? 'Auto-fade slideshow' : 'Single image',
+                      };
+                    },
+                  },
                 }),
 
                 // LIST BLOCK (reference to separate schema)
@@ -351,6 +496,83 @@ export default defineType({
                     prepare({ title, url }) {
                       return {
                         title: title || 'CTA Button',
+                        subtitle: url,
+                      };
+                    },
+                  },
+                }),
+
+                // BUTTON BLOCK (multiple buttons)
+                defineField({
+                  name: 'buttonBlock',
+                  title: 'Button Block',
+                  type: 'object',
+                  fields: [
+                    defineField({
+                      name: 'buttons',
+                      title: 'Buttons',
+                      type: 'array',
+                      of: [
+                        defineField({
+                          name: 'button',
+                          title: 'Button',
+                          type: 'object',
+                          fields: [
+                            defineField({ name: 'title', title: 'Button Text', type: 'string' }),
+                            defineField({ name: 'url', title: 'URL', type: 'string' }),
+                            defineField({
+                              name: 'style',
+                              title: 'Button Style',
+                              type: 'string',
+                              options: {
+                                list: [
+                                  { title: 'Primary', value: 'primary' },
+                                  { title: 'Secondary', value: 'secondary' },
+                                  { title: 'Outline', value: 'outline' },
+                                ],
+                              },
+                              initialValue: 'primary',
+                            }),
+                          ],
+                          preview: {
+                            select: { title: 'title', url: 'url' },
+                            prepare({ title, url }) {
+                              return {
+                                title: title || 'Button',
+                                subtitle: url,
+                              };
+                            },
+                          },
+                        }),
+                      ],
+                      validation: (Rule) => Rule.max(3),
+                    }),
+                  ],
+                  preview: {
+                    select: { buttons: 'buttons' },
+                    prepare({ buttons }) {
+                      const count = buttons?.length || 0;
+                      return {
+                        title: `Button Block (${count} button${count !== 1 ? 's' : ''})`,
+                      };
+                    },
+                  },
+                }),
+
+                // LINK BLOCK (single link with arrow)
+                defineField({
+                  name: 'linkBlock',
+                  title: 'Link Block',
+                  type: 'object',
+                  fields: [
+                    defineField({ name: 'text', title: 'Link Text', type: 'string' }),
+                    defineField({ name: 'url', title: 'URL', type: 'string' }),
+                  ],
+                  preview: {
+                    select: { text: 'text', url: 'url' },
+                    prepare({ text, url }) {
+                      return {
+                        title: text || 'Link',
                         subtitle: url,
                       };
                     },
