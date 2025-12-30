@@ -132,7 +132,13 @@ const renderContentBlock = (
           items={block.items || []}
           columns={block.columns || 1}
           theme={block.variant || 'default'}
+          heading={
+            block.heading && Array.isArray(block.heading) && block.heading.length > 0
+              ? block.heading
+              : undefined
+          }
           sectionTheme={theme as 'light' | 'dark' | 'midnight' | 'sky' | 'orange'}
+          textColorClass={textColorClass}
         />
       );
 

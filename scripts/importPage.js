@@ -315,6 +315,15 @@ async function processContentBlock(block) {
     block.columns = listData.columns || 2;
     block.items = [];
 
+    // Process heading if present
+    if (listData.heading) {
+      if (typeof listData.heading === 'string') {
+        block.heading = convertMarkdownToBlocks(listData.heading);
+      } else {
+        block.heading = listData.heading;
+      }
+    }
+
     if (Array.isArray(listData.items)) {
       block.items = await Promise.all(
         listData.items.map(async (item) => {

@@ -283,4 +283,74 @@ sections:
                   label: 'sq. ft.'
                   body: |
                     91,000 sq. ft. raised floor space for enterprise, government, and research clients
+
+      # Row 4
+      - layout:
+          columns: '1/1'
+        contentBlocks:
+          - listBlock:
+              heading: |
+                Security & Compliance
+              variant: 'flags'
+              columns: 2
+              items:
+                - body: |
+                    24/7/365 on-site security with biometric access
+                - body: |
+                    DoD/DoS-rated perimeter standards
+                - body: |
+                    Comprehensive CCTV surveillance
+                - body: |
+                    HIPAA, PCI DSS, and GxP-aligned practices
+
+      # Row 5
+      - layout:
+          columns: '1/1'
+        contentBlocks:
+          - listBlock:
+              heading: |
+                Connectivity
+              variant: 'flags'
+              columns: 2
+              items:
+                - body: |
+                    Carrier-neutral architecture
+                - body: |
+                    Direct connections to Mid-Atlantic Crossroads (MAX) and Montgomery County FiberNet
+                - body: |
+                    Multiple Tier-1 network providers for low-latency performance
+                - body: |
+                    Hybrid and private cloud interconnect options
+
+      # Row 6
+      - layout:
+          columns: '1/1'
+        contentBlocks:
+          - listBlock:
+              heading: |
+                Performance & Scalability
+              variant: 'flags'
+              columns: 2
+              items:
+                - body: |
+                    100% uptime SLA backed by redundant systems
+                - body: |
+                    AI, Quantum & HPC-ready environments
+                - body: |
+                    Scalable private cages, suites, and expansion options
+
+      # Row 7
+      - layout:
+          columns: '1/1'
+        contentBlocks:
+          - listBlock:
+              heading: |
+                Strategic Location
+              variant: 'flags'
+              columns: 2
+              items:
+                - body: |
+                    Silver Spring, Maryland — near Washington DC and Baltimore
+                - body: |
+                    Proximity to airports, research hubs, and government centers
 ---

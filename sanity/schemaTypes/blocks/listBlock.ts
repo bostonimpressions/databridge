@@ -7,6 +7,13 @@ export default defineType({
   type: 'object',
   fields: [
     defineField({
+      name: 'heading',
+      title: 'Heading',
+      type: 'blockContentMinimal',
+      description: 'Optional heading that appears above the list',
+    }),
+
+    defineField({
       name: 'variant',
       type: 'string',
       options: {

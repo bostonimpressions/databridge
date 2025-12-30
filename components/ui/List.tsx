@@ -23,6 +23,8 @@ interface ListProps {
   className?: string;
   items: ListItemProps[];
   columns?: 1 | 2 | 3 | 4;
+  heading?: PortableTextBlock[];
+  textColorClass?: string;
   theme?:
     | 'default'
     | 'image-only'
@@ -56,6 +58,8 @@ export default function List({
   theme = 'default',
   compact,
   className,
+  heading,
+  textColorClass = '',
   sectionTheme = 'light',
 }: ListProps) {
   const colClass = `cols-${columns}`;
@@ -115,60 +119,90 @@ export default function List({
   };
 
   return (
-    <ul
-      className={`list ${colClass} ${compact ? 'compact' : ''} ${className}`}
-      data-theme={theme}
-      data-section-theme={isCardsData ? sectionTheme : undefined}
-      role="list"
-    >
-      {items.map((item, i) => {
-        const src = getImageUrl(item, i);
-        // Alternate animations: even items from left, odd items from right
-        const animation = i % 2 === 0 ? 'fadeLeft' : 'fadeRight';
-        const hasUrl = !!item.url;
-        const isCardsServiceWithIcon = theme === 'cards-service' && shouldShowImage(item) && src;
-        const isCardsData = theme === 'cards-data';
+    <>
+      {heading && Array.isArray(heading) && heading.length > 0 && (
+        <h3 className={`mb-10 ${textColorClass}`}>
+          <PortableText value={heading} components={portableComponents} />
+        </h3>
+      )}
+      <ul
+        className={`list ${colClass} ${compact ? 'compact' : ''} ${className}`}
+        data-theme={theme}
+        data-section-theme={sectionTheme}
+        role="list"
+      >
+        {items.map((item, i) => {
+          const src = getImageUrl(item, i);
+          // Alternate animations: even items from left, odd items from right
+          const animation = i % 2 === 0 ? 'fadeLeft' : 'fadeRight';
+          const hasUrl = !!item.url;
+          const isCardsServiceWithIcon = theme === 'cards-service' && shouldShowImage(item) && src;
+          const isCardsData = theme === 'cards-data';
 
-        // Check if heading is a number for animation
-        const headingText = item.heading ? toPlainText(item.heading) : '';
-        const isHeadingNumber = isCardsData && /^\d+([,.]\d+)*$/.test(headingText.trim());
+          // Check if heading is a number for animation
+          const headingText = item.heading ? toPlainText(item.heading) : '';
+          const isHeadingNumber = isCardsData && /^\d+([,.]\d+)*$/.test(headingText.trim());
 
-        const listItemContent = (
-          <>
-            {theme === 'flags' && <span className="flag-bar" />}
+          const listItemContent = (
+            <>
+              {theme === 'flags' && <span className="flag-bar" />}
 
-            {isCardsData ? (
-              // Special layout for cards-data: heading + label in card, body below card
-              <>
-                <div className="card-data-card">
-                  <div className="card-data-header">
+              {isCardsData ? (
+                // Special layout for cards-data: heading + label in card, body below card
+                <>
+                  <div className="card-data-card">
+                    <div className="card-data-header">
+                      {item.heading && (
+                        <h4 className="heading">
+                          {isHeadingNumber ? (
+                            <CountUp
+                              value={headingText.trim()}
+                              duration={2000}
+                              className="counter-number"
+                            />
+                          ) : (
+                            <PortableText value={item.heading} components={portableComponents} />
+                          )}
+                        </h4>
+                      )}
+                      {item.label && <span className="label">{item.label}</span>}
+                    </div>
+                  </div>
+                  {item.body && (
+                    <div className={`list-content ${textColorClass}`}>
+                      <PortableText value={item.body} components={portableComponents} />
+                    </div>
+                  )}
+                </>
+              ) : isCardsServiceWithIcon ? (
+                // Special layout for cards-service with icon: icon and heading inline, body below
+                <>
+                  <div className="icon-heading-row">
+                    {src && (
+                      <div className="icon-wrapper">
+                        <Image
+                          src={src}
+                          alt={`Icon ${item.heading && '- ' + toPlainText(item.heading)}`}
+                          fill
+                        />
+                      </div>
+                    )}
                     {item.heading && (
                       <h4 className="heading">
-                        {isHeadingNumber ? (
-                          <CountUp
-                            value={headingText.trim()}
-                            duration={2000}
-                            className="counter-number"
-                          />
-                        ) : (
-                          <PortableText value={item.heading} components={portableComponents} />
-                        )}
+                        <PortableText value={item.heading} components={portableComponents} />
                       </h4>
                     )}
-                    {item.label && <span className="label">{item.label}</span>}
                   </div>
-                </div>
-                {item.body && (
-                  <div className="list-content">
-                    <PortableText value={item.body} components={portableComponents} />
-                  </div>
-                )}
-              </>
-            ) : isCardsServiceWithIcon ? (
-              // Special layout for cards-service with icon: icon and heading inline, body below
-              <>
-                <div className="icon-heading-row">
-                  {src && (
+                  {item.body && (
+                    <div className={`list-content ${textColorClass}`}>
+                      <PortableText value={item.body} components={portableComponents} />
+                    </div>
+                  )}
+                </>
+              ) : (
+                // Default layout for other themes
+                <>
+                  {shouldShowImage(item) && src && (
                     <div className="icon-wrapper">
                       <Image
                         src={src}
@@ -177,90 +211,67 @@ export default function List({
                       />
                     </div>
                   )}
-                  {item.heading && (
-                    <h4 className="heading">
-                      <PortableText value={item.heading} components={portableComponents} />
-                    </h4>
+
+                  {theme !== 'image-only' && (
+                    <div className={`list-content ${textColorClass}`}>
+                      {item.heading && (
+                        <h4 className="heading">
+                          {theme === 'counter' ? (
+                            // For counter variant, extract number from heading and animate it
+                            <CountUp
+                              value={toPlainText(item.heading)}
+                              duration={2000}
+                              className="counter-number"
+                            />
+                          ) : (
+                            <PortableText value={item.heading} components={portableComponents} />
+                          )}
+                        </h4>
+                      )}
+
+                      {item.subheading && (
+                        <h5 className="subheading">
+                          <PortableText value={item.subheading} components={portableComponents} />
+                        </h5>
+                      )}
+
+                      {item.body && (
+                        <div className={textColorClass}>
+                          <PortableText value={item.body} components={portableComponents} />
+                        </div>
+                      )}
+                    </div>
                   )}
-                </div>
-                {item.body && (
-                  <div className="list-content">
-                    <PortableText value={item.body} components={portableComponents} />
-                  </div>
-                )}
-              </>
-            ) : (
-              // Default layout for other themes
-              <>
-                {shouldShowImage(item) && src && (
-                  <div className="icon-wrapper">
-                    <Image
-                      src={src}
-                      alt={`Icon ${item.heading && '- ' + toPlainText(item.heading)}`}
-                      fill
-                    />
-                  </div>
-                )}
+                </>
+              )}
+            </>
+          );
 
-                {theme !== 'image-only' && (
-                  <div className="list-content">
-                    {item.heading && (
-                      <h4 className="heading">
-                        {theme === 'counter' ? (
-                          // For counter variant, extract number from heading and animate it
-                          <CountUp
-                            value={toPlainText(item.heading)}
-                            duration={2000}
-                            className="counter-number"
-                          />
-                        ) : (
-                          <PortableText value={item.heading} components={portableComponents} />
-                        )}
-                      </h4>
-                    )}
-
-                    {item.subheading && (
-                      <h5 className="subheading">
-                        <PortableText value={item.subheading} components={portableComponents} />
-                      </h5>
-                    )}
-
-                    {item.body && (
-                      <div>
-                        <PortableText value={item.body} components={portableComponents} />
-                      </div>
-                    )}
-                  </div>
-                )}
-              </>
-            )}
-          </>
-        );
-
-        return (
-          <AnimatedElement
-            key={i}
-            as="li"
-            animation={animation}
-            data-section-theme={isCardsData ? sectionTheme : undefined}
-            delay={i * 0.1}
-            duration={0.5}
-            className={`list-item ${hasUrl ? 'has-link' : ''}`}
-          >
-            {hasUrl ? (
-              <a
-                href={item.url}
-                className="list-item-link"
-                aria-label={item.heading ? toPlainText(item.heading) : 'Learn more'}
-              >
-                {listItemContent}
-              </a>
-            ) : (
-              listItemContent
-            )}
-          </AnimatedElement>
-        );
-      })}
-    </ul>
+          return (
+            <AnimatedElement
+              key={i}
+              as="li"
+              animation={animation}
+              data-section-theme={isCardsData ? sectionTheme : undefined}
+              delay={i * 0.1}
+              duration={0.5}
+              className={`list-item ${hasUrl ? 'has-link' : ''}`}
+            >
+              {hasUrl ? (
+                <a
+                  href={item.url}
+                  className="list-item-link"
+                  aria-label={item.heading ? toPlainText(item.heading) : 'Learn more'}
+                >
+                  {listItemContent}
+                </a>
+              ) : (
+                listItemContent
+              )}
+            </AnimatedElement>
+          );
+        })}
+      </ul>
+    </>
   );
 }

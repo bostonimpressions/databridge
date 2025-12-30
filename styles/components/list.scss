@@ -270,9 +270,28 @@
   &[data-theme='flags'] {
     @apply gap-12;
     .list-item {
-      @apply items-start gap-5 bg-transparent p-0;
-      p {
-        @apply font-semibold text-black;
+      @apply min-h-[60px] items-start gap-5 bg-transparent p-0;
+    }
+
+    /* Dark section theme support */
+    &[data-section-theme='dark'],
+    &[data-section-theme='midnight'] {
+      .list-item {
+        color: white;
+        p {
+          color: white;
+        }
+      }
+    }
+
+    /* Light section theme (default) */
+    &[data-section-theme]:not([data-section-theme='dark']):not([data-section-theme='midnight']),
+    &:not([data-section-theme]) {
+      .list-item {
+        color: black;
+        p {
+          color: black;
+        }
       }
     }
   }
