@@ -180,7 +180,7 @@ sections:
     theme: light
     topBorder: true
     rows:
-      # First row: Label on left, contentRow with heading on right
+      # Row 1
       - label: 'Data Center'
         layout:
           columns: '1/4-3/4'
@@ -189,7 +189,7 @@ sections:
           - contentRow:
               heading: 'See Our Infrastructure Firsthand'
 
-      # Second row: Heading and body on left, image on right
+      # Row 2
       - heading: |
           Facility tours demonstrate why DataBridge Sites delivers superior data center services.
         body: |
@@ -207,18 +207,13 @@ sections:
                 - image: '/images/databridge-datacenter-3.jpg'
                   alt: 'DataBridge Sites Silver Spring data center facility - view 3'
 
-      # Third row: Subheading full width with compact spacing
-      - subheading: |
-          What You'll See
-        layout:
-          columns: '1/1'
-        spacing: 'compact'
-
-      # Fourth row: Flags list full width
+      # Row 3
       - layout:
           columns: '1/1'
         contentBlocks:
           - listBlock:
+              heading: |
+                What You'll See
               variant: 'flags'
               columns: 2
               items:
@@ -231,7 +226,7 @@ sections:
                 - body: |
                     Professional 24/7/365 operations with clean, well-managed environments
 
-      # Fifth row: Body text with highlighted phone number
+      # Row 4
       - body: |
           Our conversion rate for prospects who complete facility tours is exceptionally high because the infrastructure speaks for itself.
 
