@@ -250,7 +250,7 @@ const Header = ({ isScrolled, servicePages, industryPages }: HeaderProps) => {
   ];
 
   const headerClasses = isScrolled
-    ? 'fixed top-0 left-0 w-full z-50 shadow-lg backdrop-blur-md bg-white/90'
+    ? 'fixed top-0 left-0 right-0 z-50 shadow-lg backdrop-blur-md bg-white/90'
     : 'absolute top-0 left-0 w-full z-50 bg-transparent';
 
   const handleLinkClick = useCallback(() => {

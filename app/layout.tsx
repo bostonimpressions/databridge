@@ -31,7 +31,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${shareTech.variable} antialiased`}>
+      <body className={`${inter.variable} ${shareTech.variable} antialiased overflow-x-hidden`}>
         <BotIdProvider>
           <LayoutWrapper servicePages={servicePages} industryPages={industryPages}>
             {children}

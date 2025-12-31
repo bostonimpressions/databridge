@@ -6,10 +6,12 @@ import { toPlainText } from '@portabletext/react';
 
 import SectionMain from '@/components/sections/SectionMain';
 import SectionHeroMain from '@/components/sections/SectionHeroMain';
+import SectionTestimonials from '@/components/sections/SectionTestimonials';
 
 const sectionComponents: Record<string, React.ComponentType<any>> = {
   sectionMain: SectionMain,
   sectionHeroMain: SectionHeroMain,
+  sectionTestimonials: SectionTestimonials,
 };
 
 // Utility: generate safe anchor ID - prioritize manual sectionId, fallback to stable index-based ID

@@ -939,6 +939,30 @@ async function importPage(mdFilePath) {
         );
       }
     }
+
+    // -------------------------------------------
+    // SECTION: sectionTestimonials
+    // -------------------------------------------
+    if (section._type === 'sectionTestimonials') {
+      // Process testimonials items
+      if (Array.isArray(section.items)) {
+        section.items = await Promise.all(
+          section.items.map(async (item) => {
+            item._key = generateKey();
+            item._type = 'testimonial';
+
+            // Convert body and source to blocks
+            ['body', 'source'].forEach((key) => {
+              if (item[key] && typeof item[key] === 'string') {
+                item[key] = convertMarkdownToBlocks(item[key]);
+              }
+            });
+
+            return item;
+          })
+        );
+      }
+    }
   }
 
   // For home page, use 'home' as the ID to ensure it's always found

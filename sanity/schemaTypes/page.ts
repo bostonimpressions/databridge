@@ -75,6 +75,7 @@ export const page = defineType({
         { type: 'sectionHeroMain' },
         { type: 'sectionMain' },
         { type: 'sectionBody' },
+        { type: 'sectionTestimonials' },
       ],
     }),
   ],

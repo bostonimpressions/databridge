@@ -11,6 +11,7 @@ import tableBlock from './blocks/tableBlock';
 import sectionMain from './sectionMain';
 import sectionHeroMain from './sectionHeroMain';
 import sectionHeroSubpage from './sectionHeroSubpage';
+import sectionTestimonials from './sectionTestimonials';
 import sectionOverview from './sectionOverview';
 import sectionBanner from './sectionBanner';
 import sectionFeatureList from './sectionFeatureList';
@@ -44,5 +45,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     sectionCallToAction,
     sectionDetails,
     sectionBody,
+    sectionTestimonials,
   ],
 };

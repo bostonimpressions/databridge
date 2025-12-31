@@ -436,4 +436,17 @@ sections:
         layout:
           columns: '1/1'
         spacing: 'compact'
+
+  # Section 9 - testimonials slider/swiper
+  - type: sectionTestimonials
+    items:
+      - body: |
+          DataBridge Sites in Silver Spring is the most secure, well-powered and best connected facility in the state of Maryland.
+        source: 'Regional Enterprise Customer'
+      - body: |
+          No issues with downtime. The staff is knowledgeable, friendly, and easy to work with.
+        source: 'Healthcare Organization'
+      - body: |
+          All you have to do is take the tour and you'll be sold. The six generators and comprehensive infrastructure investment demonstrate a level of reliability you won't find elsewhere in Maryland.
+        source: 'Regional Enterprise Customer'
 ---

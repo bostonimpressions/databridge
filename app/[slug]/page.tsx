@@ -16,6 +16,7 @@ import SectionCallToAction from '@/components/sections/SectionCallToAction';
 import SectionDetails from '@/components/sections/SectionDetails';
 import SectionBody from '@/components/sections/SectionBody';
 import SectionMain from '@/components/sections/SectionMain';
+import SectionTestimonials from '@/components/sections/SectionTestimonials';
 
 interface PageProps {
   params: { slug: string } | Promise<{ slug: string }>;
@@ -34,6 +35,7 @@ const sectionComponents: Record<string, React.ComponentType<any>> = {
   sectionDetails: SectionDetails,
   sectionBody: SectionBody,
   sectionMain: SectionMain,
+  sectionTestimonials: SectionTestimonials,
 };
 
 // Utility: generate safe anchor ID - prioritize manual sectionId, fallback to stable index-based ID
