@@ -113,8 +113,12 @@ export default function List({
       if (typeof item.icon === 'string') {
         return item.icon;
       }
-      if (item.icon && typeof item.icon === 'object' && item.icon.asset) {
-        return urlFor(item.icon).url();
+      if (item.icon && typeof item.icon === 'object') {
+        try {
+          return urlFor(item.icon as SanityImageSource).url();
+        } catch {
+          return null;
+        }
       }
     }
     
