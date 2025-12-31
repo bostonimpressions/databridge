@@ -7,6 +7,25 @@ export default defineType({
   title: 'Section Main',
   type: 'object',
   fields: [
+    // SECTION ID (for anchor links - stable, won't change with content)
+    defineField({
+      name: 'sectionId',
+      title: 'Section ID',
+      type: 'string',
+      description:
+        'Optional unique ID for this section (used for anchor links). If not set, will use section-main-{index}. Once set, keep it stable to avoid breaking links.',
+      validation: (Rule) =>
+        Rule.custom((value) => {
+          if (!value) return true; // Optional
+          // Must be URL-safe
+          const urlSafe = /^[a-z0-9-]+$/.test(value);
+          if (!urlSafe) {
+            return 'Section ID must be lowercase letters, numbers, and hyphens only';
+          }
+          return true;
+        }),
+    }),
+
     // THEME
     defineField({
       name: 'theme',

@@ -5,7 +5,9 @@ metaTitle: 'Data Center Services in Maryland | DataBridge Sites'
 metaDescription: "Maryland's only Tier IV-designed commercial data center. 100% uptime for 30 years. Enterprise colocation, cloud services, and mission critical infrastructure."
 pageType: 'page'
 sections:
+  # Main hero
   - type: sectionHeroMain
+    sectionId: 'sectionHeroMain'
     slides:
       - label: 'Data Center Services'
         heading: 'Built for Mission Critical Infrastructure'
@@ -392,7 +394,7 @@ sections:
 
           **Contact us today: ==(855) 495-0098==**
         layout:
-          columns: '1/2-1/2'
+          columns: '1/3-2/3'
           textColumn: 'left'
         contentBlocks:
           - tableBlock:

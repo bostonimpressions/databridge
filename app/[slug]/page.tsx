@@ -36,54 +36,15 @@ const sectionComponents: Record<string, React.ComponentType<any>> = {
   sectionMain: SectionMain,
 };
 
-// Utility: generate safe anchor ID from heading or type
+// Utility: generate safe anchor ID - prioritize manual sectionId, fallback to stable index-based ID
 function generateAnchorId(section: any, index: number) {
-  let title = '';
-  
-  // For sectionMain, check rows for headings or labels
-  if (section._type === 'sectionMain' && section.rows && Array.isArray(section.rows)) {
-    // Find first row with a heading
-    const rowWithHeading = section.rows.find((row: any) => row.heading);
-    if (rowWithHeading?.heading) {
-      title = toPlainText(rowWithHeading.heading);
-    }
-    // If no heading, check for label
-    if (!title) {
-      const rowWithLabel = section.rows.find((row: any) => row.label);
-      if (rowWithLabel?.label) {
-        title = rowWithLabel.label;
-      }
-    }
-    // If still no title, try to get any text from first row body
-    if (!title && section.rows[0]?.body) {
-      const bodyText = toPlainText(section.rows[0].body);
-      // Take first few words as fallback
-      const words = bodyText.split(/\s+/).slice(0, 3).join(' ');
-      if (words) title = words;
-    }
-  } else if (section?.heading) {
-    // For other sections, check top-level heading
-    title = toPlainText(section.heading);
-  } else if (section?.label) {
-    // Check for label at top level
-    title = typeof section.label === 'string' ? section.label : toPlainText(section.label);
-  } else if (section?.title) {
-    // Check for title
-    title = typeof section.title === 'string' ? section.title : toPlainText(section.title);
+  // First priority: use manually set sectionId if available (most stable)
+  if (section?.sectionId) {
+    return section.sectionId;
   }
-  
-  // Fallback to type with index if nothing found
-  const base = title || `${section._type || 'section'}-${index}`;
-  const id = base
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-') // spaces → hyphens
-    .replace(/[^\w-]/g, '') // remove invalid chars
-    .replace(/-+/g, '-') // collapse multiple hyphens
-    .replace(/^-|-$/g, ''); // remove leading/trailing hyphens
-  
-  return id || `${section._type || 'section'}-${index}`;
+
+  // Fallback: use section type + index (stable, won't change with content)
+  return `${section._type || 'section'}-${index}`;
 }
 
 export const revalidate = 0;
@@ -112,7 +73,7 @@ export default async function Page(props: PageProps) {
 
         // Generate an anchor ID
         let anchorId = generateAnchorId(section, i);
-        
+
         // Ensure uniqueness by appending index if needed
         let uniqueId = anchorId;
         let counter = 0;

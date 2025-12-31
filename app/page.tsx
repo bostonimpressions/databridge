@@ -12,15 +12,15 @@ const sectionComponents: Record<string, React.ComponentType<any>> = {
   sectionHeroMain: SectionHeroMain,
 };
 
+// Utility: generate safe anchor ID - prioritize manual sectionId, fallback to stable index-based ID
 function generateAnchorId(section: any, index: number) {
-  const title = section?.heading && toPlainText(section.heading[0]);
-  const base = title || section._type || `section-${index}`;
-
-  return base
-    .toString()
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]/g, '');
+  // First priority: use manually set sectionId if available (most stable)
+  if (section?.sectionId) {
+    return section.sectionId;
+  }
+  
+  // Fallback: use section type + index (stable, won't change with content)
+  return `${section._type || 'section'}-${index}`;
 }
 
 export const revalidate = 0;
@@ -30,6 +30,9 @@ export default async function Page() {
   const page: PageData | null = await getPageData(slug);
 
   if (!page) notFound();
+
+  // Track IDs to ensure uniqueness
+  const usedIds = new Set<string>();
 
   return (
     <main className="font-sans">
@@ -42,10 +45,24 @@ export default async function Page() {
           return null;
         }
 
-        const anchorId = generateAnchorId(section, i);
+        // Generate an anchor ID
+        let anchorId = generateAnchorId(section, i);
+        
+        // Ensure uniqueness by appending index if needed
+        let uniqueId = anchorId;
+        let counter = 0;
+        while (usedIds.has(uniqueId)) {
+          counter++;
+          uniqueId = `${anchorId}-${counter}`;
+        }
+        usedIds.add(uniqueId);
 
         return (
-          <div id={anchorId} key={`${_type}-${i}`} className="scroll-mt-24">
+          <div
+            id={uniqueId}
+            key={`${_type}-${i}`}
+            className="scroll-mt-24" // Tailwind: offset scroll for sticky nav (~6rem)
+          >
             <SectionComponent {...sectionProps} />
           </div>
         );
