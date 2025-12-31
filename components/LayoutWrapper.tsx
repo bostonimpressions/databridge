@@ -322,7 +322,7 @@ const LayoutWrapper = ({ children, servicePages = [], industryPages = [] }: Layo
 
       <div className="pt-20">{children}</div>
 
-      <footer className="bg-stellarnight-800 mt-10 p-12 text-white">
+      <footer className="bg-stellarnight-800 mt-10 p-2 pt-8 text-white md:p-12">
         <div className="container mx-auto">
           <div className="border-b-2 border-dashed border-white/20 pb-20 md:flex md:justify-between">
             <div className="mb-20 grid grid-cols-1 gap-10 md:m-0 md:grid-cols-3 md:gap-20">

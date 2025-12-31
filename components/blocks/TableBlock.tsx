@@ -95,12 +95,12 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
         <thead>
           <tr>
             <th
-              className={`${classes.headerText} border-b-8 px-4 py-3 text-left text-xl font-semibold ${classes.headerBorder}`}
+              className={`${classes.headerText} border-b-8 px-4 py-3 text-left font-semibold md:text-xl ${classes.headerBorder}`}
             >
               {value.columnA}
             </th>
             <th
-              className={`${classes.headerText} border-b-8 px-4 py-3 text-left text-xl font-semibold ${classes.headerBorder}`}
+              className={`${classes.headerText} border-b-8 px-4 py-3 text-left font-semibold md:text-xl ${classes.headerBorder}`}
             >
               {value.columnB}
             </th>

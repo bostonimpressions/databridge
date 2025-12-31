@@ -100,16 +100,16 @@ const renderContentBlock = (
         return (
           <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
             {isSquare ? (
-              <div
-                className="relative mx-auto"
-                style={{ width: '350px', height: '350px', maxWidth: '100%' }}
-              >
-                <Image
-                  src={urlFor(image).url()}
-                  alt={image.alt || 'Image'}
-                  fill
-                  className="rounded-lg object-contain"
-                />
+              <div className="relative mx-auto w-full max-w-[350px]">
+                <div className="relative aspect-square max-h-[350px] w-full">
+                  <Image
+                    src={urlFor(image).url()}
+                    alt={image.alt || 'Image'}
+                    fill
+                    className="rounded-lg object-contain"
+                    sizes="(max-width: 350px) 100vw, 350px"
+                  />
+                </div>
               </div>
             ) : (
               <div className="relative h-64 w-full md:h-80">
