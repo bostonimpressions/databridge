@@ -38,7 +38,7 @@ export default defineType({
       name: 'columns',
       type: 'number',
       options: {
-        list: [1, 2, 3, 4],
+        list: [1, 2, 3, 4, 6],
       },
       initialValue: 2,
     }),

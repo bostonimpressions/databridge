@@ -22,7 +22,7 @@ interface ListProps {
   compact?: boolean;
   className?: string;
   items: ListItemProps[];
-  columns?: 1 | 2 | 3 | 4;
+  columns?: 1 | 2 | 3 | 4 | 6;
   heading?: PortableTextBlock[];
   textColorClass?: string;
   theme?:
@@ -91,8 +91,28 @@ export default function List({
 
   const getImageUrl = (item: ListItemProps, index: number) => {
     if (theme === 'snapshot') return snapshotIcons[index];
-    if (theme === 'images' && item.icon) return urlFor(item.icon).url();
-    if (themeAllowsUploaded && item.icon) return urlFor(item.icon).url();
+    
+    // Handle icon - can be Sanity image object or string path
+    if (item.icon) {
+      // If it's already a string path (legacy or failed import), use it directly
+      if (typeof item.icon === 'string') {
+        return item.icon;
+      }
+      // If it's a Sanity image object, use urlFor
+      if (item.icon && typeof item.icon === 'object' && item.icon.asset) {
+        return urlFor(item.icon).url();
+      }
+    }
+    
+    if (themeAllowsUploaded && item.icon) {
+      if (typeof item.icon === 'string') {
+        return item.icon;
+      }
+      if (item.icon && typeof item.icon === 'object' && item.icon.asset) {
+        return urlFor(item.icon).url();
+      }
+    }
+    
     return defaultIcons[theme];
   };
 
@@ -212,9 +232,13 @@ export default function List({
                           src={src}
                           alt={item.heading ? toPlainText(item.heading) : `Image ${i + 1}`}
                           width={800}
-                          height={240}
+                          height={columns === 6 ? 60 : 240}
                           className="object-contain"
-                          style={{ maxHeight: '240px', width: 'auto', height: 'auto' }}
+                          style={{ 
+                            maxHeight: columns === 6 ? '60px' : '240px', 
+                            width: 'auto', 
+                            height: 'auto' 
+                          }}
                         />
                       ) : (
                         <Image

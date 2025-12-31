@@ -31,6 +31,13 @@
     }
   }
 
+  &.cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
   &[data-theme='default'] {
     @apply gap-12 md:gap-24;
     .list-item {
@@ -55,8 +62,8 @@
 
   &[data-theme='images'] {
     @apply gap-2 md:gap-4;
-    /* Force 4 columns at all screen sizes */
-    grid-template-columns: repeat(4, 1fr) !important;
+    /* Images theme respects the columns class, but defaults to 4 if not specified */
+    justify-items: center; /* Center items on x-axis */
 
     .list-item {
       @apply overflow-visible p-0;
@@ -78,6 +85,23 @@
         height: auto;
         object-fit: contain;
       }
+    }
+
+    /* 6-column grid has smaller images */
+    &.cols-6 {
+      .image-wrapper {
+        max-height: 60px;
+        min-height: 40px;
+
+        img {
+          max-height: 60px;
+        }
+      }
+    }
+
+    /* If no columns class is specified, default to 4 columns */
+    &:not(.cols-1):not(.cols-2):not(.cols-3):not(.cols-4):not(.cols-6) {
+      grid-template-columns: repeat(4, 1fr) !important;
     }
   }
 

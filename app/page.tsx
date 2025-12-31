@@ -18,15 +18,16 @@ function generateAnchorId(section: any, index: number) {
   if (section?.sectionId) {
     return section.sectionId;
   }
-  
+
   // Fallback: use section type + index (stable, won't change with content)
   return `${section._type || 'section'}-${index}`;
 }
 
 export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function Page() {
-  const slug = 'home';
+  const slug = '/';
   const page: PageData | null = await getPageData(slug);
 
   if (!page) notFound();
@@ -47,7 +48,7 @@ export default async function Page() {
 
         // Generate an anchor ID
         let anchorId = generateAnchorId(section, i);
-        
+
         // Ensure uniqueness by appending index if needed
         let uniqueId = anchorId;
         let counter = 0;

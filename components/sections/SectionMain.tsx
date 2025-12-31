@@ -20,6 +20,7 @@ type TextColumn = 'left' | 'right';
 interface ContentBlock {
   _type:
     | 'image'
+    | 'imageBlock'
     | 'listBlock'
     | 'tableBlock'
     | 'ctaBlock'
@@ -47,7 +48,7 @@ interface Row {
 }
 
 interface SectionMainProps {
-  rows: Row[];
+  rows?: Row[];
   theme?: SectionTheme;
   backgroundImage?: any;
   topBorder?: boolean;
@@ -82,6 +83,7 @@ const renderContentBlock = (
 ) => {
   switch (block._type) {
     case 'image':
+    case 'imageBlock': // Support renamed type from schema
       // Check if it's an array of images (slideshow) or single image (legacy format)
       // New structure: block.images is an array
       // Legacy structure: block.asset exists (single image)
@@ -394,230 +396,236 @@ export default function SectionMain({
       )}
 
       <div className="container relative z-10 mx-auto px-4">
-        {rows.map((row, i) => {
-          // DIVIDER ROW
-          if (row.divider) {
-            return (
-              <hr
-                key={i}
-                className={`h-[9px] w-full border-0 ${getDividerColor()} my-8`}
-                aria-hidden="true"
-              />
-            );
-          }
+        {rows && rows.length > 0
+          ? rows.map((row, i) => {
+              // DIVIDER ROW
+              if (row.divider) {
+                return (
+                  <hr
+                    key={i}
+                    className={`h-[9px] w-full border-0 ${getDividerColor()} my-8`}
+                    aria-hidden="true"
+                  />
+                );
+              }
 
-          const columns = row.layout?.columns || '1/1';
-          const textColumn = row.layout?.textColumn || 'left';
-          const contentAlign = row.layout?.contentAlign || 'left';
+              const columns = row.layout?.columns || '1/1';
+              const textColumn = row.layout?.textColumn || 'left';
+              const contentAlign = row.layout?.contentAlign || 'left';
 
-          const isTextLeft = textColumn === 'left';
-          const gridCols = getGridCols(columns);
+              const isTextLeft = textColumn === 'left';
+              const gridCols = getGridCols(columns);
 
-          const textColOrder = isTextLeft ? 'md:order-1' : 'md:order-2';
-          const contentColOrder = isTextLeft ? 'md:order-2' : 'md:order-1';
+              const textColOrder = isTextLeft ? 'md:order-1' : 'md:order-2';
+              const contentColOrder = isTextLeft ? 'md:order-2' : 'md:order-1';
 
-          const spacingClass = row.spacing === 'compact' ? 'mb-6 md:mb-10' : 'mb-12 md:mb-20';
-          // Only apply gap for multi-column layouts (not 1/1)
-          const gapClass = columns === '1/1' ? '' : 'gap-10 md:gap-20';
-          // Content alignment class
-          const contentAlignClass = contentAlign === 'right' ? 'md:text-right' : '';
+              const spacingClass = row.spacing === 'compact' ? 'mb-6 md:mb-10' : 'mb-12 md:mb-20';
+              // Only apply gap for multi-column layouts (not 1/1)
+              const gapClass = columns === '1/1' ? '' : 'gap-10 md:gap-20';
+              // Content alignment class
+              const contentAlignClass = contentAlign === 'right' ? 'md:text-right' : '';
 
-          return (
-            <div key={i} className={`${spacingClass} min-h-0`}>
-              <div className={`grid ${gapClass} ${gridCols} items-start`}>
-                {/* TEXT COLUMN - Sticky so shorter column stays in view */}
-                <AnimatedElement
-                  animation={columns === '1/1' ? 'fadeUp' : isTextLeft ? 'fadeLeft' : 'fadeRight'}
-                  delay={0}
-                  className={`${textColOrder} md:sticky md:top-24 md:self-start`}
-                >
-                  {row.label && (
-                    <p className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}>
-                      {row.label}
-                    </p>
-                  )}
+              return (
+                <div key={i} className={`${spacingClass} min-h-0`}>
+                  <div className={`grid ${gapClass} ${gridCols} items-start`}>
+                    {/* TEXT COLUMN - Sticky so shorter column stays in view */}
+                    <AnimatedElement
+                      animation={
+                        columns === '1/1' ? 'fadeUp' : isTextLeft ? 'fadeLeft' : 'fadeRight'
+                      }
+                      delay={0}
+                      className={`${textColOrder} md:sticky md:top-24 md:self-start`}
+                    >
+                      {row.label && (
+                        <p className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}>
+                          {row.label}
+                        </p>
+                      )}
 
-                  {row.heading && (
-                    <TextHeading level="h2" color={textColorClass}>
-                      {renderPT(row.heading)}
-                    </TextHeading>
-                  )}
+                      {row.heading && (
+                        <TextHeading level="h2" color={textColorClass}>
+                          {renderPT(row.heading)}
+                        </TextHeading>
+                      )}
 
-                  {row.subheading && (
-                    <h3 className={`mt-2 ${textColorClass}`}>{renderPT(row.subheading)}</h3>
-                  )}
+                      {row.subheading && (
+                        <h3 className={`mt-2 ${textColorClass}`}>{renderPT(row.subheading)}</h3>
+                      )}
 
-                  {row.body && <div className={textColorClass}>{renderPT(row.body)}</div>}
+                      {row.body && <div className={textColorClass}>{renderPT(row.body)}</div>}
 
-                  {/* Support buttonBlock in text column when no heading/body (for buttons on left) */}
-                  {!row.heading && !row.body && !row.subheading && row.contentBlocks && (
-                    <div className="space-y-8">
-                      {row.contentBlocks
-                        .filter((block) => block._type === 'buttonBlock')
-                        .map((block, j) => (
-                          <React.Fragment key={j}>
-                            {renderContentBlock(block, isTextLeft, theme, textColorClass)}
-                          </React.Fragment>
-                        ))}
-                    </div>
-                  )}
-                </AnimatedElement>
+                      {/* Support buttonBlock in text column when no heading/body (for buttons on left) */}
+                      {!row.heading && !row.body && !row.subheading && row.contentBlocks && (
+                        <div className="space-y-8">
+                          {row.contentBlocks
+                            .filter((block) => block._type === 'buttonBlock')
+                            .map((block, j) => (
+                              <React.Fragment key={j}>
+                                {renderContentBlock(block, isTextLeft, theme, textColorClass)}
+                              </React.Fragment>
+                            ))}
+                        </div>
+                      )}
+                    </AnimatedElement>
 
-                {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
-                {columns !== '1/1' && (
-                  <AnimatedElement
-                    animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
-                    delay={0.1}
-                    className={`${contentColOrder} md:sticky md:top-24 md:self-start`}
-                  >
-                    <div className={`space-y-8 ${contentAlignClass}`}>
-                      {row.contentBlocks
-                        ?.filter(
-                          (block) =>
-                            // If text column has no heading/body, filter out buttonBlock (it goes in text column)
-                            // linkBlock stays in content column
-                            !(
-                              !row.heading &&
-                              !row.body &&
-                              !row.subheading &&
-                              block._type === 'buttonBlock'
+                    {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
+                    {columns !== '1/1' && (
+                      <AnimatedElement
+                        animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
+                        delay={0.1}
+                        className={`${contentColOrder} md:sticky md:top-24 md:self-start`}
+                      >
+                        <div className={`space-y-8 ${contentAlignClass}`}>
+                          {row.contentBlocks
+                            ?.filter(
+                              (block) =>
+                                // If text column has no heading/body, filter out buttonBlock (it goes in text column)
+                                // linkBlock stays in content column
+                                !(
+                                  !row.heading &&
+                                  !row.body &&
+                                  !row.subheading &&
+                                  block._type === 'buttonBlock'
+                                )
                             )
-                        )
-                        .map((block, j) => {
-                          // CONTENT ROW (nested row with text + blocks)
-                          if (block._type === 'contentRow') {
-                            return (
-                              <div key={j} className="space-y-6">
-                                {block.label && (
-                                  <p
-                                    className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
-                                  >
-                                    {block.label}
-                                  </p>
-                                )}
+                            .map((block, j) => {
+                              // CONTENT ROW (nested row with text + blocks)
+                              if (block._type === 'contentRow') {
+                                return (
+                                  <div key={j} className="space-y-6">
+                                    {block.label && (
+                                      <p
+                                        className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
+                                      >
+                                        {block.label}
+                                      </p>
+                                    )}
 
-                                {block.heading && (
-                                  <AnimatedElement animation="fade">
-                                    <TextHeading level="h2" color={textColorClass}>
-                                      {renderPT(block.heading)}
-                                    </TextHeading>
-                                  </AnimatedElement>
-                                )}
+                                    {block.heading && (
+                                      <AnimatedElement animation="fade">
+                                        <TextHeading level="h2" color={textColorClass}>
+                                          {renderPT(block.heading)}
+                                        </TextHeading>
+                                      </AnimatedElement>
+                                    )}
 
-                                {block.subheading && (
-                                  <AnimatedElement animation="fade">
-                                    <h3 className={`mt-2 ${textColorClass}`}>
-                                      {renderPT(block.subheading)}
-                                    </h3>
-                                  </AnimatedElement>
-                                )}
+                                    {block.subheading && (
+                                      <AnimatedElement animation="fade">
+                                        <h3 className={`mt-2 ${textColorClass}`}>
+                                          {renderPT(block.subheading)}
+                                        </h3>
+                                      </AnimatedElement>
+                                    )}
 
-                                {block.body && (
-                                  <AnimatedElement animation="fade" delay={0.1}>
-                                    <div className={textColorClass}>{renderPT(block.body)}</div>
-                                  </AnimatedElement>
-                                )}
+                                    {block.body && (
+                                      <AnimatedElement animation="fade" delay={0.1}>
+                                        <div className={textColorClass}>{renderPT(block.body)}</div>
+                                      </AnimatedElement>
+                                    )}
 
-                                {block.blocks && block.blocks.length > 0 && (
-                                  <div className="space-y-6">
-                                    {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
-                                      <React.Fragment key={k}>
-                                        {renderContentBlock(
-                                          nestedBlock,
-                                          isTextLeft,
-                                          theme,
-                                          textColorClass
+                                    {block.blocks && block.blocks.length > 0 && (
+                                      <div className="space-y-6">
+                                        {block.blocks.map(
+                                          (nestedBlock: ContentBlock, k: number) => (
+                                            <React.Fragment key={k}>
+                                              {renderContentBlock(
+                                                nestedBlock,
+                                                isTextLeft,
+                                                theme,
+                                                textColorClass
+                                              )}
+                                            </React.Fragment>
+                                          )
                                         )}
-                                      </React.Fragment>
-                                    ))}
+                                      </div>
+                                    )}
                                   </div>
-                                )}
-                              </div>
-                            );
-                          }
+                                );
+                              }
 
-                          // LEGACY: Direct blocks (backwards compatibility)
-                          return (
-                            <React.Fragment key={j}>
-                              {renderContentBlock(block, isTextLeft, theme, textColorClass)}
-                            </React.Fragment>
-                          );
-                        })}
-                    </div>
-                  </AnimatedElement>
-                )}
+                              // LEGACY: Direct blocks (backwards compatibility)
+                              return (
+                                <React.Fragment key={j}>
+                                  {renderContentBlock(block, isTextLeft, theme, textColorClass)}
+                                </React.Fragment>
+                              );
+                            })}
+                        </div>
+                      </AnimatedElement>
+                    )}
 
-                {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
-                {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
-                  <AnimatedElement animation="fadeUp" delay={0} className="mt-0">
-                    <div className={`space-y-8 ${contentAlignClass}`}>
-                      {row.contentBlocks.map((block, j) => {
-                        // CONTENT ROW (nested row with text + blocks)
-                        if (block._type === 'contentRow') {
-                          return (
-                            <div key={j} className="space-y-6">
-                              {block.label && (
-                                <p
-                                  className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
-                                >
-                                  {block.label}
-                                </p>
-                              )}
+                    {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
+                    {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
+                      <AnimatedElement animation="fadeUp" delay={0} className="mt-0">
+                        <div className={`space-y-8 ${contentAlignClass}`}>
+                          {row.contentBlocks.map((block, j) => {
+                            // CONTENT ROW (nested row with text + blocks)
+                            if (block._type === 'contentRow') {
+                              return (
+                                <div key={j} className="space-y-6">
+                                  {block.label && (
+                                    <p
+                                      className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
+                                    >
+                                      {block.label}
+                                    </p>
+                                  )}
 
-                              {block.heading && (
-                                <AnimatedElement animation="fade">
-                                  <TextHeading level="h2" color={textColorClass}>
-                                    {renderPT(block.heading)}
-                                  </TextHeading>
-                                </AnimatedElement>
-                              )}
+                                  {block.heading && (
+                                    <AnimatedElement animation="fade">
+                                      <TextHeading level="h2" color={textColorClass}>
+                                        {renderPT(block.heading)}
+                                      </TextHeading>
+                                    </AnimatedElement>
+                                  )}
 
-                              {block.subheading && (
-                                <AnimatedElement animation="fade">
-                                  <h3 className={`mt-2 ${textColorClass}`}>
-                                    {renderPT(block.subheading)}
-                                  </h3>
-                                </AnimatedElement>
-                              )}
+                                  {block.subheading && (
+                                    <AnimatedElement animation="fade">
+                                      <h3 className={`mt-2 ${textColorClass}`}>
+                                        {renderPT(block.subheading)}
+                                      </h3>
+                                    </AnimatedElement>
+                                  )}
 
-                              {block.body && (
-                                <AnimatedElement animation="fade" delay={0.1}>
-                                  <div className={textColorClass}>{renderPT(block.body)}</div>
-                                </AnimatedElement>
-                              )}
+                                  {block.body && (
+                                    <AnimatedElement animation="fade" delay={0.1}>
+                                      <div className={textColorClass}>{renderPT(block.body)}</div>
+                                    </AnimatedElement>
+                                  )}
 
-                              {block.blocks && block.blocks.length > 0 && (
-                                <div className="space-y-6">
-                                  {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
-                                    <React.Fragment key={k}>
-                                      {renderContentBlock(
-                                        nestedBlock,
-                                        isTextLeft,
-                                        theme,
-                                        textColorClass
-                                      )}
-                                    </React.Fragment>
-                                  ))}
+                                  {block.blocks && block.blocks.length > 0 && (
+                                    <div className="space-y-6">
+                                      {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
+                                        <React.Fragment key={k}>
+                                          {renderContentBlock(
+                                            nestedBlock,
+                                            isTextLeft,
+                                            theme,
+                                            textColorClass
+                                          )}
+                                        </React.Fragment>
+                                      ))}
+                                    </div>
+                                  )}
                                 </div>
-                              )}
-                            </div>
-                          );
-                        }
+                              );
+                            }
 
-                        // Direct blocks
-                        return (
-                          <React.Fragment key={j}>
-                            {renderContentBlock(block, isTextLeft, theme, textColorClass)}
-                          </React.Fragment>
-                        );
-                      })}
-                    </div>
-                  </AnimatedElement>
-                )}
-              </div>
-            </div>
-          );
-        })}
+                            // Direct blocks
+                            return (
+                              <React.Fragment key={j}>
+                                {renderContentBlock(block, isTextLeft, theme, textColorClass)}
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                      </AnimatedElement>
+                    )}
+                  </div>
+                </div>
+              );
+            })
+          : null}
       </div>
     </section>
   );

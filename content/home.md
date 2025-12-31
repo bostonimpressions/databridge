@@ -409,4 +409,31 @@ sections:
                 - a: 'Regional Redundancy'
                   b: |
                     Geographic diversity from Northern Virginia while maintaining optimal connectivity enables effective disaster recovery and business continuity strategies.
+
+  # Section 8
+  - type: sectionMain
+    theme: light
+    rows:
+      # Row 1: Heading and body
+      - heading: 'Trusted by Leading Organizations'
+        body: |
+          DataBridge successfully serves organizations from 10-person companies to major enterprises across diverse industries. Our customer base demonstrates our ability to scale solutions appropriately for any business size and technical requirement.
+        layout:
+          columns: '1/1'
+
+      # Row 2: Image list
+      - contentBlocks:
+          - _type: listBlock
+            variant: 'images'
+            columns: 6
+            items:
+              - icon: '/images/logo-org-1.png'
+              - icon: '/images/logo-org-2.png'
+              - icon: '/images/logo-org-3.png'
+              - icon: '/images/logo-org-4.png'
+              - icon: '/images/logo-org-5.png'
+              - icon: '/images/logo-org-6.png'
+        layout:
+          columns: '1/1'
+        spacing: 'compact'
 ---

@@ -253,7 +253,7 @@ export default defineType({
                       of: [
                         // IMAGE BLOCK (single image or multiple images for slideshow)
                         defineField({
-                          name: 'image',
+                          name: 'imageBlock',
                           title: 'Image',
                           type: 'object',
                           fields: [
@@ -454,7 +454,7 @@ export default defineType({
                 // LEGACY: Direct blocks (for backwards compatibility)
                 // IMAGE BLOCK (single image or multiple images for slideshow)
                 defineField({
-                  name: 'image',
+                  name: 'imageBlock',
                   title: 'Image',
                   type: 'object',
                   fields: [

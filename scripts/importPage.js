@@ -66,7 +66,10 @@ async function handleImage(imagePath) {
     if (extractedPath && typeof extractedPath === 'string') {
       imagePath = extractedPath;
     } else {
-      console.warn(`⚠️  Image path is not a string and could not extract path: ${typeof imagePath}`, imagePath);
+      console.warn(
+        `⚠️  Image path is not a string and could not extract path: ${typeof imagePath}`,
+        imagePath
+      );
       return null;
     }
   }
@@ -173,7 +176,7 @@ function convertMarkdownToBlocks(text) {
 
     // Process in layers: first highlights, then bold
     // This allows bold to wrap highlighted text
-    
+
     // Step 1: Find and mark all highlights first (they can be nested inside bold)
     const highlightMatches = [];
     const highlightRegex = /==([^=]+)==/g;
@@ -197,14 +200,14 @@ function convertMarkdownToBlocks(text) {
     while (pos < line.length) {
       const asteriskStart = line.indexOf('**', pos);
       if (asteriskStart === -1) break;
-      
+
       // Find the matching closing **
       let asteriskEnd = line.indexOf('**', asteriskStart + 2);
       if (asteriskEnd === -1) break;
-      
+
       const boldText = line.substring(asteriskStart + 2, asteriskEnd);
       const hasHighlight = /==[^=]+==/.test(boldText);
-      
+
       boldMatches.push({
         start: asteriskStart,
         end: asteriskEnd + 2,
@@ -212,23 +215,23 @@ function convertMarkdownToBlocks(text) {
         type: 'strong',
         hasHighlight,
       });
-      
+
       pos = asteriskEnd + 2;
     }
-    
+
     // Also handle __text__ format
     pos = 0;
     while (pos < line.length) {
       const underscoreStart = line.indexOf('__', pos);
       if (underscoreStart === -1) break;
-      
+
       // Find the matching closing __
       let underscoreEnd = line.indexOf('__', underscoreStart + 2);
       if (underscoreEnd === -1) break;
-      
+
       const boldText = line.substring(underscoreStart + 2, underscoreEnd);
       const hasHighlight = /==[^=]+==/.test(boldText);
-      
+
       boldMatches.push({
         start: underscoreStart,
         end: underscoreEnd + 2,
@@ -236,18 +239,18 @@ function convertMarkdownToBlocks(text) {
         type: 'strong',
         hasHighlight,
       });
-      
+
       pos = underscoreEnd + 2;
     }
 
     // Step 3: Merge and sort all matches, handling overlaps
     const allMatches = [];
-    
+
     // Add bold matches first (they're outer)
     for (const boldMatch of boldMatches) {
       allMatches.push(boldMatch);
     }
-    
+
     // Add highlight matches that aren't inside bold
     for (const highlightMatch of highlightMatches) {
       const isInsideBold = boldMatches.some(
@@ -257,14 +260,14 @@ function convertMarkdownToBlocks(text) {
         allMatches.push(highlightMatch);
       }
     }
-    
+
     // Sort by start position
     allMatches.sort((a, b) => a.start - b.start);
 
     // Step 4: Process matches, handling nested cases
     for (let i = 0; i < allMatches.length; i++) {
       const currentMatch = allMatches[i];
-      
+
       // Add text before this match
       if (currentMatch.start > lastIndex) {
         const beforeText = line.substring(lastIndex, currentMatch.start);
@@ -382,34 +385,34 @@ async function processContentBlock(block) {
   // Determine block type
   if (block.image) {
     // Image block (supports single image or array of images for slideshow)
-    block._type = 'image';
-    
-      // Check if it's the new structure with images array
-      if (block.image.images && Array.isArray(block.image.images)) {
-        // New structure: array of images for slideshow
-        block.images = await Promise.all(
-          block.image.images.map(async (imgItem) => {
-            const imageData = await handleImage(imgItem.image);
-            if (imageData) {
-              return {
-                _type: 'image',
-                asset: imageData.asset,
-                alt: imgItem.alt || '',
-              };
-            }
-            return null;
-          })
-        );
-        // Filter out failed uploads
-        block.images = block.images.filter((img) => img !== null);
-        if (block.images.length === 0) {
-          return null; // All images failed
-        }
-        // Preserve display option if present
-        if (block.image.display) {
-          block.display = block.image.display;
-        }
-        delete block.image;
+    block._type = 'imageBlock'; // Changed from 'image' to avoid conflict with built-in type
+
+    // Check if it's the new structure with images array
+    if (block.image.images && Array.isArray(block.image.images)) {
+      // New structure: array of images for slideshow
+      block.images = await Promise.all(
+        block.image.images.map(async (imgItem) => {
+          const imageData = await handleImage(imgItem.image);
+          if (imageData) {
+            return {
+              _type: 'image',
+              asset: imageData.asset,
+              alt: imgItem.alt || '',
+            };
+          }
+          return null;
+        })
+      );
+      // Filter out failed uploads
+      block.images = block.images.filter((img) => img !== null);
+      if (block.images.length === 0) {
+        return null; // All images failed
+      }
+      // Preserve display option if present
+      if (block.image.display) {
+        block.display = block.image.display;
+      }
+      delete block.image;
     } else {
       // Legacy structure: single image
       const imagePath = typeof block.image === 'string' ? block.image : block.image.image;
@@ -449,8 +452,11 @@ async function processContentBlock(block) {
 
     if (Array.isArray(listData.items)) {
       block.items = await Promise.all(
-        listData.items.map(async (item) => {
-          item._key = generateKey();
+        listData.items.map(async (item, index) => {
+          // Ensure _key is always set
+          if (!item._key) {
+            item._key = generateKey();
+          }
           item._type = 'listItem';
 
           ['heading', 'body'].forEach((key) => {
@@ -459,8 +465,16 @@ async function processContentBlock(block) {
             }
           });
 
+          // Process icon field - convert image path to Sanity image object
           if (item.icon) {
-            item.icon = await handleImage(item.icon);
+            const imageData = await handleImage(item.icon);
+            if (imageData) {
+              item.icon = imageData;
+            } else {
+              // If image upload failed, remove icon field
+              console.warn(`⚠️  Failed to process icon for list item ${index + 1}: ${item.icon}`);
+              delete item.icon;
+            }
           }
 
           return item;
@@ -481,14 +495,8 @@ async function processContentBlock(block) {
       block.rows = await Promise.all(
         tableData.rows.map(async (row) => {
           row._key = generateKey();
-          row.a =
-            row.a && typeof row.a === 'string'
-              ? convertMarkdownToBlocks(row.a)
-              : row.a || [];
-          row.b =
-            row.b && typeof row.b === 'string'
-              ? convertMarkdownToBlocks(row.b)
-              : row.b || [];
+          row.a = row.a && typeof row.a === 'string' ? convertMarkdownToBlocks(row.a) : row.a || [];
+          row.b = row.b && typeof row.b === 'string' ? convertMarkdownToBlocks(row.b) : row.b || [];
           return row;
         })
       );
@@ -508,7 +516,7 @@ async function processContentBlock(block) {
     block._type = 'buttonBlock';
     const buttonData = block.buttonBlock;
     block.buttons = [];
-    
+
     if (Array.isArray(buttonData.buttons)) {
       block.buttons = buttonData.buttons.map((button) => {
         button._key = generateKey();
@@ -520,7 +528,7 @@ async function processContentBlock(block) {
         };
       });
     }
-    
+
     delete block.buttonBlock;
   } else if (block.linkBlock) {
     // Link block (single link with arrow)
@@ -563,24 +571,26 @@ async function importPage(mdFilePath) {
 
   // -------------------------------------------
   // Find existing page by slug + type
+  // Normalize 'home' to '/' for lookup since that's what's in Sanity
+  const lookupSlug = data.slug === 'home' ? '/' : data.slug;
   // -------------------------------------------
   const existing = await client.fetch(
     `*[_type == $type && slug.current == $slug][0]{ _id, orderRank }`,
     {
       type: pageType,
-      slug: data.slug,
+      slug: lookupSlug,
     }
   );
 
   // Also search for pages with "home" or slug in ID (fallback)
   let fallbackExisting = null;
-  if (!existing && data.slug === 'home') {
+  if (!existing && (data.slug === 'home' || lookupSlug === '/')) {
     const byId = await client.fetch(
-      `*[_type == $type && _id match "*home*"][0]{ _id, orderRank }`,
+      `*[_type == $type && (_id match "*home*" || _id == "home" || slug.current == "/")][0]{ _id, orderRank }`,
       { type: pageType }
     );
     if (byId) {
-      console.log(`⚠️  Found page by ID pattern: ${byId._id}`);
+      console.log(`⚠️  Found page by ID/slug pattern: ${byId._id}`);
       fallbackExisting = byId;
     }
   }
@@ -594,7 +604,9 @@ async function importPage(mdFilePath) {
     console.log(`♻️  Overwriting existing page: ${finalExisting._id}`);
   } else {
     console.log(`🆕 Creating new page`);
-    console.log(`⚠️  WARNING: No existing page found with slug "${data.slug}". This will create a new document.`);
+    console.log(
+      `⚠️  WARNING: No existing page found with slug "${data.slug}". This will create a new document.`
+    );
   }
   console.log(`📊 Setting orderRank: ${orderRank}`);
 
@@ -609,11 +621,19 @@ async function importPage(mdFilePath) {
     const section = data.sections[i];
     const sectionTheme = section.theme || 'default';
     const sectionRows = section.rows?.length || 0;
-    console.log(`  Section ${i + 1}: ${section.type || 'unknown'}${section.type === 'sectionMain' ? ` (theme: ${sectionTheme}, rows: ${sectionRows})` : ''}`);
+    console.log(
+      `  Section ${i + 1}: ${section.type || 'unknown'}${section.type === 'sectionMain' ? ` (theme: ${sectionTheme}, rows: ${sectionRows})` : ''}`
+    );
 
     section._type = section.type;
     section._key = generateKey();
     delete section.type; // Remove the 'type' field
+
+    // Validate and normalize sectionId if present
+    if (section.sectionId && typeof section.sectionId === 'string') {
+      // Ensure sectionId is lowercase and URL-safe
+      section.sectionId = section.sectionId.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+    }
 
     // Convert text fields to blocks
     ['heading', 'subheading', 'lead', 'body', 'reference'].forEach((key) => {
@@ -808,8 +828,16 @@ async function importPage(mdFilePath) {
               }
             });
 
+            // Process icon field - convert image path to Sanity image object
             if (item.icon) {
-              item.icon = await handleImage(item.icon);
+              const imageData = await handleImage(item.icon);
+              if (imageData) {
+                item.icon = imageData;
+              } else {
+                // If image upload failed, remove icon field
+                console.warn(`⚠️  Failed to process icon for list item: ${item.icon}`);
+                delete item.icon;
+              }
             }
           }
         }
@@ -830,9 +858,13 @@ async function importPage(mdFilePath) {
           delete section.backgroundImage; // Remove if upload failed
         }
       }
-      
-      // Process rows
-      if (Array.isArray(section.rows)) {
+
+      // Process rows - ensure rows array exists
+      if (!Array.isArray(section.rows)) {
+        section.rows = [];
+      }
+
+      if (section.rows.length > 0) {
         section.rows = await Promise.all(
           section.rows.map(async (row) => {
             row._key = generateKey();
@@ -848,12 +880,24 @@ async function importPage(mdFilePath) {
             if (Array.isArray(row.contentBlocks)) {
               const processedBlocks = await Promise.all(
                 row.contentBlocks.map(async (block) => {
+                  // Handle blocks that use _type directly (new format)
+                  // e.g., { _type: 'listBlock', variant: 'images', ... }
+                  if (block._type && !block[block._type] && !block.contentRow) {
+                    // Convert _type: 'listBlock' to listBlock: {...}
+                    const blockType = block._type;
+                    const blockData = { ...block };
+                    delete blockData._type;
+                    // Clear the block and set the proper structure
+                    Object.keys(block).forEach((key) => delete block[key]);
+                    block[blockType] = blockData;
+                  }
+
                   // CONTENT ROW (nested row with text + blocks)
                   if (block.contentRow) {
                     block._key = generateKey();
                     block._type = 'contentRow';
                     const rowData = block.contentRow;
-                    
+
                     // Convert text fields to blocks
                     ['heading', 'body'].forEach((key) => {
                       if (rowData[key] && typeof rowData[key] === 'string') {
@@ -879,7 +923,11 @@ async function importPage(mdFilePath) {
                   }
 
                   // LEGACY: Direct blocks (backwards compatibility)
-                  return await processContentBlock(block);
+                  const processedBlock = await processContentBlock(block);
+                  if (processedBlock && !processedBlock._key) {
+                    processedBlock._key = generateKey();
+                  }
+                  return processedBlock;
                 })
               );
               // Filter out null blocks (failed image uploads)
@@ -893,7 +941,13 @@ async function importPage(mdFilePath) {
     }
   }
 
-  const safeId = finalExisting?._id || `${data.slug}-import`;
+  // For home page, use 'home' as the ID to ensure it's always found
+  // Use existing page ID if found, otherwise create new ID
+  // For home page, try to use existing ID or 'home', otherwise use slug-based ID
+  const safeId = finalExisting?._id || (data.slug === 'home' ? 'home' : `${data.slug}-import`);
+
+  // Normalize 'home' slug to '/' for consistency
+  const normalizedSlug = data.slug === 'home' ? '/' : data.slug;
 
   const doc = {
     _id: safeId,
@@ -901,7 +955,7 @@ async function importPage(mdFilePath) {
     title: data.title,
     slug: {
       _type: 'slug',
-      current: data.slug,
+      current: normalizedSlug,
     },
     orderRank, // ✅ Add orderRank here
     sections: data.sections,
@@ -913,7 +967,7 @@ async function importPage(mdFilePath) {
 
   console.log(`\n📤 Creating/replacing document in Sanity...`);
   console.log(`   Total sections in document: ${doc.sections.length}`);
-  const sectionMainCount = doc.sections.filter(s => s._type === 'sectionMain').length;
+  const sectionMainCount = doc.sections.filter((s) => s._type === 'sectionMain').length;
   console.log(`   sectionMain entries: ${sectionMainCount}`);
 
   try {
@@ -921,14 +975,26 @@ async function importPage(mdFilePath) {
     console.log(`\n✅ Successfully imported: ${data.title}`);
     console.log(`   Type: ${pageType}`);
     console.log(`   ID: ${safeId}`);
-    console.log(`   Slug: ${data.slug}`);
+    console.log(`   Slug: ${doc.slug.current}`);
     console.log(`   Order Rank: ${orderRank}`);
     console.log(`   Total sections: ${doc.sections.length}`);
     console.log(`   sectionMain sections: ${sectionMainCount}`);
+
+    // Verify the page was created correctly
+    const verify = await client.fetch(
+      `*[_type == $type && _id == $id][0]{ _id, "slug": slug.current }`,
+      { type: pageType, id: safeId }
+    );
+    if (verify) {
+      console.log(`   ✅ Verification: Page exists with slug "${verify.slug}"`);
+    } else {
+      console.warn(`   ⚠️  Verification: Page not found after import!`);
+    }
   } catch (error) {
     console.error(`\n❌ Error importing page:`, error.message);
     console.error(`   Document ID: ${safeId}`);
     console.error(`   Slug: ${data.slug}`);
+    console.error(`   Full error:`, error);
     throw error;
   }
 }
