@@ -28,6 +28,7 @@ export default defineType({
           'positives',
           'negatives',
           'counter',
+          'images',
         ],
       },
       initialValue: 'default',

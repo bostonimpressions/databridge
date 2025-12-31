@@ -53,6 +53,34 @@
     }
   }
 
+  &[data-theme='images'] {
+    @apply gap-2 md:gap-4;
+    /* Force 4 columns at all screen sizes */
+    grid-template-columns: repeat(4, 1fr) !important;
+
+    .list-item {
+      @apply overflow-visible p-0;
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-wrapper {
+      @apply relative flex w-full items-center justify-center;
+      max-height: 240px;
+      min-height: 100px;
+
+      img {
+        max-height: 240px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+      }
+    }
+  }
+
   &[data-theme='snapshot'] {
     @apply gap-8 md:justify-self-end;
     .list-item {

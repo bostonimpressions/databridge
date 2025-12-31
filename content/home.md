@@ -359,8 +359,22 @@ sections:
           Organizations in healthcare, financial services, government, and other regulated sectors trust DataBridge to meet stringent compliance requirements.
 
           Our comprehensive certification portfolio and dedicated compliance team handle the regulatory burden.
+        spacing: 'compact'
 
       # Row 2
+      - layout:
+          columns: '1/1'
+        spacing: 'compact'
+        contentBlocks:
+          - listBlock:
+              variant: 'images'
+              columns: 4
+              items:
+                - icon: '/images/compliance-1.png'
+                - icon: '/images/compliance-2.png'
+                - icon: '/images/compliance-3.png'
+
+      # Row 3
       - body: |
           Our ultra-secure facilities are ready to be conditioned as SCIF environments for classified data.
 

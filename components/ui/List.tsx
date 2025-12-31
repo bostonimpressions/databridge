@@ -40,7 +40,8 @@ interface ListProps {
     | 'positives'
     | 'good'
     | 'bad'
-    | 'counter';
+    | 'counter'
+    | 'images';
   sectionTheme?: SectionTheme;
 }
 
@@ -81,6 +82,7 @@ export default function List({
 
   const shouldShowImage = (item: ListItemProps) => {
     if (theme === 'snapshot') return true;
+    if (theme === 'images') return true;
     if (theme === 'flags') return false;
     if (theme === 'counter') return false;
     if (themeAllowsUploaded) return !!item.icon;
@@ -89,6 +91,7 @@ export default function List({
 
   const getImageUrl = (item: ListItemProps, index: number) => {
     if (theme === 'snapshot') return snapshotIcons[index];
+    if (theme === 'images' && item.icon) return urlFor(item.icon).url();
     if (themeAllowsUploaded && item.icon) return urlFor(item.icon).url();
     return defaultIcons[theme];
   };
@@ -203,16 +206,27 @@ export default function List({
                 // Default layout for other themes
                 <>
                   {shouldShowImage(item) && src && (
-                    <div className="icon-wrapper">
-                      <Image
-                        src={src}
-                        alt={`Icon ${item.heading && '- ' + toPlainText(item.heading)}`}
-                        fill
-                      />
+                    <div className={theme === 'images' ? 'image-wrapper' : 'icon-wrapper'}>
+                      {theme === 'images' ? (
+                        <Image
+                          src={src}
+                          alt={item.heading ? toPlainText(item.heading) : `Image ${i + 1}`}
+                          width={800}
+                          height={240}
+                          className="object-contain"
+                          style={{ maxHeight: '240px', width: 'auto', height: 'auto' }}
+                        />
+                      ) : (
+                        <Image
+                          src={src}
+                          alt={item.heading ? toPlainText(item.heading) : `Icon ${i + 1}`}
+                          fill
+                        />
+                      )}
                     </div>
                   )}
 
-                  {theme !== 'image-only' && (
+                  {theme !== 'image-only' && theme !== 'images' && (
                     <div className={`list-content ${textColorClass}`}>
                       {item.heading && (
                         <h4 className="heading">
