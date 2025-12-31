@@ -42,8 +42,14 @@ async function getLastOrderRank(pageType) {
 async function handleImage(imagePath) {
   if (!imagePath) return null;
 
-  // If it's already a Sanity image reference
-  if (imagePath.startsWith('image-') && imagePath.includes('-')) {
+  // If it's already a Sanity image object (already processed)
+  if (typeof imagePath === 'object' && imagePath._type === 'image' && imagePath.asset) {
+    // Already processed, return as-is
+    return imagePath;
+  }
+
+  // If it's already a Sanity image reference string
+  if (typeof imagePath === 'string' && imagePath.startsWith('image-') && imagePath.includes('-')) {
     return {
       _type: 'image',
       asset: {
@@ -51,6 +57,18 @@ async function handleImage(imagePath) {
         _type: 'reference',
       },
     };
+  }
+
+  // Ensure imagePath is a string for file path processing
+  if (typeof imagePath !== 'string') {
+    // Try to extract path from object
+    const extractedPath = imagePath?.url || imagePath?.image || imagePath?.path;
+    if (extractedPath && typeof extractedPath === 'string') {
+      imagePath = extractedPath;
+    } else {
+      console.warn(`⚠️  Image path is not a string and could not extract path: ${typeof imagePath}`, imagePath);
+      return null;
+    }
   }
 
   // Handle paths starting with /images/
@@ -146,17 +164,110 @@ function convertMarkdownToBlocks(text) {
     currentList = [];
   }
 
-  // Parse a line for highlights (==text==) and convert to spans
+  // Parse a line for highlights (==text==), bold (**text**), and convert to spans
+  // Handles nested marks (e.g., bold containing highlight)
   function parseLineForHighlights(line) {
     const children = [];
-    const highlightRegex = /==([^=]+)==/g;
+    let processedLine = line;
     let lastIndex = 0;
-    let match;
 
+    // Process in layers: first highlights, then bold
+    // This allows bold to wrap highlighted text
+    
+    // Step 1: Find and mark all highlights first (they can be nested inside bold)
+    const highlightMatches = [];
+    const highlightRegex = /==([^=]+)==/g;
+    let match;
     while ((match = highlightRegex.exec(line)) !== null) {
-      // Add text before the highlight
-      if (match.index > lastIndex) {
-        const beforeText = line.substring(lastIndex, match.index);
+      highlightMatches.push({
+        start: match.index,
+        end: match.index + match[0].length,
+        text: match[1],
+        type: 'highlight',
+      });
+    }
+
+    // Step 2: Find bold patterns, but be smart about nested highlights
+    // Bold can be **text** or __text__, and can contain highlights
+    // Use a more flexible approach: match **...** allowing == inside
+    const boldMatches = [];
+    // Match ** followed by content (allowing ==) until closing **
+    // We'll use a simpler approach: find **, then find the matching closing **
+    let pos = 0;
+    while (pos < line.length) {
+      const asteriskStart = line.indexOf('**', pos);
+      if (asteriskStart === -1) break;
+      
+      // Find the matching closing **
+      let asteriskEnd = line.indexOf('**', asteriskStart + 2);
+      if (asteriskEnd === -1) break;
+      
+      const boldText = line.substring(asteriskStart + 2, asteriskEnd);
+      const hasHighlight = /==[^=]+==/.test(boldText);
+      
+      boldMatches.push({
+        start: asteriskStart,
+        end: asteriskEnd + 2,
+        text: boldText,
+        type: 'strong',
+        hasHighlight,
+      });
+      
+      pos = asteriskEnd + 2;
+    }
+    
+    // Also handle __text__ format
+    pos = 0;
+    while (pos < line.length) {
+      const underscoreStart = line.indexOf('__', pos);
+      if (underscoreStart === -1) break;
+      
+      // Find the matching closing __
+      let underscoreEnd = line.indexOf('__', underscoreStart + 2);
+      if (underscoreEnd === -1) break;
+      
+      const boldText = line.substring(underscoreStart + 2, underscoreEnd);
+      const hasHighlight = /==[^=]+==/.test(boldText);
+      
+      boldMatches.push({
+        start: underscoreStart,
+        end: underscoreEnd + 2,
+        text: boldText,
+        type: 'strong',
+        hasHighlight,
+      });
+      
+      pos = underscoreEnd + 2;
+    }
+
+    // Step 3: Merge and sort all matches, handling overlaps
+    const allMatches = [];
+    
+    // Add bold matches first (they're outer)
+    for (const boldMatch of boldMatches) {
+      allMatches.push(boldMatch);
+    }
+    
+    // Add highlight matches that aren't inside bold
+    for (const highlightMatch of highlightMatches) {
+      const isInsideBold = boldMatches.some(
+        (b) => highlightMatch.start >= b.start && highlightMatch.end <= b.end
+      );
+      if (!isInsideBold) {
+        allMatches.push(highlightMatch);
+      }
+    }
+    
+    // Sort by start position
+    allMatches.sort((a, b) => a.start - b.start);
+
+    // Step 4: Process matches, handling nested cases
+    for (let i = 0; i < allMatches.length; i++) {
+      const currentMatch = allMatches[i];
+      
+      // Add text before this match
+      if (currentMatch.start > lastIndex) {
+        const beforeText = line.substring(lastIndex, currentMatch.start);
         if (beforeText) {
           children.push({
             _type: 'span',
@@ -167,18 +278,30 @@ function convertMarkdownToBlocks(text) {
         }
       }
 
-      // Add the highlighted text
-      children.push({
-        _type: 'span',
-        _key: generateKey(),
-        text: match[1],
-        marks: ['highlight'],
-      });
+      // If this is a bold that contains highlights, parse it recursively
+      if (currentMatch.type === 'strong' && currentMatch.hasHighlight) {
+        // Parse the inner text for highlights
+        const innerChildren = parseLineForHighlights(currentMatch.text);
+        // Add 'strong' mark to all inner spans
+        const boldChildren = innerChildren.map((child) => ({
+          ...child,
+          marks: [...(child.marks || []), 'strong'],
+        }));
+        children.push(...boldChildren);
+      } else {
+        // Simple case: just add the mark
+        children.push({
+          _type: 'span',
+          _key: generateKey(),
+          text: currentMatch.text,
+          marks: [currentMatch.type],
+        });
+      }
 
-      lastIndex = match.index + match[0].length;
+      lastIndex = currentMatch.end;
     }
 
-    // Add remaining text after the last highlight
+    // Add remaining text
     if (lastIndex < line.length) {
       const afterText = line.substring(lastIndex);
       if (afterText) {
@@ -191,7 +314,7 @@ function convertMarkdownToBlocks(text) {
       }
     }
 
-    // If no highlights found, return a single span
+    // If no matches found, return a single span
     if (children.length === 0) {
       children.push({
         _type: 'span',
@@ -698,9 +821,9 @@ async function importPage(mdFilePath) {
     // -------------------------------------------
     if (section._type === 'sectionMain') {
       // Process background image if present
+      // handleImage will check if it's already processed and return as-is
       if (section.backgroundImage) {
-        const imagePath = section.backgroundImage;
-        const imageData = await handleImage(imagePath);
+        const imageData = await handleImage(section.backgroundImage);
         if (imageData) {
           section.backgroundImage = imageData;
         } else {

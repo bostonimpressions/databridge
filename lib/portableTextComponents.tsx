@@ -8,9 +8,9 @@ import type { PortableTextComponents } from '@portabletext/react';
  */
 export const portableTextComponents: PortableTextComponents = {
   marks: {
-    highlight: ({ children }) => (
-      <span className="text-highlight">{children}</span>
-    ),
+    highlight: ({ children }) => <span className="text-highlight">{children}</span>,
+    strong: ({ children }) => <strong>{children}</strong>,
+    em: ({ children }) => <em>{children}</em>,
     link: ({ value, children }) => {
       const href = value?.href || '#';
       const isExternal = href.startsWith('http');
@@ -44,4 +44,3 @@ export function mergePortableTextComponents(
     },
   };
 }
-

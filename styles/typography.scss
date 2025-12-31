@@ -52,7 +52,7 @@
 
   p {
     margin-bottom: 1em;
-    @apply text-sm md:text-base lg:text-lg;
+    @apply text-sm sm:text-base lg:text-lg;
     line-height: 1.375em;
     &:last-child {
       margin-bottom: 0;

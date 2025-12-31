@@ -3,6 +3,7 @@ import { PortableText } from '@portabletext/react';
 import type { PortableTextBlock } from '@portabletext/types';
 import { portableTextComponents } from '@/lib/portableTextComponents';
 import type { SectionTheme } from '@/types/sections';
+import type { PortableTextComponents } from '@portabletext/react';
 
 interface TableBlockValue {
   columnA: string;
@@ -66,41 +67,59 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
       tbodyBorder: 'border-orange-300',
       rowStyle: {},
     },
+    gray: {
+      headerBorder: 'border-sapphire-500',
+      headerText: 'text-black',
+      text: 'text-black',
+      rowBorder: 'border-gray-300',
+      rowBg: 'bg-gray-50',
+      tbodyBorder: 'border-perano-300',
+      rowStyle: {},
+    },
   };
 
   // Get theme classes with fallback to light/default
   const classes = themeClasses[theme] || themeClasses.light;
+
+  // Custom PortableText components for table cells with text-sm
+  const tableTextComponents: PortableTextComponents = {
+    ...portableTextComponents,
+    block: {
+      normal: ({ children }) => <p className="text-sm">{children}</p>,
+    },
+  };
 
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th className={`${classes.headerText} px-4 py-3 text-left text-xl font-semibold border-b-8 ${classes.headerBorder}`}>
+            <th
+              className={`${classes.headerText} border-b-8 px-4 py-3 text-left text-xl font-semibold ${classes.headerBorder}`}
+            >
               {value.columnA}
             </th>
-            <th className={`${classes.headerText} px-4 py-3 text-left text-xl font-semibold border-b-8 ${classes.headerBorder}`}>
+            <th
+              className={`${classes.headerText} border-b-8 px-4 py-3 text-left text-xl font-semibold ${classes.headerBorder}`}
+            >
               {value.columnB}
             </th>
           </tr>
         </thead>
         <tbody className={`border-b-8 ${classes.tbodyBorder}`}>
           {value.rows.map((row, i) => (
-            <tr 
-              key={i} 
-              className={`border-b-2 ${classes.rowBorder}`}
-            >
-              <td 
-                className={`${classes.rowBg} ${classes.text} px-4 py-5`}
+            <tr key={i} className={`border-b-2 ${classes.rowBorder}`}>
+              <td
+                className={`${classes.rowBg} ${classes.text} px-4 py-5 align-top font-semibold`}
                 style={classes.rowStyle}
               >
-                <PortableText value={row.a} components={portableTextComponents} />
+                <PortableText value={row.a} components={tableTextComponents} />
               </td>
-              <td 
-                className={`${classes.rowBg} ${classes.text} px-4 py-5`}
+              <td
+                className={`${classes.rowBg} ${classes.text} px-4 py-5 align-top`}
                 style={classes.rowStyle}
               >
-                <PortableText value={row.b} components={portableTextComponents} />
+                <PortableText value={row.b} components={tableTextComponents} />
               </td>
             </tr>
           ))}

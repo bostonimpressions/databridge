@@ -379,4 +379,32 @@ sections:
           Our ultra-secure facilities are ready to be conditioned as SCIF environments for classified data.
 
           Annual compliance reports, initial qualification processes, and ongoing support from our full compliance team ensure your infrastructure meets all applicable regulatory requirements.
+
+  # Section seven
+  - type: sectionMain
+    theme: gray
+    backgroundImage: '/images/databridge-datacenter-4.png'
+    rows:
+      # Row 1
+      - heading: 'Strategic Maryland Location'
+        body: |
+          DataBridge Sites eliminates "windshield time on 495" while providing equal or better reliability than Northern Virginia alternatives. Our Silver Spring location serves the Washington D.C. and Baltimore region with local access to enterprise-grade infrastructure.
+
+          **Contact us today: ==(855) 495-0098==**
+        layout:
+          columns: '1/2-1/2'
+          textColumn: 'left'
+        contentBlocks:
+          - tableBlock:
+              columnA: 'Advantage'
+              columnB: 'Benefit'
+              rows:
+                - a: 'Local Jurisdiction'
+                  b: 'Keep mission critical infrastructure within Maryland boundaries for organizations preferring local control and reduced travel time for maintenance and troubleshooting.'
+                - a: 'Express Connect to Ashburn'
+                  b: |
+                    Proprietary under-river fiber path provides the fastest route to Ashburn, VA, connecting you to the world's largest data center hub with ultra-low latency.
+                - a: 'Regional Redundancy'
+                  b: |
+                    Geographic diversity from Northern Virginia while maintaining optimal connectivity enables effective disaster recovery and business continuity strategies.
 ---

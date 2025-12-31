@@ -6,7 +6,7 @@ export interface BaseSection {
 }
 
 /* --- THEME TYPE --- */
-export type SectionTheme = 'light' | 'dark' | 'midnight' | 'sky' | 'orange';
+export type SectionTheme = 'light' | 'dark' | 'midnight' | 'sky' | 'orange' | 'gray';
 
 /* --- HERO --- */
 export interface SectionHeroMain extends BaseSection {

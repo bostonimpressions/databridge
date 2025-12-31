@@ -55,10 +55,13 @@
   @apply text-blue-ribbon-500;
 }
 
-/* Dark section highlights use yellowish-green */
 [data-section-theme='dark'] .text-highlight,
 .text-white .text-highlight {
   color: #d2ff78;
+}
+
+[data-section-theme='gray'] .text-highlight {
+  color: var(--color-sapphire-500);
 }
 
 .icon-wrapper {

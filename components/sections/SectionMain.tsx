@@ -297,7 +297,9 @@ export default function SectionMain({
           ? 'bg-blue-50'
           : theme === 'orange'
             ? '' // Orange theme uses custom gradient background
-            : 'bg-white';
+            : theme === 'gray'
+              ? '' // Gray theme uses custom background color
+              : 'bg-white';
 
   const textColorClass = theme === 'dark' ? 'text-white' : theme === 'midnight' ? 'text-white' : '';
 
@@ -331,12 +333,45 @@ export default function SectionMain({
 
   const borderStyle = topBorder ? { borderTop: '2px solid #DEE2FF' } : {};
   const darkBgStyle = theme === 'dark' ? { backgroundColor: '#1C2D50' } : {};
+  const grayBgStyle = theme === 'gray' ? { backgroundColor: '#F7F7F7' } : {};
+
+  // Gray theme background image with 11% opacity overlay
+  const grayBgImageStyle =
+    theme === 'gray' && backgroundImageUrl
+      ? {
+          position: 'relative' as const,
+          backgroundImage: `url(${backgroundImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }
+      : {};
+
+  const grayOverlayStyle =
+    theme === 'gray' && backgroundImageUrl
+      ? {
+          position: 'absolute' as const,
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: '#F7F7F7',
+          opacity: 0.89, // 100% - 11% = 89% opacity for overlay
+          zIndex: 0,
+        }
+      : {};
 
   return (
     <section
       className={`relative py-16 ${sectionBg} ${textColorClass}`}
       data-section-theme={theme}
-      style={{ ...orangeGradientStyle, ...darkBgStyle, ...borderStyle }}
+      style={{
+        ...orangeGradientStyle,
+        ...darkBgStyle,
+        ...grayBgStyle,
+        ...grayBgImageStyle,
+        ...borderStyle,
+      }}
     >
       {/* Background image for orange theme (positioned at bottom with color-burn) */}
       {theme === 'orange' && backgroundImageUrl && (
@@ -351,6 +386,11 @@ export default function SectionMain({
             mixBlendMode: 'color-burn',
           }}
         />
+      )}
+
+      {/* Gray theme overlay for background image (11% opacity) */}
+      {theme === 'gray' && backgroundImageUrl && (
+        <div className="pointer-events-none absolute inset-0" style={grayOverlayStyle} />
       )}
 
       <div className="container relative z-10 mx-auto px-4">
