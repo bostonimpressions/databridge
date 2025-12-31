@@ -99,7 +99,8 @@ export default function List({
         return item.icon;
       }
       // If it's a Sanity image object, use urlFor
-      if (item.icon && typeof item.icon === 'object' && item.icon.asset) {
+      // Check if it has _type === 'image' or has an asset property
+      if (item.icon && typeof item.icon === 'object' && ('asset' in item.icon || item.icon._type === 'image')) {
         return urlFor(item.icon).url();
       }
     }
