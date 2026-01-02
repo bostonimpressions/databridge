@@ -85,46 +85,46 @@ export default function SectionTestimonials({ items, sectionId }: SectionTestimo
 
   return (
     <section className="bg-white py-8" id={sectionId}>
-      <div className="container mx-auto px-4">
-        <div className="relative">
+      <div className="container mx-auto">
+        <div className="relative px-3 sm:px-8 md:px-8 xl:px-0">
           {/* Navigation Arrows */}
           <button
             onClick={goToPrevious}
             disabled={currentIndex === 0}
-            className="text-blue-ribbon-400 hover:text-blue-ribbon-600 absolute left-2 top-1/2 z-10 -translate-y-1/2 transition-colors disabled:cursor-not-allowed disabled:text-gray-300 md:left-0 md:-translate-x-12"
+            className="text-blue-ribbon-400 hover:text-blue-ribbon-600 absolute left-0 top-1/2 z-10 -translate-x-9 -translate-y-1/2 cursor-pointer p-4 transition-all duration-200 hover:scale-110 disabled:cursor-not-allowed disabled:text-gray-300 xl:-translate-x-4"
             aria-label="Previous testimonials"
           >
             <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              width="32"
+              height="56"
+              viewBox="0 0 12 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M15 18l-6-6 6-6" />
+              <path d="M10 4l-4 8 4 8" />
             </svg>
           </button>
 
           <button
             onClick={goToNext}
             disabled={currentIndex >= items.length - itemsPerPage}
-            className="text-blue-ribbon-400 hover:text-blue-ribbon-600 absolute right-2 top-1/2 z-10 -translate-y-1/2 transition-colors disabled:cursor-not-allowed disabled:text-gray-300 md:right-0 md:translate-x-12"
+            className="text-blue-ribbon-400 hover:text-blue-ribbon-600 absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-9 cursor-pointer p-4 transition-all duration-200 hover:scale-110 disabled:cursor-not-allowed disabled:text-gray-300 xl:translate-x-4"
             aria-label="Next testimonials"
           >
             <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+              width="32"
+              height="56"
+              viewBox="0 0 12 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M9 18l6-6-6-6" />
+              <path d="M2 4l4 8-4 8" />
             </svg>
           </button>
 
