@@ -488,7 +488,7 @@ export default function SectionMain({
         )}
 
         {hasContentBlocks && columnContent.contentBlocks && (
-          <div className={`${hasBody || hasHeading ? 'mt-8' : ''} space-y-8 ${alignClass}`}>
+          <div className={`${hasBody || hasHeading ? 'mt-15' : ''} space-y-8 ${alignClass}`}>
             {columnContent.contentBlocks.map((block, j) => {
               return (
                 <React.Fragment key={block._key || j}>

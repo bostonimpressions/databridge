@@ -482,20 +482,27 @@ sections:
           columns: '2/3-1/3'
           mobileReverse: true
         leftColumn:
-          heading: '30 Years of Excellence'
+          heading: '100% Uptime for Three Decades'
           body: |
-            For three decades, DataBridge Sites has been at the forefront of data center innovation, providing reliable infrastructure solutions to organizations across the region.
+            DataBridge Sites has maintained 100% uptime for 30 years without experiencing a single electrical outage.
+
+            This perfect reliability record demonstrates actual operational excellence rather than statistical projections.
+
+            Organizations that cannot accept downtime depend on infrastructure designed and operated to eliminate outage risks.
           contentBlocks:
             - tableBlock:
-                columnA: 'Milestone'
-                columnB: 'Achievement'
+                columnA: 'Reliability Factor'
+                columnB: 'Implementation'
                 rows:
-                  - a: '1994'
-                    b: 'Founded as one of the first commercial data centers in Maryland'
-                  - a: '2000s'
-                    b: 'Expanded to multiple facilities with Tier IV design standards'
-                  - a: '2024'
-                    b: 'Celebrating 30 years of uninterrupted service and innovation'
+                  - a: 'Redundant Power'
+                    b: |
+                      Six 2.4-megawatt generators with N+1 redundancy ensure continuous operations during extended utility outages and provide capacity for future growth.
+                  - a: '24/7/365 Staffing'
+                    b: |
+                      Professional on-site teams monitor all systems around the clock, providing immediate response to any situations and direct access for customer needs.
+                  - a: 'Tier IV Design'
+                    b: |
+                      Maryland's only Tier IV-designed commercial facility implements multiple layers of redundancy throughout all infrastructure systems for maximum fault tolerance.
         rightColumn:
           contentBlocks:
             - image:

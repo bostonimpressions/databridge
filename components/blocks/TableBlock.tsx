@@ -50,11 +50,11 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
       rowStyle: {},
     },
     sky: {
-      headerBorder: 'border-blue-600',
-      headerText: 'text-sapphire-500',
-      text: 'text-sapphire-500',
+      headerBorder: 'border-sky-400',
+      headerText: 'text-white',
+      text: 'text-white',
       rowBorder: 'border-gray-300',
-      rowBg: 'bg-gray-50',
+      rowBg: 'bg-black/10',
       tbodyBorder: 'border-perano-300',
       rowStyle: {},
     },
@@ -95,12 +95,12 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
         <thead>
           <tr>
             <th
-              className={`${classes.headerText} border-b-8 px-4 py-3 text-left font-semibold md:text-xl ${classes.headerBorder}`}
+              className={`${classes.headerText} border-b-8 px-4 py-3 text-left font-semibold md:text-xl ${classes.headerBorder} w-1/3 whitespace-nowrap`}
             >
               {value.columnA}
             </th>
             <th
-              className={`${classes.headerText} border-b-8 px-4 py-3 text-left font-semibold md:text-xl ${classes.headerBorder}`}
+              className={`${classes.headerText} border-b-8 px-4 py-3 text-left font-semibold md:text-xl ${classes.headerBorder} w-2/3`}
             >
               {value.columnB}
             </th>
@@ -110,13 +110,13 @@ export default function TableBlock({ value, theme = 'light' }: TableBlockProps) 
           {value.rows.map((row, i) => (
             <tr key={i} className={`border-b-2 ${classes.rowBorder}`}>
               <td
-                className={`${classes.rowBg} ${classes.text} px-4 py-5 align-top font-semibold`}
+                className={`${classes.rowBg} ${classes.text} px-4 py-5 align-top font-semibold w-1/3`}
                 style={classes.rowStyle}
               >
                 <PortableText value={row.a} components={tableTextComponents} />
               </td>
               <td
-                className={`${classes.rowBg} ${classes.text} px-4 py-5 align-top`}
+                className={`${classes.rowBg} ${classes.text} px-4 py-5 align-top w-2/3`}
                 style={classes.rowStyle}
               >
                 <PortableText value={row.b} components={tableTextComponents} />
