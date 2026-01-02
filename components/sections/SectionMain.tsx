@@ -15,36 +15,32 @@ import type { SectionTheme } from '@/types/sections';
 /* -------------------------------- Types -------------------------------- */
 
 type ColumnLayout = '1/1' | '1/2-1/2' | '2/3-1/3' | '1/3-2/3' | '1/4-3/4';
-type TextColumn = 'left' | 'right';
 
 interface ContentBlock {
-  _type:
-    | 'image'
-    | 'imageBlock'
-    | 'listBlock'
-    | 'tableBlock'
-    | 'ctaBlock'
-    | 'contentRow'
-    | 'buttonBlock'
-    | 'linkBlock';
+  _type: 'imageBlock' | 'listBlock' | 'tableBlock' | 'ctaBlock' | 'buttonBlock' | 'linkBlock';
   [key: string]: any;
 }
 
 interface RowLayout {
   columns?: ColumnLayout;
-  textColumn?: TextColumn;
   contentAlign?: 'left' | 'right';
+  mobileReverse?: boolean; // Reverse column order on mobile only
 }
 
-interface Row {
-  divider?: boolean;
+interface ColumnContent {
   label?: string;
   heading?: any[];
   subheading?: any[];
   body?: any[];
+  contentBlocks?: ContentBlock[];
+}
+
+interface Row {
+  divider?: boolean;
   layout?: RowLayout;
   spacing?: 'default' | 'compact';
-  contentBlocks?: ContentBlock[];
+  leftColumn?: ColumnContent;
+  rightColumn?: ColumnContent;
 }
 
 interface SectionMainProps {
@@ -54,8 +50,25 @@ interface SectionMainProps {
   topBorder?: boolean;
 }
 
-const renderPT = (value?: any[]) => {
+const renderPT = (value?: any[] | string) => {
   if (!value) return null;
+  if (typeof value === 'string') {
+    return (
+      <PortableText
+        value={[
+          {
+            _type: 'block',
+            _key: 'temp',
+            style: 'normal',
+            children: [{ _type: 'span', text: value, marks: [] }],
+            markDefs: [],
+          },
+        ]}
+        components={portableTextComponents}
+      />
+    );
+  }
+  if (!Array.isArray(value)) return null;
   return <PortableText value={value} components={portableTextComponents} />;
 };
 
@@ -74,38 +87,75 @@ const getGridCols = (columns?: ColumnLayout) => {
   }
 };
 
+// Helper function to get image URL
+const getImageUrl = (imageObj: any): string => {
+  if (typeof imageObj === 'string') {
+    return imageObj;
+  }
+  if (imageObj?.image && typeof imageObj.image === 'string') {
+    return imageObj.image;
+  }
+  if (imageObj?.asset || imageObj?._type === 'image') {
+    return urlFor(imageObj).url();
+  }
+  try {
+    return urlFor(imageObj).url();
+  } catch {
+    return '';
+  }
+};
+
 // Helper function to render content blocks
-const renderContentBlock = (
-  block: ContentBlock,
-  isTextLeft: boolean,
-  theme: SectionTheme,
-  textColorClass: string
-) => {
-  switch (block._type) {
-    case 'image':
-    case 'imageBlock': // Support renamed type from schema
-      // Check if it's an array of images (slideshow) or single image (legacy format)
-      // New structure: block.images is an array
-      // Legacy structure: block.asset exists (single image)
-      const images = block.images || (block.asset ? [{ asset: block.asset, alt: block.alt }] : []);
+const renderContentBlock = (block: ContentBlock, theme: SectionTheme, textColorClass: string) => {
+  // Normalize block structure
+  let normalizedBlock = block;
+  if (!block._type) {
+    if (block.tableBlock) {
+      normalizedBlock = { ...block.tableBlock, _type: 'tableBlock', _key: block._key || 'block' };
+    } else if (block.imageBlock || block.image) {
+      const imageData = block.imageBlock || block.image;
+      let imagesArray = [];
+      if (imageData.images && Array.isArray(imageData.images)) {
+        imagesArray = imageData.images;
+      } else if (imageData.image) {
+        imagesArray = [{ image: imageData.image, alt: imageData.alt }];
+      }
+      normalizedBlock = {
+        _type: 'imageBlock',
+        _key: block._key || 'block',
+        images: imagesArray,
+        display: imageData.display || 'cover',
+      };
+    } else if (block.listBlock) {
+      normalizedBlock = { ...block.listBlock, _type: 'listBlock', _key: block._key || 'block' };
+    } else if (block.ctaBlock) {
+      normalizedBlock = { ...block.ctaBlock, _type: 'ctaBlock', _key: block._key || 'block' };
+    } else if (block.buttonBlock) {
+      normalizedBlock = { ...block.buttonBlock, _type: 'buttonBlock', _key: block._key || 'block' };
+    } else if (block.linkBlock) {
+      normalizedBlock = { ...block.linkBlock, _type: 'linkBlock', _key: block._key || 'block' };
+    }
+  }
+
+  switch (normalizedBlock._type) {
+    case 'imageBlock':
+      const images = normalizedBlock.images || [];
       const isSlideshow = images.length > 1;
 
       if (isSlideshow) {
-        // Image slideshow component
-        return <ImageSlideshow images={images} isTextLeft={isTextLeft} />;
+        return <ImageSlideshow images={images} />;
       } else if (images.length === 1) {
-        // Single image
         const image = images[0];
-        const display = block.display || 'cover';
+        const display = normalizedBlock.display || 'cover';
         const isSquare = display === 'square';
 
         return (
-          <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+          <AnimatedElement animation="fade">
             {isSquare ? (
               <div className="relative mx-auto w-full max-w-[350px]">
                 <div className="relative aspect-square max-h-[350px] w-full">
                   <Image
-                    src={urlFor(image).url()}
+                    src={getImageUrl(image)}
                     alt={image.alt || 'Image'}
                     fill
                     className="rounded-lg object-contain"
@@ -116,7 +166,7 @@ const renderContentBlock = (
             ) : (
               <div className="relative h-64 w-full md:h-80">
                 <Image
-                  src={urlFor(image).url()}
+                  src={getImageUrl(image)}
                   alt={image.alt || 'Image'}
                   fill
                   className="rounded-lg object-cover"
@@ -131,12 +181,14 @@ const renderContentBlock = (
     case 'listBlock':
       return (
         <List
-          items={block.items || []}
-          columns={block.columns || 1}
-          theme={block.variant || 'default'}
+          items={normalizedBlock.items || []}
+          columns={normalizedBlock.columns || 1}
+          theme={normalizedBlock.variant || 'default'}
           heading={
-            block.heading && Array.isArray(block.heading) && block.heading.length > 0
-              ? block.heading
+            normalizedBlock.heading &&
+            Array.isArray(normalizedBlock.heading) &&
+            normalizedBlock.heading.length > 0
+              ? normalizedBlock.heading
               : undefined
           }
           sectionTheme={theme as 'light' | 'dark' | 'midnight' | 'sky' | 'orange'}
@@ -145,13 +197,43 @@ const renderContentBlock = (
       );
 
     case 'tableBlock':
+      // Ensure rows is an array and each row has a and b as arrays
+      const tableRows = (normalizedBlock.rows || []).map((row: any) => ({
+        a: Array.isArray(row.a)
+          ? row.a
+          : typeof row.a === 'string'
+            ? [
+                {
+                  _type: 'block',
+                  _key: 'temp',
+                  style: 'normal',
+                  children: [{ _type: 'span', text: row.a, marks: [] }],
+                  markDefs: [],
+                },
+              ]
+            : [],
+        b: Array.isArray(row.b)
+          ? row.b
+          : typeof row.b === 'string'
+            ? [
+                {
+                  _type: 'block',
+                  _key: 'temp',
+                  style: 'normal',
+                  children: [{ _type: 'span', text: row.b, marks: [] }],
+                  markDefs: [],
+                },
+              ]
+            : [],
+      }));
+
       return (
-        <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+        <AnimatedElement animation="fade">
           <TableBlock
             value={{
-              columnA: block.columnA || '',
-              columnB: block.columnB || '',
-              rows: block.rows || [],
+              columnA: normalizedBlock.columnA || '',
+              columnB: normalizedBlock.columnB || '',
+              rows: tableRows,
             }}
             theme={theme as SectionTheme}
           />
@@ -160,18 +242,18 @@ const renderContentBlock = (
 
     case 'ctaBlock':
       return (
-        <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+        <AnimatedElement animation="fade">
           <a
-            href={block.url || '#'}
+            href={normalizedBlock.url || '#'}
             className={`inline-block rounded-lg px-6 py-3 font-semibold transition-colors ${
-              block.style === 'secondary'
+              normalizedBlock.style === 'secondary'
                 ? 'bg-gray-200 text-gray-800 hover:bg-gray-300'
-                : block.style === 'outline'
+                : normalizedBlock.style === 'outline'
                   ? 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
                   : 'bg-blue-600 text-white hover:bg-blue-700'
             }`}
           >
-            {block.title || 'Click Here'}
+            {normalizedBlock.title || 'Click Here'}
           </a>
         </AnimatedElement>
       );
@@ -179,7 +261,7 @@ const renderContentBlock = (
     case 'buttonBlock':
       return (
         <div className="flex flex-wrap gap-3">
-          {block.buttons?.map((btn: any, i: number) => (
+          {(normalizedBlock.buttons || []).map((btn: any, i: number) => (
             <a
               key={i}
               href={btn.url || '#'}
@@ -199,8 +281,8 @@ const renderContentBlock = (
 
     case 'linkBlock':
       return (
-        <a href={block.url || '#'} className="link-w-arrow">
-          {block.text || 'Link'}
+        <a href={normalizedBlock.url || '#'} className="link-w-arrow">
+          {normalizedBlock.text || 'Link'}
         </a>
       );
 
@@ -212,27 +294,23 @@ const renderContentBlock = (
 /* ------------------------- Image Slideshow Component ------------------------- */
 interface ImageSlideshowProps {
   images: any[];
-  isTextLeft: boolean;
 }
 
-function ImageSlideshow({ images, isTextLeft }: ImageSlideshowProps) {
+function ImageSlideshow({ images }: ImageSlideshowProps) {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
     if (images.length <= 1) return;
-
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % images.length);
-    }, 5000); // Change image every 5 seconds
-
+    }, 5000);
     return () => clearInterval(interval);
   }, [images.length]);
 
-  // Preload images
   useEffect(() => {
     images.forEach((img) => {
-      if (img.asset || img._type === 'image') {
-        const imageUrl = urlFor(img).width(1920).url();
+      const imageUrl = getImageUrl(img);
+      if (imageUrl) {
         const imgElement = new window.Image();
         imgElement.src = imageUrl;
       }
@@ -240,7 +318,7 @@ function ImageSlideshow({ images, isTextLeft }: ImageSlideshowProps) {
   }, [images]);
 
   return (
-    <AnimatedElement animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}>
+    <AnimatedElement animation="fade">
       <div className="relative h-64 w-full overflow-hidden rounded-lg md:h-80">
         {images.map((img, index) => (
           <motion.div
@@ -252,7 +330,7 @@ function ImageSlideshow({ images, isTextLeft }: ImageSlideshowProps) {
             style={{ zIndex: index === current ? 1 : 0 }}
           >
             <Image
-              src={urlFor(img).url()}
+              src={getImageUrl(img)}
               alt={img.alt || `Slide ${index + 1}`}
               fill
               className="object-cover"
@@ -261,7 +339,6 @@ function ImageSlideshow({ images, isTextLeft }: ImageSlideshowProps) {
           </motion.div>
         ))}
 
-        {/* Slide indicators */}
         {images.length > 1 && (
           <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
             {images.map((_, index) => (
@@ -289,23 +366,28 @@ export default function SectionMain({
   backgroundImage,
   topBorder,
 }: SectionMainProps) {
-  // Theme-based background colors
   const sectionBg =
     theme === 'dark'
-      ? '' // Dark theme uses custom background color
+      ? ''
       : theme === 'midnight'
         ? 'bg-gray-900'
         : theme === 'sky'
-          ? 'bg-blue-50'
+          ? 'bg-blue-ribbon-500'
           : theme === 'orange'
-            ? '' // Orange theme uses custom gradient background
+            ? ''
             : theme === 'gray'
-              ? '' // Gray theme uses custom background color
+              ? ''
               : 'bg-white';
 
-  const textColorClass = theme === 'dark' ? 'text-white' : theme === 'midnight' ? 'text-white' : '';
+  const textColorClass =
+    theme === 'dark'
+      ? 'text-white'
+      : theme === 'midnight'
+        ? 'text-white'
+        : theme === 'sky'
+          ? 'text-white'
+          : '';
 
-  // Orange theme background style with gradient
   const orangeGradientStyle =
     theme === 'orange'
       ? {
@@ -313,10 +395,8 @@ export default function SectionMain({
         }
       : {};
 
-  // Background image URL
   const backgroundImageUrl = backgroundImage ? urlFor(backgroundImage).url() : null;
 
-  // Theme-based divider colors
   const getDividerColor = () => {
     switch (theme) {
       case 'midnight':
@@ -337,48 +417,105 @@ export default function SectionMain({
   const darkBgStyle = theme === 'dark' ? { backgroundColor: '#1C2D50' } : {};
   const grayBgStyle = theme === 'gray' ? { backgroundColor: '#F7F7F7' } : {};
 
-  // Gray theme background image with 11% opacity overlay
   const grayBgImageStyle =
     theme === 'gray' && backgroundImageUrl
       ? {
-          position: 'relative' as const,
           backgroundImage: `url(${backgroundImageUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          opacity: 0.11,
         }
       : {};
 
-  const grayOverlayStyle =
-    theme === 'gray' && backgroundImageUrl
-      ? {
-          position: 'absolute' as const,
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: '#F7F7F7',
-          opacity: 0.89, // 100% - 11% = 89% opacity for overlay
-          zIndex: 0,
+  // Helper to render column content
+  const renderColumnContent = (
+    columnContent: ColumnContent | undefined,
+    animation: string,
+    orderClass: string,
+    alignClass: string = ''
+  ) => {
+    if (!columnContent) return null;
+
+    const hasLabel = !!columnContent.label;
+    const hasHeading =
+      columnContent.heading &&
+      (Array.isArray(columnContent.heading)
+        ? columnContent.heading.length > 0
+        : typeof columnContent.heading === 'string');
+    const hasSubheading =
+      columnContent.subheading &&
+      (Array.isArray(columnContent.subheading)
+        ? columnContent.subheading.length > 0
+        : typeof columnContent.subheading === 'string');
+    const hasBody =
+      columnContent.body &&
+      (Array.isArray(columnContent.body)
+        ? columnContent.body.length > 0
+        : typeof columnContent.body === 'string');
+    const hasContentBlocks =
+      columnContent.contentBlocks &&
+      Array.isArray(columnContent.contentBlocks) &&
+      columnContent.contentBlocks.length > 0;
+
+    if (!hasLabel && !hasHeading && !hasSubheading && !hasBody && !hasContentBlocks) return null;
+
+    return (
+      <AnimatedElement
+        animation={
+          animation as 'fadeUp' | 'fadeLeft' | 'fadeRight' | 'fade' | 'fadeDown' | 'scale' | 'none'
         }
-      : {};
+        delay={0}
+        className={`${orderClass} md:sticky md:top-24 md:self-start`}
+      >
+        {hasLabel && (
+          <p className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}>
+            {columnContent.label}
+          </p>
+        )}
+
+        {hasHeading && columnContent.heading && (
+          <TextHeading level="h2" color={textColorClass}>
+            {renderPT(columnContent.heading)}
+          </TextHeading>
+        )}
+
+        {hasSubheading && columnContent.subheading && (
+          <h3 className={`mt-2 ${textColorClass}`}>{renderPT(columnContent.subheading)}</h3>
+        )}
+
+        {hasBody && columnContent.body && (
+          <div className={textColorClass}>{renderPT(columnContent.body)}</div>
+        )}
+
+        {hasContentBlocks && columnContent.contentBlocks && (
+          <div className={`${hasBody || hasHeading ? 'mt-8' : ''} space-y-8 ${alignClass}`}>
+            {columnContent.contentBlocks.map((block, j) => {
+              return (
+                <React.Fragment key={block._key || j}>
+                  {renderContentBlock(block, theme, textColorClass)}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        )}
+      </AnimatedElement>
+    );
+  };
 
   return (
     <section
-      className={`relative py-16 ${sectionBg} ${textColorClass}`}
-      data-section-theme={theme}
-      style={{
-        ...orangeGradientStyle,
-        ...darkBgStyle,
-        ...grayBgStyle,
-        ...grayBgImageStyle,
-        ...borderStyle,
-      }}
+      className={`relative ${sectionBg} py-16 md:py-24`}
+      style={{ ...borderStyle, ...darkBgStyle, ...grayBgStyle }}
     >
-      {/* Background image for orange theme (positioned at bottom with color-burn) */}
+      {/* Orange theme gradient background */}
+      {theme === 'orange' && (
+        <div className="pointer-events-none absolute inset-0" style={orangeGradientStyle} />
+      )}
+
+      {/* Orange theme background image */}
       {theme === 'orange' && backgroundImageUrl && (
         <div
-          className="pointer-events-none absolute bottom-0 left-0 right-0"
+          className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage: `url(${backgroundImageUrl})`,
             backgroundSize: 'contain',
@@ -392,13 +529,12 @@ export default function SectionMain({
 
       {/* Gray theme overlay for background image (11% opacity) */}
       {theme === 'gray' && backgroundImageUrl && (
-        <div className="pointer-events-none absolute inset-0" style={grayOverlayStyle} />
+        <div className="pointer-events-none absolute inset-0" style={grayBgImageStyle} />
       )}
 
       <div className="container relative z-10 mx-auto px-4">
         {rows && rows.length > 0
           ? rows.map((row, i) => {
-              // DIVIDER ROW
               if (row.divider) {
                 return (
                   <hr
@@ -410,217 +546,31 @@ export default function SectionMain({
               }
 
               const columns = row.layout?.columns || '1/1';
-              const textColumn = row.layout?.textColumn || 'left';
               const contentAlign = row.layout?.contentAlign || 'left';
-
-              const isTextLeft = textColumn === 'left';
+              const mobileReverse = row.layout?.mobileReverse || false;
               const gridCols = getGridCols(columns);
-
-              const textColOrder = isTextLeft ? 'md:order-1' : 'md:order-2';
-              const contentColOrder = isTextLeft ? 'md:order-2' : 'md:order-1';
-
               const spacingClass = row.spacing === 'compact' ? 'mb-6 md:mb-10' : 'mb-12 md:mb-20';
-              // Only apply gap for multi-column layouts (not 1/1)
               const gapClass = columns === '1/1' ? '' : 'gap-10 md:gap-20';
-              // Content alignment class
               const contentAlignClass = contentAlign === 'right' ? 'md:text-right' : '';
+
+              // Determine order classes based on mobileReverse
+              const leftOrderClass = mobileReverse ? 'order-2 md:order-1' : 'md:order-1';
+              const rightOrderClass = mobileReverse ? 'order-1 md:order-2' : 'md:order-2';
 
               return (
                 <div key={i} className={`${spacingClass} min-h-0`}>
                   <div className={`grid ${gapClass} ${gridCols} items-start`}>
-                    {/* TEXT COLUMN - Sticky so shorter column stays in view */}
-                    <AnimatedElement
-                      animation={
-                        columns === '1/1' ? 'fadeUp' : isTextLeft ? 'fadeLeft' : 'fadeRight'
-                      }
-                      delay={0}
-                      className={`${textColOrder} md:sticky md:top-24 md:self-start`}
-                    >
-                      {row.label && (
-                        <p className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}>
-                          {row.label}
-                        </p>
+                    {/* LEFT COLUMN - Always present, even for 1/1 rows */}
+                    {renderColumnContent(row.leftColumn, 'fadeLeft', leftOrderClass, '')}
+
+                    {/* RIGHT COLUMN - Only for multi-column layouts */}
+                    {columns !== '1/1' &&
+                      renderColumnContent(
+                        row.rightColumn,
+                        'fadeRight',
+                        rightOrderClass,
+                        contentAlignClass
                       )}
-
-                      {row.heading && (
-                        <TextHeading level="h2" color={textColorClass}>
-                          {renderPT(row.heading)}
-                        </TextHeading>
-                      )}
-
-                      {row.subheading && (
-                        <h3 className={`mt-2 ${textColorClass}`}>{renderPT(row.subheading)}</h3>
-                      )}
-
-                      {row.body && <div className={textColorClass}>{renderPT(row.body)}</div>}
-
-                      {/* Support buttonBlock in text column when no heading/body (for buttons on left) */}
-                      {!row.heading && !row.body && !row.subheading && row.contentBlocks && (
-                        <div className="space-y-8">
-                          {row.contentBlocks
-                            .filter((block) => block._type === 'buttonBlock')
-                            .map((block, j) => (
-                              <React.Fragment key={j}>
-                                {renderContentBlock(block, isTextLeft, theme, textColorClass)}
-                              </React.Fragment>
-                            ))}
-                        </div>
-                      )}
-                    </AnimatedElement>
-
-                    {/* CONTENT COLUMN - Also sticky so shorter column stays in view */}
-                    {columns !== '1/1' && (
-                      <AnimatedElement
-                        animation={isTextLeft ? 'fadeRight' : 'fadeLeft'}
-                        delay={0.1}
-                        className={`${contentColOrder} md:sticky md:top-24 md:self-start`}
-                      >
-                        <div className={`space-y-8 ${contentAlignClass}`}>
-                          {row.contentBlocks
-                            ?.filter(
-                              (block) =>
-                                // If text column has no heading/body, filter out buttonBlock (it goes in text column)
-                                // linkBlock stays in content column
-                                !(
-                                  !row.heading &&
-                                  !row.body &&
-                                  !row.subheading &&
-                                  block._type === 'buttonBlock'
-                                )
-                            )
-                            .map((block, j) => {
-                              // CONTENT ROW (nested row with text + blocks)
-                              if (block._type === 'contentRow') {
-                                return (
-                                  <div key={j} className="space-y-6">
-                                    {block.label && (
-                                      <p
-                                        className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
-                                      >
-                                        {block.label}
-                                      </p>
-                                    )}
-
-                                    {block.heading && (
-                                      <AnimatedElement animation="fade">
-                                        <TextHeading level="h2" color={textColorClass}>
-                                          {renderPT(block.heading)}
-                                        </TextHeading>
-                                      </AnimatedElement>
-                                    )}
-
-                                    {block.subheading && (
-                                      <AnimatedElement animation="fade">
-                                        <h3 className={`mt-2 ${textColorClass}`}>
-                                          {renderPT(block.subheading)}
-                                        </h3>
-                                      </AnimatedElement>
-                                    )}
-
-                                    {block.body && (
-                                      <AnimatedElement animation="fade" delay={0.1}>
-                                        <div className={textColorClass}>{renderPT(block.body)}</div>
-                                      </AnimatedElement>
-                                    )}
-
-                                    {block.blocks && block.blocks.length > 0 && (
-                                      <div className="space-y-6">
-                                        {block.blocks.map(
-                                          (nestedBlock: ContentBlock, k: number) => (
-                                            <React.Fragment key={k}>
-                                              {renderContentBlock(
-                                                nestedBlock,
-                                                isTextLeft,
-                                                theme,
-                                                textColorClass
-                                              )}
-                                            </React.Fragment>
-                                          )
-                                        )}
-                                      </div>
-                                    )}
-                                  </div>
-                                );
-                              }
-
-                              // LEGACY: Direct blocks (backwards compatibility)
-                              return (
-                                <React.Fragment key={j}>
-                                  {renderContentBlock(block, isTextLeft, theme, textColorClass)}
-                                </React.Fragment>
-                              );
-                            })}
-                        </div>
-                      </AnimatedElement>
-                    )}
-
-                    {/* FULL WIDTH CONTENT BLOCKS - Render when columns is 1/1 */}
-                    {columns === '1/1' && row.contentBlocks && row.contentBlocks.length > 0 && (
-                      <AnimatedElement animation="fadeUp" delay={0} className="mt-0">
-                        <div className={`space-y-8 ${contentAlignClass}`}>
-                          {row.contentBlocks.map((block, j) => {
-                            // CONTENT ROW (nested row with text + blocks)
-                            if (block._type === 'contentRow') {
-                              return (
-                                <div key={j} className="space-y-6">
-                                  {block.label && (
-                                    <p
-                                      className={`mb-4 text-sm font-semibold uppercase ${textColorClass}`}
-                                    >
-                                      {block.label}
-                                    </p>
-                                  )}
-
-                                  {block.heading && (
-                                    <AnimatedElement animation="fade">
-                                      <TextHeading level="h2" color={textColorClass}>
-                                        {renderPT(block.heading)}
-                                      </TextHeading>
-                                    </AnimatedElement>
-                                  )}
-
-                                  {block.subheading && (
-                                    <AnimatedElement animation="fade">
-                                      <h3 className={`mt-2 ${textColorClass}`}>
-                                        {renderPT(block.subheading)}
-                                      </h3>
-                                    </AnimatedElement>
-                                  )}
-
-                                  {block.body && (
-                                    <AnimatedElement animation="fade" delay={0.1}>
-                                      <div className={textColorClass}>{renderPT(block.body)}</div>
-                                    </AnimatedElement>
-                                  )}
-
-                                  {block.blocks && block.blocks.length > 0 && (
-                                    <div className="space-y-6">
-                                      {block.blocks.map((nestedBlock: ContentBlock, k: number) => (
-                                        <React.Fragment key={k}>
-                                          {renderContentBlock(
-                                            nestedBlock,
-                                            isTextLeft,
-                                            theme,
-                                            textColorClass
-                                          )}
-                                        </React.Fragment>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            }
-
-                            // Direct blocks
-                            return (
-                              <React.Fragment key={j}>
-                                {renderContentBlock(block, isTextLeft, theme, textColorClass)}
-                              </React.Fragment>
-                            );
-                          })}
-                        </div>
-                      </AnimatedElement>
-                    )}
                   </div>
                 </div>
               );

@@ -876,6 +876,128 @@ async function importPage(mdFilePath) {
               }
             });
 
+            // Process leftColumn (explicit column structure)
+            if (row.leftColumn) {
+              // Convert text fields to blocks
+              ['heading', 'subheading', 'body'].forEach((key) => {
+                if (row.leftColumn[key] && typeof row.leftColumn[key] === 'string') {
+                  row.leftColumn[key] = convertMarkdownToBlocks(row.leftColumn[key]);
+                }
+              });
+
+              // Process contentBlocks in leftColumn
+              if (Array.isArray(row.leftColumn.contentBlocks)) {
+                const processedBlocks = await Promise.all(
+                  row.leftColumn.contentBlocks.map(async (block) => {
+                    // Handle blocks that use _type directly (new format)
+                    if (block._type && !block[block._type] && !block.contentRow) {
+                      const blockType = block._type;
+                      const blockData = { ...block };
+                      delete blockData._type;
+                      Object.keys(block).forEach((key) => delete block[key]);
+                      block[blockType] = blockData;
+                    }
+
+                    // CONTENT ROW (nested row with text + blocks)
+                    if (block.contentRow) {
+                      block._key = generateKey();
+                      block._type = 'contentRow';
+                      const rowData = block.contentRow;
+
+                      ['heading', 'body'].forEach((key) => {
+                        if (rowData[key] && typeof rowData[key] === 'string') {
+                          block[key] = convertMarkdownToBlocks(rowData[key]);
+                        } else if (rowData[key]) {
+                          block[key] = rowData[key];
+                        }
+                      });
+
+                      if (Array.isArray(rowData.blocks)) {
+                        block.blocks = await Promise.all(
+                          rowData.blocks.map(async (nestedBlock) => {
+                            return await processContentBlock(nestedBlock);
+                          })
+                        );
+                        block.blocks = block.blocks.filter((b) => b !== null);
+                      }
+
+                      delete block.contentRow;
+                      return block;
+                    }
+
+                    // LEGACY: Direct blocks
+                    const processedBlock = await processContentBlock(block);
+                    if (processedBlock && !processedBlock._key) {
+                      processedBlock._key = generateKey();
+                    }
+                    return processedBlock;
+                  })
+                );
+                row.leftColumn.contentBlocks = processedBlocks.filter((block) => block !== null);
+              }
+            }
+
+            // Process rightColumn (explicit column structure)
+            if (row.rightColumn) {
+              // Convert text fields to blocks
+              ['heading', 'subheading', 'body'].forEach((key) => {
+                if (row.rightColumn[key] && typeof row.rightColumn[key] === 'string') {
+                  row.rightColumn[key] = convertMarkdownToBlocks(row.rightColumn[key]);
+                }
+              });
+
+              // Process contentBlocks in rightColumn
+              if (Array.isArray(row.rightColumn.contentBlocks)) {
+                const processedBlocks = await Promise.all(
+                  row.rightColumn.contentBlocks.map(async (block) => {
+                    // Handle blocks that use _type directly (new format)
+                    if (block._type && !block[block._type] && !block.contentRow) {
+                      const blockType = block._type;
+                      const blockData = { ...block };
+                      delete blockData._type;
+                      Object.keys(block).forEach((key) => delete block[key]);
+                      block[blockType] = blockData;
+                    }
+
+                    // CONTENT ROW (nested row with text + blocks)
+                    if (block.contentRow) {
+                      block._key = generateKey();
+                      block._type = 'contentRow';
+                      const rowData = block.contentRow;
+
+                      ['heading', 'body'].forEach((key) => {
+                        if (rowData[key] && typeof rowData[key] === 'string') {
+                          block[key] = convertMarkdownToBlocks(rowData[key]);
+                        } else if (rowData[key]) {
+                          block[key] = rowData[key];
+                        }
+                      });
+
+                      if (Array.isArray(rowData.blocks)) {
+                        block.blocks = await Promise.all(
+                          rowData.blocks.map(async (nestedBlock) => {
+                            return await processContentBlock(nestedBlock);
+                          })
+                        );
+                        block.blocks = block.blocks.filter((b) => b !== null);
+                      }
+
+                      delete block.contentRow;
+                      return block;
+                    }
+
+                    // LEGACY: Direct blocks
+                    const processedBlock = await processContentBlock(block);
+                    if (processedBlock && !processedBlock._key) {
+                      processedBlock._key = generateKey();
+                    }
+                    return processedBlock;
+                  })
+                );
+                row.rightColumn.contentBlocks = processedBlocks.filter((block) => block !== null);
+              }
+            }
+
             // Process contentBlocks
             if (Array.isArray(row.contentBlocks)) {
               const processedBlocks = await Promise.all(
