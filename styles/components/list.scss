@@ -41,8 +41,8 @@
   &[data-theme='default'] {
     @apply gap-12 md:gap-24;
     .list-item {
-      @apply p-0;
-      color: var(--color-sapphire-500);
+      @apply items-start p-0;
+      color: var(--color-gray-700);
     }
     .list-content {
       @apply max-w-[400px];

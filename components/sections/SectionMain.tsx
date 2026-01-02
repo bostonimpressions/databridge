@@ -537,11 +537,12 @@ export default function SectionMain({
           ? rows.map((row, i) => {
               if (row.divider) {
                 return (
-                  <hr
-                    key={i}
-                    className={`h-[9px] w-full border-0 ${getDividerColor()} my-8`}
-                    aria-hidden="true"
-                  />
+                  <AnimatedElement key={i} animation="fadeUp">
+                    <hr
+                      className={`h-[9px] w-full border-0 ${getDividerColor()} my-20`}
+                      aria-hidden="true"
+                    />
+                  </AnimatedElement>
                 );
               }
 

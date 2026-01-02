@@ -510,4 +510,68 @@ sections:
                   - image: '/images/logo-30-year-badge.png'
                     alt: 'DataBridge Sites 30 Year Anniversary Badge'
                 display: 'square'
+
+  # Section 11 - Idustries
+  - type: sectionMain
+    theme: light
+    rows:
+      # Row 1: Heading and body
+      - layout:
+          columns: '1/2-1/2'
+        leftColumn:
+          heading: '==Industries We Serve=='
+          body: |
+            DataBridge delivers data center solutions for organizations across industries with specific regulatory, security, and operational requirements.
+
+            Our extensive certifications and specialized expertise support mission critical infrastructure regardless of sector.
+
+      # Row 2: Divider
+      - divider: true
+
+      # Row 3: List
+      - leftColumn:
+          contentBlocks:
+            - listBlock:
+                variant: 'default'
+                columns: 2
+                items:
+                  - heading: 'Healthcare'
+                    body: |
+                      HIPAA/HITECH compliance, secure patient data handling, and infrastructure supporting electronic health records and medical imaging systems.
+                    icon: '/images/icon-healthcare.png'
+
+                  - heading: 'Financial Services'
+                    body: |
+                      PCI DSS certification, SOC 2 controls, and ultra-secure environments for banking systems, payment processing, and financial data.
+                    icon: '/images/icon-financial.png'
+
+                  - heading: 'Government'
+                    body: |
+                      FedRAMP and FISMA readiness, SCIF-capable infrastructure, and security clearances for federal, state, and local agencies.
+                    icon: '/images/icon-government.png'
+
+                  - heading: 'Education'
+                    body: |
+                      Scalable infrastructure for research institutions, student information systems, and academic computing environments with budget-conscious solutions.
+                    icon: '/images/icon-education.png'
+
+                  - heading: 'Manufacturing'
+                    body: |
+                      High-availability systems for production control, supply chain management, and enterprise resource planning with minimal downtime tolerance.
+                    icon: '/images/icon-manufacturing.png'
+
+                  - heading: 'Legal'
+                    body: |
+                      Secure document management, e-discovery infrastructure, and compliant environments for confidential client information.
+                    icon: '/images/icon-legal.png'
+
+                  - heading: 'Biopharma'
+                    body: |
+                      GxP and FDA compliance, specialized requirements for pharmaceutical research, clinical trial data, and regulatory submissions.
+                    icon: '/images/icon-biopharma.png'
+
+                  - heading: 'Technology'
+                    body: |
+                      High-density computing support, carrier-neutral connectivity, and scalable infrastructure for SaaS providers and technology companies.
+                    icon: '/images/icon-technology.png'
 ---
